@@ -3,456 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Wawancara - Literasi Numerasi</title>
-  	<link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
+    <title>Pendampingan Literasi & Numerasi SD</title>
     <!-- Memuat Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Kustomisasi font Inter */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Style untuk tab aktif */
-        .tab-button.active {
-            border-bottom-color: #3b82f6; /* blue-500 */
-            color: #3b82f6;
-            font-weight: 600;
-        }
-        /* Style untuk tab non-aktif */
-        .tab-button {
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-    </style>
-    <!-- Memuat font Inter dari Google Fonts -->
+      	<link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
+    <!-- Memuat font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body class="bg-gray-100 p-4 md:p-8">
-
-    <div class="max-w-5xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+    
+    <style>
+        /* Mengatur font utama ke Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* bg-gray-50 */
+        }
         
-        <!-- Judul Aplikasi -->
-        <header class="border-b pb-4 mb-6">
-            <h1 class="text-3xl font-bold text-gray-800">Aplikasi Input Data</h1>
-            <p class="text-lg text-gray-600">Studi Literasi dan Numerasi Sekolah</p>
-            <!-- Status Autentikasi -->
-            <p id="auth-status" class="text-sm text-blue-600 font-medium mt-2">Menghubungkan ke server...</p>
+        /* CSS kustom untuk animasi kartu */
+        .animated-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .animated-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 15px -4px rgb(0 0 0 / 0.1);
+            border-color: #3b82f6; /* border-blue-500 */
+        }
+
+        /* Animasi denyut (pulse) halus untuk kartu admin */
+        @keyframes pulse-light {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+            }
+        }
+        
+        .pulse-animate {
+            /* Menerapkan animasi pulse */
+            animation: pulse-light 2.5s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Kontainer Utama (Lebar 95% dari layar) -->
+    <div class="w-[95%] max-w-7xl mx-auto my-8">
+
+        <!-- Bagian Header dan Navigasi Kartu Animatif -->
+        <header class="bg-gradient-to-r from-blue-700 to-blue-900 text-white p-8 md:p-12 rounded-xl shadow-2xl text-center mb-12 overflow-hidden">
+            <h1 class="text-3xl md:text-5xl font-bold mb-4">
+                Pendampingan Penguatan Literasi dan Numerasi
+            </h1>
+            <p class="text-xl md:text-2xl font-light text-blue-100">
+                Sekolah Dasar di Kabupaten Tabanan
+            </p>
+            
+            <!-- Navigasi Kartu Animatif -->
+            <div class="flex flex-col md:flex-row justify-center gap-6 mt-10">
+                
+                <!-- Kartu 1: Portal Admin -->
+                <a href="Admin.html" 
+                   class="animated-card pulse-animate bg-white text-blue-800 p-6 rounded-lg shadow-lg w-full md:w-72 text-left">
+                    <h3 class="text-2xl font-semibold mb-2">Portal Admin</h3>
+                    <p class="text-gray-600">Masuk untuk mengelola data, monitoring, dan melihat progres program.</p>
+                    <span class="text-blue-600 font-medium mt-4 inline-block">Masuk &rarr;</span>
+                </a>
+                
+                <!-- Kartu 2: Formulir Pendataan -->
+                <a href="Form.html" 
+                   class="animated-card bg-white text-blue-800 p-6 rounded-lg shadow-lg w-full md:w-72 text-left">
+                    <h3 class="text-2xl font-semibold mb-2">Formulir Pendataan</h3>
+                    <p class="text-gray-600">Isi formulir pendataan awal untuk guru dan siswa peserta program.</p>
+                    <span class="text-blue-600 font-medium mt-4 inline-block">Isi Formulir &rarr;</span>
+                </a>
+            </div>
         </header>
 
-        <!-- Input NPSN -->
-        <div class="mb-6">
-            <label for="npsn-sekolah" class="block text-lg font-semibold text-gray-800">NPSN Sekolah</label>
-            <input type="number" id="npsn-sekolah" placeholder="Wajib diisi: 8 digit NPSN" 
-                   class="mt-2 block w-full md:w-1/2 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-lg p-3">
-            <p id="npsn-error" class="text-red-600 text-sm mt-1 hidden">NPSN wajib diisi sebelum menyimpan data.</p>
-        </div>
+        <!-- Konten Utama (Informasi dari Slide) -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        <!-- Navigasi Tab Instrumen -->
-        <nav class="flex border-b mb-6 space-x-1 md:space-x-4">
-            <button onclick="showTab('fgd', this)" class="tab-button active py-3 px-4 text-sm md:text-base">FGD</button>
-            <button onclick="showTab('guru', this)" class="tab-button py-3 px-4 text-sm md:text-base">Wawancara Guru</button>
-            <button onclick="showTab('murid', this)" class="tab-button py-3 px-4 text-sm md:text-base">Wawancara Murid</button>
-            <button onclick="showTab('observasi', this)" class="tab-button py-3 px-4 text-sm md:text-base">Observasi</button>
-        </nav>
+            <!-- Kolom Utama (Lebih Lebar) -->
+            <div class="lg:col-span-2 space-y-8">
 
-        <!-- Konten Form -->
-        <main>
-            <!-- Form FGD (Focus Group Discussion) -->
-            <form id="fgd-form" data-collection="fgd_data" class="space-y-4">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Formulir FGD</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="fgd-tanggal" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                        <input type="date" id="fgd-tanggal" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <!-- 1. Latar Belakang -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-200 pb-3">
+                        Latar Belakang
+                    </h2>
+                    <div class="space-y-4 text-gray-700 leading-relaxed">
+                        <p>Berdasarkan data Rapor Pendidikan tahun 2023, capaian literasi dan numerasi di beberapa sekolah dasar di Kabupaten Tabanan masih berada di bawah rata-rata nasional. Hal ini menunjukkan adanya kebutuhan mendesak untuk intervensi yang efektif.</p>
+                        <p>Program pendampingan ini dirancang untuk meningkatkan kompetensi guru dalam merancang dan melaksanakan pembelajaran yang berfokus pada literasi dan numerasi, serta meningkatkan kualitas proses pembelajaran di kelas untuk hasil belajar siswa yang lebih baik.</p>
                     </div>
-                    <div>
-                        <label for="fgd-pewawancara" class="block text-sm font-medium text-gray-700">Pewawancara/Fasilitator</label>
-                        <input type="text" id="fgd-pewawancara" placeholder="Nama fasilitator" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div>
-                    <label for="fgd-peserta" class="block text-sm font-medium text-gray-700">Peserta (pisahkan dengan koma)</label>
-                    <input type="text" id="fgd-peserta" placeholder="Contoh: Guru A, Guru B, Kepala Sekolah" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="fgd-temuan" class="block text-sm font-medium text-gray-700">Temuan Kunci / Poin Diskusi</label>
-                    <textarea id="fgd-temuan" rows="5" placeholder="Catat temuan utama dari diskusi..." required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                </div>
-                <button type="submit" class="save-button w-full md:w-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200 disabled:bg-gray-400">
-                    Simpan Data FGD
-                </button>
-            </form>
+                </section>
 
-            <!-- Form Wawancara Guru -->
-            <form id="guru-form" data-collection="guru_data" class="space-y-4 hidden">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Formulir Wawancara Guru</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="guru-tanggal" class="block text-sm font-medium text-gray-700">Tanggal Wawancara</label>
-                        <input type="date" id="guru-tanggal" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="guru-pewawancara" class="block text-sm font-medium text-gray-700">Pewawancara</tabel>
-                        <input type="text" id="guru-pewawancara" placeholder="Nama pewawancara" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                        <label for="guru-nama" class="block text-sm font-medium text-gray-700">Nama Guru</label>
-                        <input type="text" id="guru-nama" placeholder="Nama lengkap guru" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="guru-mapel" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
-                        <input type="text" id="guru-mapel" placeholder="Contoh: Matematika, Bahasa Indonesia" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div>
-                    <label for="guru-hasil" class="block text-sm font-medium text-gray-700">Hasil Wawancara</label>
-                    <textarea id="guru-hasil" rows="5" placeholder="Catat jawaban dan temuan dari wawancara guru..." required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                </div>
-                <button type="submit" class="save-button w-full md:w-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200 disabled:bg-gray-400">
-                    Simpan Data Guru
-                </button>
-            </form>
+                <!-- 2. Tujuan Program -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-200 pb-3">
+                        Tujuan Program
+                    </h2>
+                    <ul class="space-y-3 text-gray-700 list-inside">
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-3 mt-1">✓</span>
+                            <span>Menganalisis Rapor Pendidikan untuk mengidentifikasi capaian literasi dan numerasi.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-3 mt-1">✓</span>
+                            <span>Mengidentifikasi akar masalah yang memengaruhi rendahnya hasil belajar.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-3 mt-1">✓</span>
+                            <span>Menyusun rencana intervensi melalui Perencanaan Berbasis Data (PBD).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-3 mt-1">✓</span>
+                            <span>Mengimplementasikan program penguatan literasi dan numerasi di sekolah sasaran.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-3 mt-1">✓</span>
+                            <span>Melakukan monitoring dan evaluasi untuk perbaikan berkelanjutan.</span>
+                        </li>
+                    </ul>
+                </section>
+                
+                <!-- 3. Metode Pelaksanaan -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-200 pb-3">
+                        Metode Pelaksanaan
+                    </h2>
+                    <ol class="relative border-l border-gray-300 space-y-10 ml-4">
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-200 text-blue-800 rounded-full -left-4 font-bold">1</span>
+                            <h3 class="font-semibold text-xl text-gray-900 mb-1">Analisis & Perencanaan</h3>
+                            <p class="text-gray-600">Koordinasi dengan sekolah, analisis rapor pendidikan, identifikasi masalah, dan penyusunan solusi berbasis data (PBD).</p>
+                        </li>
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-200 text-blue-800 rounded-full -left-4 font-bold">2</span>
+                            <h3 class="font-semibold text-xl text-gray-900 mb-1">Pelaksanaan</h3>
+                            <p class="text-gray-600">Workshop PBD, pendampingan penyusunan program, dan implementasi pembelajaran literasi/numerasi di kelas.</p>
+                        </li>
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-200 text-blue-800 rounded-full -left-4 font-bold">3</span>
+                            <h3 class="font-semibold text-xl text-gray-900 mb-1">Evaluasi & Refleksi</h3>
+                            <p class="text-gray-600">Monitoring berkala, evaluasi dampak program, refleksi bersama guru, dan penyusunan rencana tindak lanjut.</p>
+                        </li>
+                    </ol>
+                </section>
 
-            <!-- Form Wawancara Murid -->
-            <form id="murid-form" data-collection="murid_data" class="space-y-4 hidden">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Formulir Wawancara Murid</h2>
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="murid-tanggal" class="block text-sm font-medium text-gray-700">Tanggal Wawancara</label>
-                        <input type="date" id="murid-tanggal" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <!-- 4. Dokumentasi -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-200 pb-3">
+                        Dokumentasi Kegiatan
+                    </h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <img src="https://placehold.co/400x300/60a5fa/white?text=Workshop" alt="Dokumentasi Workshop" class="rounded-lg shadow-md aspect-video object-cover">
+                        <img src="https://placehold.co/400x300/60a5fa/white?text=Diskusi" alt="Dokumentasi Diskusi Guru" class="rounded-lg shadow-md aspect-video object-cover">
+                        <img src="https://placehold.co/400x300/60a5fa/white?text=Pendampingan" alt="Dokumentasi Pendampingan" class="rounded-lg shadow-md aspect-video object-cover">
+                        <img src="https://placehold.co/400x300/60a5fa/white?text=Implementasi" alt="Dokumentasi Implementasi" class="rounded-lg shadow-md aspect-video object-cover">
                     </div>
-                    <div>
-                        <label for="murid-pewawancara" class="block text-sm font-medium text-gray-700">Pewawancara</label>
-                        <input type="text" id="murid-pewawancara" placeholder="Nama pewawancara" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                        <label for="murid-nama" class="block text-sm font-medium text-gray-700">Nama Murid</label>
-                        <input type="text" id="murid-nama" placeholder="Nama inisial atau lengkap" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="murid-kelas" class="block text-sm font-medium text-gray-700">Kelas</label>
-                        <input type="text" id="murid-kelas" placeholder="Contoh: Kelas 5A" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div>
-                    <label for="murid-hasil" class="block text-sm font-medium text-gray-700">Hasil Wawancara</label>
-                    <textarea id="murid-hasil" rows="5" placeholder="Catat jawaban dan temuan dari wawancara murid..." required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                </div>
-                <button type="submit" class="save-button w-full md:w-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200 disabled:bg-gray-400">
-                    Simpan Data Murid
-                </button>
-            </form>
+                </section>
+            </div>
 
-            <!-- Form Observasi -->
-            <form id="observasi-form" data-collection="observasi_data" class="space-y-4 hidden">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Formulir Observasi</h2>
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="observasi-tanggal" class="block text-sm font-medium text-gray-700">Tanggal Observasi</label>
-                        <input type="date" id="observasi-tanggal" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <!-- Kolom Samping (Lebih Sempit) -->
+            <div class="space-y-8">
+
+                <!-- 5. Sasaran & Luaran -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Sasaran Program</h2>
+                    <p class="text-gray-700 mb-6">Program ini menargetkan <strong>Kepala Sekolah, Guru,</strong> dan <strong>Siswa</strong> di <strong>SDN 1 & 2 Kaba-kaba</strong> serta <strong>SDN 1 & 2 Nunggul</strong>.</p>
+                    
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 pt-4 border-t">Luaran Program</h2>
+                    <ul class="space-y-2 text-gray-700 list-inside">
+                        <li class="flex items-center">⭐ <span class="ml-2">Program penguatan literasi & numerasi.</span></li>
+                        <li class="flex items-center">⭐ <span class="ml-2">Peningkatan kompetensi guru.</span></li>
+                        <li class="flex items-center">⭐ <span class="ml-2">Peningkatan hasil belajar siswa.</span></li>
+                        <li class="flex items-center">⭐ <span class="ml-2">Publikasi ilmiah dan media.</span></li>
+                    </ul>
+                </section>
+
+                <!-- 6. Jadwal Kegiatan -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Jadwal Kegiatan</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-center"><span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full mr-3 w-20 text-center">Mei</span> Koordinasi & Analisis</li>
+                        <li class="flex items-center"><span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full mr-3 w-20 text-center">Juni</span> Workshop PBD</li>
+                        <li class="flex items-center"><span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full mr-3 w-20 text-center">Jul-Okt</span> Implementasi</li>
+                        <li class="flex items-center"><span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full mr-3 w-20 text-center">Nov</span> Evaluasi & Laporan</li>
+                    </ul>
+                </section>
+
+                <!-- 7. Tim Fasilitator -->
+                <section class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tim Fasilitator</h2>
+                    <div class="space-y-5">
+                        <!-- Tim Dosen -->
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/100x100/e0e7ff/3730a3?text=FD" class="w-16 h-16 rounded-full shadow-md" alt="Foto Dosen">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Dr. I Gede Margunayasa, S.Pd., M.Pd.</h3>
+                                <p class="text-sm text-gray-600">Dosen (Ketua)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/100x100/e0e7ff/3730a3?text=FD" class="w-16 h-16 rounded-full shadow-md" alt="Foto Dosen">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Dr. Gst Ngr Sst Adi Putra, S.Pd., M.Pd.</h3>
+                                <p class="text-sm text-gray-600">Dosen (Anggota)</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Tim Guru -->
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/100x100/dbeafe/1e40af?text=FG" class="w-16 h-16 rounded-full shadow-md" alt="Foto Guru">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">I Made Juna, S.Pd.SD</h3>
+                                <p class="text-sm text-gray-600">Guru (Anggota)</p>
+                            </div>
+                        </div>
+
+                        <!-- Tim Mahasiswa -->
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/100x100/bfdbfe/1d4ed8?text=FM" class="w-16 h-16 rounded-full shadow-md" alt="Foto Mahasiswa">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">I Kadek Wira Adiatma</h3>
+                                <p class="text-sm text-gray-600">Mahasiswa (Anggota)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/100x100/bfdbfe/1d4ed8?text=FM" class="w-16 h-16 rounded-full shadow-md" alt="Foto Mahasiswa">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Ni Kadek Dwi Candra</h3>
+                                <p class="text-sm text-gray-600">Mahasiswa (Anggota)</p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label for="observasi-observer" class="block text-sm font-medium text-gray-700">Observer</label>
-                        <input type="text" id="observasi-observer" placeholder="Nama observer" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                        <label for="observasi-lokasi" class="block text-sm font-medium text-gray-700">Lokasi/Kelas</label>
-                        <input type="text" id="observasi-lokasi" placeholder="Contoh: Kelas 4B, Perpustakaan" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="observasi-aktivitas" class="block text-sm font-medium text-gray-700">Aktivitas yang Diamati</label>
-                        <input type="text" id="observasi-aktivitas" placeholder="Contoh: Pembelajaran Matematika, Membaca senyap" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div>
-                    <label for="observasi-catatan" class="block text-sm font-medium text-gray-700">Catatan Observasi</labe>
-                    <textarea id="observasi-catatan" rows="5" placeholder="Catat detail kejadian, interaksi, dan temuan selama observasi..." required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                </div>
-                <button type="submit" class="save-button w-full md:w-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200 disabled:bg-gray-400">
-                    Simpan Data Observasi
-                </button>
-            </form>
+                </section>
+                
+            </div>
         </main>
 
-        <!-- Area Tampilan Data yang Tersimpan -->
-        <section class="mt-12 border-t pt-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Data Tersimpan (Real-time)</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                <!-- Data FGD -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h3 class="text-lg font-semibold text-blue-700 mb-3 border-b pb-2">Data FGD</h3>
-                    <div id="fgd-data-display" class="space-y-3 max-h-64 overflow-y-auto pr-2">
-                        <p class="text-gray-500">Belum ada data...</p>
-                    </div>
-                </div>
-
-                <!-- Data Guru -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h3 class="text-lg font-semibold text-green-700 mb-3 border-b pb-2">Data Wawancara Guru</h3>
-                    <div id="guru-data-display" class="space-y-3 max-h-64 overflow-y-auto pr-2">
-                        <p class="text-gray-500">Belum ada data...</p>
-                    </div>
-                </div>
-
-                <!-- Data Murid -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h3 class="text-lg font-semibold text-purple-700 mb-3 border-b pb-2">Data Wawancara Murid</h3>
-                    <div id="murid-data-display" class="space-y-3 max-h-64 overflow-y-auto pr-2">
-                        <p class="text-gray-500">Belum ada data...</p>
-                    </div>
-                </div>
-
-                <!-- Data Observasi -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h3 class="text-lg font-semibold text-yellow-700 mb-3 border-b pb-2">Data Observasi</h3>
-                    <div id="observasi-data-display" class="space-y-3 max-h-64 overflow-y-auto pr-2">
-                        <p class="text-gray-500">Belum ada data...</p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 mt-12 py-6 border-t border-gray-200">
+            &copy; 2024 Tim Program Pendampingan Literasi & Numerasi.
+        </footer>
+        
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import fungsi-fungsi yang diperlukan dari Firebase SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInAnonymously, 
-            signInWithCustomToken, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            addDoc, 
-            onSnapshot, 
-            Timestamp,
-            setLogLevel
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // MENGGUNAKAN VARIABEL GLOBAL DARI CANVAS (WAJIB)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // Inisialisasi Firebase
-        let app, db, auth;
-        let userId = null;
-        
-        // Aktifkan logging untuk debug
-        setLogLevel('Debug');
-
-        try {
-            // --- Atur Tanggal Hari Ini untuk Semua Input Tanggal ---
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Bulan 0-indexed
-            const dd = String(today.getDate()).padStart(2, '0');
-            const todayString = `${yyyy}-${mm}-${dd}`;
-            
-            document.querySelectorAll('input[type="date"]').forEach(input => {
-                input.value = todayString;
-            });
-            console.log("Tanggal hari ini diatur untuk input tanggal:", todayString);
-            // ---------------------------------------------------
-
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            console.log("Firebase berhasil diinisialisasi.");
-            
-            // Nonaktifkan tombol simpan sampai auth siap
-            document.querySelectorAll('.save-button').forEach(btn => btn.disabled = true);
-            
-            // Tangani Autentikasi
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    // Pengguna sudah login
-                    userId = user.uid;
-                    console.log("Autentikasi berhasil. UserID:", userId);
-                    document.getElementById('auth-status').textContent = `Terhubung (ID: ${userId.substring(0, 8)}...)`;
-                    document.getElementById('auth-status').className = "text-sm text-green-600 font-medium mt-2";
-                    
-                    // Aktifkan tombol simpan
-                    document.querySelectorAll('.save-button').forEach(btn => btn.disabled = false);
-
-                    // Muat semua data
-                    loadAllData();
-                } else {
-                    // Pengguna belum login, coba login
-                    console.log("Mencoba autentikasi...");
-                    try {
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (error) {
-                        console.error("Gagal autentikasi:", error);
-                        document.getElementById('auth-status').textContent = "Gagal terhubung ke server.";
-                        document.getElementById('auth-status').className = "text-sm text-red-600 font-medium mt-2";
-                    }
-                }
-            });
-
-        } catch (error) {
-            console.error("Gagal inisialisasi Firebase:", error);
-            document.getElementById('auth-status').textContent = "Gagal memuat konfigurasi Firebase.";
-            document.getElementById('auth-status').className = "text-sm text-red-600 font-medium mt-2";
-        }
-        
-        // --- LOGIKA TAB ---
-        const forms = document.querySelectorAll('main form');
-        const tabs = document.querySelectorAll('nav .tab-button');
-
-        window.showTab = (tabName, clickedButton) => {
-            // Sembunyikan semua form
-            forms.forEach(form => form.classList.add('hidden'));
-            
-            // Nonaktifkan semua tab
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Tampilkan form yang dipilih
-            document.getElementById(tabName + '-form').classList.remove('hidden');
-            
-            // Aktifkan tab yang diklik
-            clickedButton.classList.add('active');
-        }
-
-        // --- LOGIKA FIRESTORE ---
-
-        // Fungsi untuk menangani submit form
-        async function handleFormSubmit(event) {
-            event.preventDefault();
-
-            // --- Validasi dan Ambil NPSN ---
-            const npsnInput = document.getElementById('npsn-sekolah');
-            const npsnError = document.getElementById('npsn-error');
-            const npsn = npsnInput.value;
-
-            if (!npsn || npsn.trim() === '') {
-                npsnError.classList.remove('hidden'); // Tampilkan error
-                npsnInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500'); // Sorot input
-                npsnInput.focus(); // Fokus ke input
-                console.error("NPSN wajib diisi.");
-                return; // Hentikan submit
-            } else {
-                npsnError.classList.add('hidden'); // Sembunyikan error
-                npsnInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500'); // Hapus sorot
-            }
-            // --- Akhir Validasi NPSN ---
-
-            if (!userId) {
-                console.error("UserID tidak ditemukan, tidak bisa menyimpan.");
-                // Nanti bisa diganti modal
-                return;
-            }
-
-            const form = event.target;
-            const collectionName = form.dataset.collection;
-            const formData = new FormData(form);
-            
-            // Ubah FormData menjadi objek biasa
-            let data = {};
-            data['npsn'] = npsn; // <-- TAMBAHKAN NPSN KE DATA
-
-            // Ambil semua ID input di dalam form
-            form.querySelectorAll('input, textarea').forEach(input => {
-                if (input.id) {
-                    // Ambil nama field dari ID (misal: 'fgd-tanggal' -> 'tanggal')
-                    const fieldName = input.id.split('-').slice(1).join('_');
-                    data[fieldName] = input.value;
-                }
-            });
-            
-            // Tambahkan timestamp
-            data.createdAt = Timestamp.now();
-
-            // Disable tombol saat menyimpan
-            const submitButton = form.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Menyimpan...';
-
-            try {
-                // Simpan ke Firestore
-                const docRef = await addDoc(collection(db, 'artifacts', appId, 'users', userId, collectionName), data);
-                console.log("Data berhasil disimpan dengan ID:", docRef.id);
-                form.reset(); // Kosongkan form setelah berhasil
-            } catch (error) {
-                console.error("Gagal menyimpan data:", error);
-                // Nanti bisa diganti modal
-            } finally {
-                // Aktifkan tombol kembali
-                submitButton.disabled = false;
-                submitButton.textContent = `Simpan Data ${collectionName.split('_')[0].charAt(0).toUpperCase() + collectionName.split('_')[0].slice(1)}`;
-            }
-        }
-        
-        // Tambahkan event listener ke semua form
-        document.querySelectorAll('main form').forEach(form => {
-            form.addEventListener('submit', handleFormSubmit);
-        });
-
-        // Fungsi untuk memuat dan menampilkan data (real-time)
-        function attachSnapshotListener(collectionName, displayElementId) {
-            if (!userId) return;
-
-            const displayElement = document.getElementById(displayElementId);
-            const colRef = collection(db, 'artifacts', appId, 'users', userId, collectionName);
-            
-            onSnapshot(colRef, (snapshot) => {
-                if (snapshot.empty) {
-                    displayElement.innerHTML = '<p class="text-gray-500">Belum ada data...</p>';
-                    return;
-                }
-                
-                displayElement.innerHTML = ''; // Kosongkan tampilan
-                let dataHtml = [];
-                snapshot.docs.forEach(doc => {
-                    const data = doc.data();
-                    let content = `<div class="p-3 bg-white border border-gray-200 rounded-lg shadow-sm text-sm">`;
-                    
-                    // Format data secara dinamis
-                    for (const [key, value] of Object.entries(data)) {
-                        if (key === 'createdAt') continue; // Jangan tampilkan timestamp
-                        // Ubah 'nama_guru' menjadi 'Nama Guru'
-                        const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        content += `<p class="mb-1"><strong class="font-medium text-gray-700">${label}:</strong> <span class="text-gray-600">${value}</span></p>`;
-                    }
-                    
-                    content += `</div>`;
-                    dataHtml.push(content);
-                });
-                // Tampilkan data terbaru di atas
-                displayElement.innerHTML = dataHtml.reverse().join('');
-            }, (error) => {
-                console.error(`Gagal memuat data ${collectionName}:`, error);
-                displayElement.innerHTML = '<p class="text-red-500">Gagal memuat data.</p>';
-            });
-        }
-
-        // Fungsi untuk memuat semua data
-        function loadAllData() {
-            attachSnapshotListener('fgd_data', 'fgd-data-display');
-            attachSnapshotListener('guru_data', 'guru-data-display');
-            attachSnapshotListener('murid_data', 'murid-data-display');
-            attachSnapshotListener('observasi_data', 'observasi-data-display');
-        }
-
-    </script>
 </body>
 </html>
-
-
