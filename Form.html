@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Pendampingan</title>
+    <!-- Memuat Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  	<link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
+    <!-- Memuat Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Menggunakan font Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style kustom untuk scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-gray-800 text-white p-4 flex-shrink-0 fixed md:relative h-full z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="h-16 flex items-center justify-center mb-4">
+                <i class="fas fa-clipboard-list text-2xl mr-3"></i>
+                <h1 class="text-2xl font-bold text-white">Pendampingan</h1>
+            </div>
+            <nav>
+                <ul class="space-y-2">
+                    <!-- Tautan Menu -->
+                    <li>
+                        <a href="#" onclick="showForm('fgd-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-users w-6 text-center mr-3"></i>
+                            <span class="font-medium">FGD</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showForm('wawancara-guru-form', this)" class="sidebar-link flex items-center px-4 py-3 bg-gray-900 text-white rounded-lg transition-colors"> <!-- Aktif secara default -->
+                            <i class="fas fa-chalkboard-user w-6 text-center mr-3"></i>
+                            <span class="font-medium">Wawancara Guru</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showForm('wawancara-murid-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-children w-6 text-center mr-3"></i>
+                            <span class="font-medium">Wawancara Murid</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                            <span class="font-medium">Observasi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                            <span class="font-medium">Program</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                            <span class="font-medium">Laporan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                            <span class="font-medium">Panduan Diskusi</span>
+                        </a>
+                    </li>                   
+                    <li>
+                        <a href="./" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-home w-6 text-center mr-3"></i>
+                            <span class="font-medium">Home</span>
+                        </a>
+                    </li>                         
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay untuk mobile -->
+        <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden md:hidden"></div>
+
+        <!-- Konten Utama -->
+        <div id="main-content" class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header Mobile -->
+            <header class="md:hidden bg-white shadow p-4 flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-800">Form Pendampingan</h1>
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </header>
+
+            <!-- Area Konten Form -->
+            <main class="flex-1 overflow-y-auto p-6 md:p-8">
+
+                <!-- Form 1: Wawancara Guru (Terlihat) -->
+                <div id="wawancara-guru-form" class="form-section">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Wawancara Guru</h1>
+                    
+                    <form action="#" method="POST">
+                        <!-- Bagian I: Data Petugas & Sekolah -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Dropdown Petugas 1 -->
+                                <div>
+                                    <label for="petugas1" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
+                                    <select id="petugas1" name="petugas1" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Dropdown Petugas 2 -->
+                                <div>
+                                    <label for="petugas2" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
+                                    <select id="petugas2" name="petugas2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- NPSN -->
+                                <div>
+                                    <label for="npsn" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="npsn" id="npsn" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Nama Sekolah -->
+                                <div>
+                                    <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="nama_sekolah" id="nama_sekolah" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Provinsi -->
+                                <div>
+                                    <label for="provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                                    <input type="text" name="provinsi" id="provinsi" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Kab/Kota -->
+                                <div>
+                                    <label for="kab_kota" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
+                                    <input type="text" name="kab_kota" id="kab_kota" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian II: Data Guru -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Guru</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Nama Guru -->
+                                <div>
+                                    <label for="nama_guru" class="block text-sm font-medium text-gray-700 mb-1">Nama Guru</label>
+                                    <input type="text" name="nama_guru" id="nama_guru" placeholder="Masukkan Nama Guru" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+
+                                <!-- HP Guru -->
+                                <div>
+                                    <label for="hp_guru" class="block text-sm font-medium text-gray-700 mb-1">HP Guru</label>
+                                    <input type="tel" name="hp_guru" id="hp_guru" placeholder="Mis: 08123456..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+
+                                <!-- Mengajar Kelas -->
+                                <div>
+                                    <label for="kelas_guru" class="block text-sm font-medium text-gray-700 mb-1">Mengajar Kelas</label>
+                                    <input type="text" name="kelas_guru" id="kelas_guru" placeholder="Mis: Kelas 1 dan 2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian III: Pertanyaan Wawancara -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan Wawancara</h2>
+                            <div class="space-y-8">
+                                <!-- Pertanyaan 1 -->
+                                <div>
+                                    <label for="q1" class="block text-md font-semibold text-gray-800">1. Bagaimana Bapak/Ibu memahami penguatan literasi dan numerasi dalam konteks pembelajaran mendalam? [Pemahaman Umum]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apa perbedaan penguatan literasi dan numerasi dengan kegiatan membaca atau berhitung yang selama ini dilakukan?<br>
+                                        - Bagaimana penguatan tersebut berkontribusi pada pengembangan dimensi Profil Lulusan?
+                                    </p>
+                                    <textarea id="q1" name="q1" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru menunjukkan pemahaman bahwa literasi dan numerasi merupakan kemampuan berpikir, bernalar, dan memahami konteks secara mendalam dalam setiap mata pelajaran. Jawaban mencerminkan keterkaitan antara penguatan literasi dan numerasi dengan pembentukan kompetensi murid sesuai dimensi Profil Lulusan."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 2 -->
+                                <div>
+                                    <label for="q2" class="block text-md font-semibold text-gray-800">2. Bagaimana Bapak/Ibu menilai kemampuan literasi dan numerasi murid di kelas yang Bapak/Ibu ampu berdasarkan pengalaman mengajar dan data pembelajaran? [Kondisi Awal dan Refleksi Sekolah]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apakah Bapak/Ibu menggunakan hasil asesmen seperti ANBK atau asesmen diagnostik untuk memahami kemampuan murid?<br>
+                                        - Apa yang menjadi kekuatan dan tantangan murid dalam literasi dan numerasi?
+                                    </p>
+                                    <textarea id="q2" name="q2" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru mampu menjelaskan kondisi aktual berdasarkan data atau observasi kelas. Jawaban menggambarkan kemampuan guru dalam mengenali capaian murid serta tantangan yang perlu ditangani melalui strategi pembelajaran yang sesuai."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 3 -->
+                                <div>
+                                    <label for="q3" class="block text-md font-semibold text-gray-800">3. Dapatkah Bapak/Ibu menceritakan contoh pembelajaran yang telah diterapkan untuk memperkuat kemampuan literasi dan numerasi murid? [Praktik Pembelajaran dan Strategi Inovatif]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Bagaimana Bapak/Ibu menggunakan pertanyaan pemantik (SSA) atau pendekatan CPA dalam proses pembelajaran?<br>
+                                        - Adakah kegiatan membaca, menulis, atau berhitung yang dikaitkan dengan konteks kehidupan sehari-hari?
+                                    </p>
+                                    <textarea id="q3" name="q3" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru memberikan contoh konkret penerapan strategi pembelajaran mendalam seperti penggunaan pertanyaan pemantik (SSA), tahapan konkret–visual–abstrak (CPA), atau integrasi literasi-numerasi kontekstual. Jawaban menunjukkan keterlibatan aktif murid dalam proses berpikir dan refleksi"></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 4 -->
+                                <div>
+                                    <label for="q4" class="block text-md font-semibold text-gray-800">4. Bagaimana bentuk kolaborasi yang dilakukan Bapak/Ibu bersama guru lain untuk memperkuat pembelajaran yang menguatkan literasi dan numerasi di sekolah? [Kolaborasi dan Pengembangan Profesional]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Adakah forum pertemuan atau diskusi rutin untuk berbagi praktik pembelajaran?<br>
+                                        - Bagaimana hasil kolaborasi tersebut diterapkan dalam kegiatan belajar di kelas?
+                                    </p>
+                                    <textarea id="q4" name="q4" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru menjelaskan keterlibatan dalam kegiatan kolaboratif seperti MGMP internal, lesson study, refleksi kolektif, atau forum pengembangan profesi. Jawaban menunjukkan adanya budaya saling belajar dan penguatan kapasitas guru melalui praktik bersama."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 5 -->
+                                <div>
+                                    <label for="q5" class="block text-md font-semibold text-gray-800">5. Bagaimana Bapak/Ibu memanfaatkan media, sumber belajar, atau teknologi digital untuk mendukung literasi dan numerasi? [Pemanfaatan Media dan Sumber Belajar]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Media atau sumber belajar apa yang paling membantu murid memahami konsep secara mendalam?<br>
+                                        - Bagaimana Bapak/Ibu menyesuaikan media pembelajaran dengan tingkat kemampuan murid?
+                                    </p>
+                                    <textarea id="q5" name="q5" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru menjelaskan penggunaan media atau sumber belajar yang kontekstual dan variatif, seperti teks bacaan tematik, alat peraga numerasi, video, atau platform digital. Jawaban menunjukkan kreativitas guru dalam memfasilitasi pengalaman belajar bermakna."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 6 -->
+                                <div>
+                                    <label for="q6" class="block text-md font-semibold text-gray-800">6. Bagaimana Bapak/Ibu melakukan refleksi terhadap hasil pembelajaran literasi dan numerasi murid? [Refleksi dan Evaluasi Pembelajaran]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apakah terdapat forum refleksi setelah pembelajaran untuk meninjau hasil dan strategi?<br>
+                                        - Bagaimana hasil refleksi digunakan untuk perbaikan proses belajar berikutnya?
+                                    </p>
+                                    <textarea id="q6" name="q6" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru menunjukkan adanya kesadaran reflektif terhadap hasil belajar murid. Jawaban menggambarkan praktik evaluasi formatif dan tindak lanjut konkret seperti penyesuaian strategi, pemberian umpan balik, atau penguatan materi."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 7 -->
+                                <div>
+                                    <label for="q7" class="block text-md font-semibold text-gray-800">7. Apa yang menurut Bapak/Ibu perlu diperkuat agar pelaksanaan program penguatan literasi dan numerasi di kelas dapat berjalan optimal? [Kesiapan dan Dukungan Implementasi]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Dukungan atau pelatihan apa yang paling dibutuhkan untuk memperkuat kompetensi mengajar?<br>
+                                        - Bagaimana peran Kepala Sekolah dan rekan guru dalam memberikan dukungan tersebut?
+                                    </p>
+                                    <textarea id="q7" name="q7" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Guru menjelaskan kebutuhan penguatan kapasitas profesional, dukungan fasilitas, serta mekanisme kolaboratif dari sekolah. Jawaban mencerminkan kesiapan pribadi dan kelembagaan untuk melaksanakan program secara berkelanjutan."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Simpan -->
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-save mr-2"></i> Simpan Wawancara
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-pdf mr-2"></i> Cetak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Form 2: FGD (Tersembunyi) -->
+                <div id="fgd-form" class="form-section hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Form FGD</h1>
+                    
+                    <form action="#" method="POST">
+                        <!-- Bagian I: Data Petugas & Sekolah (FGD) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Dropdown Petugas 1 -->
+                                <div>
+                                    <label for="petugas1_fgd" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
+                                    <select id="petugas1_fgd" name="petugas1_fgd" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Dropdown Petugas 2 -->
+                                <div>
+                                    <label for="petugas2_fgd" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
+                                    <select id="petugas2_fgd" name="petugas2_fgd" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- NPSN -->
+                                <div>
+                                    <label for="npsn_fgd" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="npsn_fgd" id="npsn_fgd" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Nama Sekolah -->
+                                <div>
+                                    <label for="nama_sekolah_fgd" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="nama_sekolah_fgd" id="nama_sekolah_fgd" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Provinsi -->
+                                <div>
+                                    <label for="provinsi_fgd" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                                    <input type="text" name="provinsi_fgd" id="provinsi_fgd" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Kab/Kota -->
+                                <div>
+                                    <label for="kab_kota_fgd" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
+                                    <input type="text" name="kab_kota_fgd" id="kab_kota_fgd" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian II: Data Peserta FGD -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Peserta FGD</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Nama Kepala Sekolah -->
+                                <div>
+                                    <label for="nama_kepala_sekolah" class="block text-sm font-medium text-gray-700 mb-1">Nama Kepala Sekolah</label>
+                                    <input type="text" name="nama_kepala_sekolah" id="nama_kepala_sekolah" placeholder="Masukkan Nama Kepala Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- HP Kepala Sekolah -->
+                                <div>
+                                    <label for="hp_kepala_sekolah" class="block text-sm font-medium text-gray-700 mb-1">HP Kepala Sekolah</label>
+                                    <input type="tel" name="hp_kepala_sekolah" id="hp_kepala_sekolah" placeholder="Mis: 08123456..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- Lama Bertugas -->
+                                <div>
+                                    <label for="lama_bertugas" class="block text-sm font-medium text-gray-700 mb-1">Lama Bertugas</label>
+                                    <input type="text" name="lama_bertugas" id="lama_bertugas" placeholder="Mis: 2 tahun 5 bulan" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div class="md:col-span-2"></div> <!-- Spacer -->
+                                <!-- Nama Guru -->
+                                <div>
+                                    <label for="nama_guru_fgd" class="block text-sm font-medium text-gray-700 mb-1">Nama Guru</label>
+                                    <input type="text" name="nama_guru_fgd" id="nama_guru_fgd" placeholder="Masukkan Nama Guru" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- HP Guru -->
+                                <div>
+                                    <label for="hp_guru_fgd" class="block text-sm font-medium text-gray-700 mb-1">HP Guru</label>
+                                    <input type="tel" name="hp_guru_fgd" id="hp_guru_fgd" placeholder="Mis: 08123456..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- Mengajar Kelas -->
+                                <div>
+                                    <label for="kelas_guru_fgd" class="block text-sm font-medium text-gray-700 mb-1">Mengajar Kelas</label>
+                                    <input type="text" name="kelas_guru_fgd" id="kelas_guru_fgd" placeholder="Mis: Kelas 1 dan 2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian III: Pertanyaan FGD -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan FGD</h2>
+                            <div class="space-y-8">
+                                
+                                <!-- Pertanyaan 1 -->
+                                <div>
+                                    <label class="block text-md font-semibold text-gray-800">1. Bagaimana Bapak/Ibu memahami penguatan literasi dan numerasi dalam konteks pembelajaran mendalam di sekolah? [Pemahaman Umum]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Bagaimana keterkaitan antara penguatan literasi dan numerasi dengan dimensi Profil Lulusan?<br>
+                                        - Bagaimana konsep ini diterapkan dalam proses pembelajaran di kelas?
+                                    </p>
+                                    
+                                    <label for="fgd_q1_ks" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Kepala Sekolah:</label>
+                                    <textarea id="fgd_q1_ks" name="fgd_q1_ks" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah menunjukkan pemahaman yang komprehensif bahwa literasi dan numerasi merupakan kemampuan esensial yang dikembangkan melalui pembelajaran berkesadaran, bermakna, dan menggembirakan. Jawaban mencerminkan pemahaman tentang hubungan antara pembelajaran mendalam dan penguatan kemampuan murid dalam berbagai mata pelajaran."></textarea>
+                                    
+                                    <label for="fgd_q1_guru" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Guru:</label>
+                                    <textarea id="fgd_q1_guru" name="fgd_q1_guru" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Guru menunjukkan pemahaman bahwa literasi dan numerasi merupakan kemampuan berpikir, bernalar, dan memahami konteks secara mendalam dalam setiap mata pelajaran. Jawaban mencerminkan keterkaitan antara penguatan literasi dan numerasi dengan pembentukan kompetensi murid sesuai dimensi Profil Lulusan."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 2 -->
+                                <div>
+                                    <label class="block text-md font-semibold text-gray-800">2. Berdasarkan hasil refleksi atau data Rapor Pendidikan, tantangan apa yang saat ini dihadapi sekolah dalam meningkatkan kemampuan literasi dan numerasi murid? [Kondisi Awal dan Refleksi Sekolah]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apakah tantangan tersebut berkaitan dengan aspek pedagogik, lingkungan belajar, atau kebijakan sekolah?<br>
+                                        - Data atau hasil asesmen apa yang digunakan sekolah untuk memahami kondisi tersebut?
+                                    </p>
+
+                                    <label for="fgd_q2_ks" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Kepala Sekolah:</label>
+                                    <textarea id="fgd_q2_ks" name="fgd_q2_ks" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah dapat menjelaskan kondisi aktual dengan mengacu pada data asesmen seperti ANBK, asesmen diagnostik, atau hasil refleksi guru. Jawaban menunjukkan kemampuan analitis dalam mengidentifikasi akar tantangan serta dampaknya terhadap proses pembelajaran."></textarea>
+                                    
+                                    <label for="fgd_q2_guru" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Guru:</label>
+                                    <textarea id="fgd_q2_guru" name="fgd_q2_guru" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Guru mampu menjelaskan kondisi aktual berdasarkan data atau observasi kelas. Jawaban menggambarkan kemampuan guru dalam mengenali capaian murid serta tantangan yang perlu ditangani melalui strategi pembelajaran yang sesuai."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 3 -->
+                                <div>
+                                    <label for="fgd_q3" class="block text-md font-semibold text-gray-800">3. Langkah apa yang telah dilakukan Sekolah untuk mendukung guru dalam mengembangkan pembelajaran yang menguatkan literasi dan numerasi? [Kepemimpinan Instruksional]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Bagaimana bentuk supervisi akademik atau pendampingan yang diberikan kepada guru?<br>
+                                        - Apakah terdapat forum refleksi, pelatihan, atau kebijakan internal yang mendukung penerapan strategi pembelajaran mendalam seperti SSA atau CPA?
+                                    </p>
+                                    <label for="fgd_q3" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Catatan FGD (KS & Guru):</label>
+                                    <textarea id="fgd_q3" name="fgd_q3" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah dan guru menjelaskan perannya dalam membina dan memfasilitasi guru melalui kegiatan supervisi, forum pengembangan profesi, atau kebijakan akademik sekolah. Jawaban memperlihatkan keselarasan antara kepemimpinan instruksional dan peningkatan kualitas pembelajaran."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 4 -->
+                                <div>
+                                    <label for="fgd_q4" class="block text-md font-semibold text-gray-800">4. Dapatkah Bapak/Ibu menceritakan contoh pembelajaran yang telah diterapkan untuk memperkuat kemampuan literasi dan numerasi murid? [Praktik Pembelajaran dan Strategi Inovatif]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Bagaimana Bapak/Ibu menggunakan pertanyaan pemantik (SSA) atau pendekatan CPA dalam proses pembelajaran?<br>
+                                        - Adakah kegiatan membaca, menulis, atau berhitung yang dikaitkan dengan konteks kehidupan sehari-hari?
+                                    </p>
+                                    <label for="fgd_q4" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Catatan FGD (KS & Guru):</label>
+                                    <textarea id="fgd_q4" name="fgd_q4" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah dan Guru memberikan contoh konkret penerapan strategi pembelajaran mendalam seperti penggunaan pertanyaan pemantik (SSA), tahapan konkret–visual–abstrak (CPA), atau integrasi literasi-numerasi kontekstual. Jawaban menunjukkan keterlibatan aktif murid dalam proses berpikir dan refleksi."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 5 -->
+                                <div>
+                                    <label class="block text-md font-semibold text-gray-800">5. Bagaimana sekolah membangun budaya kolaboratif untuk memperkuat literasi dan numerasi lintas mata pelajaran? [Kolaborasi dan Budaya Sekolah]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Adakah forum atau kegiatan rutin yang memfasilitasi guru berbagi praktik pembelajaran literasi dan numerasi?<br>
+                                        - Bagaimana hasil kolaborasi tersebut digunakan untuk meningkatkan mutu pembelajaran?
+                                    </p>
+                                    
+                                    <label for="fgd_q5_ks" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Kepala Sekolah:</label>
+                                    <textarea id="fgd_q5_ks" name="fgd_q5_ks" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah menggambarkan keberadaan forum kolaboratif seperti MGMP internal, lesson study, atau pertemuan reflektif guru. Budaya kerja kolaboratif di sekolah mendorong konsistensi penerapan strategi literasi dan numerasi secara lintas disiplin."></textarea>
+                                    
+                                    <label for="fgd_q5_guru" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Guru:</label>
+                                    <textarea id="fgd_q5_guru" name="fgd_q5_guru" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Guru menjelaskan keterlibatan dalam kegiatan kolaboratif seperti MGMP internal, lesson study, refleksi kolektif, atau forum pengembangan profesi. Jawaban menunjukkan adanya budaya saling belajar dan penguatan kapasitas guru melalui praktik bersama."></textarea>
+                                </div>
+                                
+                                <!-- Pertanyaan 6 -->
+                                <div>
+                                    <label class="block text-md font-semibold text-gray-800">6. Bagaimana sekolah mengoptimalkan sumber daya dan lingkungan belajar untuk mendukung penguatan literasi dan numerasi? [Pemanfaatan Sumber Daya dan Lingkungan Belajar]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apakah sekolah memiliki fasilitas atau sarana yang mendukung kegiatan literasi dan numerasi, seperti pojok baca, papan data, atau media numerasi?<br>
+                                        - Bagaimana sekolah memanfaatkan media digital dan alat bantu pembelajaran lainnya?<br>
+                                        - Media atau sumber belajar apa yang paling membantu murid memahami konsep secara mendalam?
+                                    </p>
+                                    
+                                    <label for="fgd_q6_ks" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Kepala Sekolah:</label>
+                                    <textarea id="fgd_q6_ks" name="fgd_q6_ks" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah dan guru menjelaskan ketersediaan serta pemanfaatan fasilitas dan sumber daya sekolah untuk memperkuat budaya literasi dan numerasi. Jawaban menekankan upaya penciptaan lingkungan belajar yang kaya sumber daya dan kondusif bagi pembelajaran mendalam."></textarea>
+                                    
+                                    <label for="fgd_q6_guru" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban Guru:</label>
+                                    <textarea id="fgd_q6_guru" name="fgd_q6_guru" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala sekolah dan guru menjelaskan penggunaan media atau sumber belajar yang kontekstual dan variatif, seperti teks bacaan tematik, alat peraga numerasi, video, atau platform digital. Jawaban menunjukkan kreativitas guru dalam memfasilitasi pengalaman belajar bermakna."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 7 -->
+                                <div>
+                                    <label for="fgd_q7" class="block text-md font-semibold text-gray-800">7. Bagaimana sekolah melaksanakan evaluasi dan refleksi terhadap pelaksanaan program literasi dan numerasi? [Evaluasi dan Refleksi Program]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Siapa yang terlibat dalam proses refleksi hasil pembelajaran?<br>
+                                        - Bagaimana hasil refleksi digunakan sebagai dasar penyempurnaan pembelajaran berikutnya?
+                                    </p>
+                                    <label for="fgd_q7" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Catatan FGD (KS & Guru):</label>
+                                    <textarea id="fgd_q7" name="fgd_q7" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah dan guru menjelaskan adanya mekanisme refleksi terstruktur, melibatkan guru dan tim pengembang sekolah. Hasil refleksi digunakan untuk menyusun perbaikan strategi pembelajaran dan kebijakan penguatan literasi dan numerasi."></textarea>
+                                </div>
+                                
+                                <!-- Pertanyaan 8 -->
+                                <div>
+                                    <label for="fgd_q8" class="block text-md font-semibold text-gray-800">8. Menjelang tahap implementasi program penguatan literasi dan numerasi, hal apa yang perlu diperkuat agar pelaksanaan program berjalan optimal? [Kesiapan Implementasi dan Tindak Lanjut]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apakah ada kebutuhan tambahan dari sisi sumber daya manusia, pelatihan, atau dukungan kelembagaan?<br>
+                                        - Langkah tindak lanjut apa yang akan dilakukan sekolah untuk menjaga keberlanjutan program?
+                                    </p>
+                                    <label for="fgd_q8" class="block text-sm font-medium text-gray-700 mt-4 mb-1">Catatan FGD (KS & Guru):</label>
+                                    <textarea id="fgd_q8" name="fgd_q8" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Konteks: Kepala Sekolah dan guru menyampaikan analisis kesiapan sekolah dan rencana tindak lanjut, termasuk penguatan kapasitas guru, dukungan sumber daya, dan mekanisme monitoring. Jawaban menunjukkan komitmen terhadap pelaksanaan program secara berkelanjutan."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Catatan Pelaksanaan -->
+                            <div class="mt-8 border-t pt-6">
+                                <h3 class="text-lg font-semibold text-gray-700 mb-3">Catatan Pelaksanaan:</h3>
+                                <ul class="text-sm text-gray-600 list-disc list-inside space-y-1">
+                                    <li>(1) wawancara dilaksanakan dalam durasi maksimal 30 menit secara individual;</li>
+                                    <li>(2) gunakan pertanyaan probe untuk memperdalam jawaban tanpa mengarahkan;</li>
+                                    <li>(3) catat kutipan kunci, temuan penting, dan bukti verifikasi;</li>
+                                    <li>(4) hasil wawancara menjadi dasar triangulasi dengan wawancara guru dan hasil observasi kelas.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Simpan -->
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-save mr-2"></i> Simpan FGD
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-pdf mr-2"></i> Cetak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Form 3: Wawancara Murid (Tersembunyi) -->
+                <div id="wawancara-murid-form" class="form-section hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Wawancara Murid</h1>
+                    
+                    <form action="#" method="POST">
+                        <!-- Bagian I: Data Petugas & Sekolah (Salinan dari Form Guru) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Dropdown Petugas 1 -->
+                                <div>
+                                    <label for="petugas1_murid" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
+                                    <select id="petugas1_murid" name="petugas1_murid" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Dropdown Petugas 2 -->
+                                <div>
+                                    <label for="petugas2_murid" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
+                                    <select id="petugas2_murid" name="petugas2_murid" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- NPSN -->
+                                <div>
+                                    <label for="npsn_murid" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="npsn_murid" id="npsn_murid" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Nama Sekolah -->
+                                <div>
+                                    <label for="nama_sekolah_murid" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="nama_sekolah_murid" id="nama_sekolah_murid" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Provinsi -->
+                                <div>
+                                    <label for="provinsi_murid" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                                    <input type="text" name="provinsi_murid" id="provinsi_murid" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Kab/Kota -->
+                                <div>
+                                    <label for="kab_kota_murid" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
+                                    <input type="text" name="kab_kota_murid" id="kab_kota_murid" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian II: Data Murid -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Murid</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                <!-- Murid 1 -->
+                                <div>
+                                    <label for="nama_murid_1" class="block text-sm font-medium text-gray-700 mb-1">Nama Murid 1</label>
+                                    <input type="text" name="nama_murid_1" id="nama_murid_1" placeholder="Masukkan Nama Murid 1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_murid_1" class="block text-sm font-medium text-gray-700 mb-1">Kelas (Murid 1)</label>
+                                    <input type="text" name="kelas_murid_1" id="kelas_murid_1" placeholder="Mis: 4B" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Murid 2 -->
+                                <div>
+                                    <label for="nama_murid_2" class="block text-sm font-medium text-gray-700 mb-1">Nama Murid 2</label>
+                                    <input type="text" name="nama_murid_2" id="nama_murid_2" placeholder="Masukkan Nama Murid 2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_murid_2" class="block text-sm font-medium text-gray-700 mb-1">Kelas (Murid 2)</label>
+                                    <input type="text" name="kelas_murid_2" id="kelas_murid_2" placeholder="Mis: 5A" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+
+                                <!-- Murid 3 -->
+                                <div>
+                                    <label for="nama_murid_3" class="block text-sm font-medium text-gray-700 mb-1">Nama Murid 3</label>
+                                    <input type="text" name="nama_murid_3" id="nama_murid_3" placeholder="Masukkan Nama Murid 3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_murid_3" class="block text-sm font-medium text-gray-700 mb-1">Kelas (Murid 3)</label>
+                                    <input type="text" name="kelas_murid_3" id="kelas_murid_3" placeholder="Mis: 1C" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+
+                                <!-- Murid 4 -->
+                                <div>
+                                    <label for="nama_murid_4" class="block text-sm font-medium text-gray-700 mb-1">Nama Murid 4</label>
+                                    <input type="text" name="nama_murid_4" id="nama_murid_4" placeholder="Masukkan Nama Murid 4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_murid_4" class="block text-sm font-medium text-gray-700 mb-1">Kelas (Murid 4)</label>
+                                    <input type="text" name="kelas_murid_4" id="kelas_murid_4" placeholder="Mis: 2B" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+
+                                <!-- Murid 5 -->
+                                <div>
+                                    <label for="nama_murid_5" class="block text-sm font-medium text-gray-700 mb-1">Nama Murid 5</label>
+                                    <input type="text" name="nama_murid_5" id="nama_murid_5" placeholder="Masukkan Nama Murid 5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_murid_5" class="block text-sm font-medium text-gray-700 mb-1">Kelas (Murid 5)</label>
+                                    <input type="text" name="kelas_murid_5" id="kelas_murid_5" placeholder="Mis: 3A" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+
+                                <!-- Murid 6 -->
+                                <div>
+                                    <label for="nama_murid_6" class="block text-sm font-medium text-gray-700 mb-1">Nama Murid 6</label>
+                                    <input type="text" name="nama_murid_6" id="nama_murid_6" placeholder="Masukkan Nama Murid 6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_murid_6" class="block text-sm font-medium text-gray-700 mb-1">Kelas (Murid 6)</label>
+                                    <input type="text" name="kelas_murid_6" id="kelas_murid_6" placeholder="Mis: 6B" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian III: Pertanyaan Wawancara (Murid) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan Wawancara</h2>
+                            <div class="space-y-8">
+                                <!-- Pertanyaan 1 (Murid) -->
+                                <div>
+                                    <label for="mq1" class="block text-md font-semibold text-gray-800">1. Ceritakan kegiatan belajar di sekolah yang menurut kamu paling membantu memahami pelajaran. [Pengalaman Belajar]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apa yang membuat kegiatan itu mudah kamu pahami atau kamu sukai?<br>
+                                        - Siapa yang biasanya membimbing atau membantu kamu saat kegiatan itu berlangsung?
+                                    </p>
+                                    <textarea id="mq1" name="mq1" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Murid menceritakan pengalaman belajar yang berkesan, seperti membaca cerita, membuat proyek sederhana, berdiskusi, atau memecahkan soal dengan cara menyenangkan. Jawaban menunjukkan keterlibatan aktif murid dalam proses belajar yang bermakna."></textarea>
+                                </div>
+                                
+                                <!-- Pertanyaan 2 (Murid) -->
+                                <div>
+                                    <label for="mq2" class="block text-md font-semibold text-gray-800">2. Apakah kamu sering membaca atau menulis di sekolah? Kegiatan seperti apa yang paling kamu sukai? [Kegiatan Literasi]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Bacaan seperti apa yang paling menarik untuk kamu baca di sekolah?<br>
+                                        - Apakah kamu pernah diminta menulis atau menceritakan kembali hasil bacaanmu?
+                                    </p>
+                                    <textarea id="mq2" name="mq2" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Murid menjelaskan kegiatan literasi yang rutin atau menarik, misalnya membaca di pojok baca, menulis cerita, membuat ringkasan bacaan, atau diskusi tentang isi teks. Jawaban menggambarkan bahwa murid terlibat aktif dan memahami isi bacaan."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 3 (Murid) -->
+                                <div>
+                                    <label for="mq3" class="block text-md font-semibold text-gray-800">3. Ceritakan pengalamanmu saat belajar berhitung atau memecahkan masalah angka di sekolah. [Kegiatan Numerasi]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Pernahkah kamu menggunakan benda nyata, gambar, atau permainan saat belajar berhitung?<br>
+                                        - Bagaimana cara guru menjelaskan supaya kamu bisa lebih paham?
+                                    </p>
+                                    <textarea id="mq3" name="mq3" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Murid menggambarkan pengalaman belajar numerasi yang menyenangkan, seperti menghitung dengan alat peraga, menggambar grafik, atau bermain peran dalam menyelesaikan soal. Jawaban menunjukkan adanya penerapan tahapan konkret–visual–abstrak dalam pembelajaran numerasi."></textarea>
+                                </div>
+                                
+                                <!-- Pertanyaan 4 (Murid) -->
+                                <div>
+                                    <label for="mq4" class="block text-md font-semibold text-gray-800">4. Setelah belajar, apakah kamu biasanya diminta untuk menulis atau bercerita tentang apa yang kamu pelajari? [Refleksi Belajar]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apa yang biasanya kamu tulis atau ceritakan?<br>
+                                        - Bagaimana perasaanmu ketika diminta menceritakan kembali pelajaran yang sudah kamu pelajari?
+                                    </p>
+                                    <textarea id="mq4" name="mq4" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Murid menjelaskan bahwa refleksi menjadi bagian dari proses belajar, seperti menulis jurnal belajar, menyampaikan pendapat di depan kelas, atau menuliskan hal baru yang dipahami. Jawaban menunjukkan kemampuan murid untuk merefleksikan pengalaman belajar."></textarea>
+                                </div>
+
+                                <!-- Pertanyaan 5 (Murid) -->
+                                <div>
+                                    <label for="mq5" class="block text-md font-semibold text-gray-800">5. Bagaimana suasana belajar di kelas kamu? Apakah ada hal di sekolah yang membuat kamu senang belajar membaca atau berhitung? [Lingkungan dan Suasana Belajar]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Apakah kamu punya tempat favorit untuk membaca atau belajar?<br>
+                                        - Apa yang biasanya dilakukan guru supaya suasana belajar terasa menyenangkan?
+                                    </p>
+                                    <textarea id="mq5" name="mq5" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Murid menggambarkan suasana kelas yang mendukung, seperti guru yang sabar, kegiatan kelompok yang seru, atau ruang baca yang menarik. Jawaban menunjukkan bahwa lingkungan belajar di sekolah memberi dukungan terhadap pembiasaan yang menguatkan literasi dan numerasi"></textarea>
+                                </div>
+                                
+                                <!-- Pertanyaan 6 (Murid) -->
+                                <div>
+                                    <label for="mq6" class="block text-md font-semibold text-gray-800">6. Menurut kamu, apa kegiatan belajar yang paling kamu tunggu atau paling membuat kamu bersemangat di sekolah? [Keterlibatan dan Motivasi]</label>
+                                    <p class="text-sm text-gray-600 mt-2 mb-3">
+                                        <strong class="text-gray-700">Probe:</strong><br>
+                                        - Mengapa kamu menyukai kegiatan itu?<br>
+                                        - Apakah kegiatan itu membuat kamu merasa lebih paham pelajaran?
+                                    </p>
+                                    <textarea id="mq6" name="mq6" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Murid menyampaikan kegiatan belajar yang menumbuhkan semangat, seperti proyek, eksperimen, permainan, atau membaca bersama. Jawaban menunjukkan bahwa pembelajaran di sekolah membantu membangun motivasi dan rasa percaya diri murid."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Simpan -->
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-save mr-2"></i> Simpan Wawancara Murid
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-pdf mr-2"></i> Cetak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Form 4: Observasi (Tersembunyi) -->
+                <div id="observasi-form" class="form-section hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Observasi</h1>
+                    
+                    <form action="#" method="POST">
+                        <!-- Bagian I: Data Petugas & Sekolah (Observasi) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Petugas 1 -->
+                                <div>
+                                    <label for="petugas1_obs" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
+                                    <select id="petugas1_obs" name="petugas1_obs" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                <!-- Petugas 2 -->
+                                <div>
+                                    <label for="petugas2_obs" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
+                                    <select id="petugas2_obs" name="petugas2_obs" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                        <option value="Ahmad">Ahmad</option>
+                                        <option value="Budi">Budi</option>
+                                        <option value="Chandra">Chandra</option>
+                                        <option value="Dewi">Dewi</option>
+                                    </select>
+                                </div>
+                                <!-- NPSN -->
+                                <div>
+                                    <label for="npsn_obs" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="npsn_obs" id="npsn_obs" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- Nama Sekolah -->
+                                <div>
+                                    <label for="nama_sekolah_obs" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="nama_sekolah_obs" id="nama_sekolah_obs" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- Provinsi -->
+                                <div>
+                                    <label for="provinsi_obs" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                                    <input type="text" name="provinsi_obs" id="provinsi_obs" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- Kab/Kota -->
+                                <div>
+                                    <label for="kab_kota_obs" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
+                                    <input type="text" name="kab_kota_obs" id="kab_kota_obs" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian II: Data Guru (Observasi) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Guru (Observasi)</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Nama Guru -->
+                                <div>
+                                    <label for="nama_guru_obs" class="block text-sm font-medium text-gray-700 mb-1">Nama Guru</label>
+                                    <input type="text" name="nama_guru_obs" id="nama_guru_obs" placeholder="Masukkan Nama Guru" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- HP Guru -->
+                                <div>
+                                    <label for="hp_guru_obs" class="block text-sm font-medium text-gray-700 mb-1">HP Guru</label>
+                                    <input type="tel" name="hp_guru_obs" id="hp_guru_obs" placeholder="Mis: 08123456..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <!-- Mengajar Kelas -->
+                                <div>
+                                    <label for="kelas_guru_obs" class="block text-sm font-medium text-gray-700 mb-1">Mengajar Kelas</label>
+                                    <input type="text" name="kelas_guru_obs" id="kelas_guru_obs" placeholder="Mis: Kelas 1 dan 2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian III: Observasi -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Observasi</h2>
+                            
+                            <!-- Wrapper div for horizontal scrolling on small screens -->
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full border border-gray-300 border-collapse">
+                                    <!-- Table Header -->
+                                    <thead class="bg-gray-100 text-gray-700">
+                                        <tr>
+                                            <th rowspan="2" class="border border-gray-300 p-3 text-left text-sm font-semibold w-1/12">No</th>
+                                            <th rowspan="2" class="border border-gray-300 p-3 text-left text-sm font-semibold w-4/12">Komponen dan Indikator</th>
+                                            <th colspan="3" class="border border-gray-300 p-3 text-center text-sm font-semibold w-3/12">Pengamatan</th>
+                                            <th rowspan="2" class="border border-gray-300 p-3 text-left text-sm font-semibold w-4/12">Catatan & Bukti Pendukung</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-gray-300 p-2 text-center text-xs font-medium w-1/12">Ya</th>
+                                            <th class="border border-gray-300 p-2 text-center text-xs font-medium w-1/12">Tidak</th>
+                                            <th class="border border-gray-300 p-2 text-center text-xs font-medium w-1/12">Tdk. Teramati</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        <!-- Section A -->
+                                        <tr class="bg-gray-50">
+                                            <td colspan="6" class="border border-gray-300 p-3 font-bold text-gray-800">A. Proses Pembelajaran di Kelas</td>
+                                        </tr>
+                                        
+                                        <!-- A.1 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">1</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Kegiatan Pembuka<br><span class="text-xs text-gray-600">Guru menjelaskan tujuan pembelajaran dan mengaitkannya dengan pengalaman nyata murid.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a1" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a1" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a1" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a1" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.2 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">2</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Aktivasi yang Menguatkan Literasi<br><span class="text-xs text-gray-600">Terdapat kegiatan membaca, menulis, atau berdiskusi yang membantu murid memahami konteks pembelajaran.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a2" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a2" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a2" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a2" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.3 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">3</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Aktivasi yang Menguatkan Numerasi<br><span class="text-xs text-gray-600">Guru memberikan kegiatan yang melatih berpikir logis, berhitung, mengukur, atau menganalisis data sederhana.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a3" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a3" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a3" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a3" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+                                        
+                                        <!-- A.4 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">4</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Pertanyaan Pemantik (SSA)<br><span class="text-xs text-gray-600">Guru menggunakan pertanyaan yang mendorong murid berpikir pada tiga tingkat: memahami isi, menafsirkan makna, dan menilai informasi.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a4" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a4" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a4" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a4" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.5 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">5</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Tahapan CPA (Concrete– Pictorial– Abstract)<br><span class="text-xs text-gray-600">Guru memfasilitasi pembelajaran yang berpindah dari benda konkret, representasi gambar, hingga simbol/konsep abstrak.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a5" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a5" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a5" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a5" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.6 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">6</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Keterlibatan Murid<br><span class="text-xs text-gray-600">Murid aktif bertanya, menjawab, dan berpartisipasi dalam kegiatan belajar.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a6" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a6" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a6" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a6" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.7 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">7</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Kegiatan Reflektif<br><span class="text-xs text-gray-600">Di akhir pembelajaran, murid melakukan refleksi atau menyimpulkan hasil belajarnya.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a7" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a7" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a7" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a7" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+                                        
+                                        <!-- A.8 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">8</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Pemanfaatan Media / Teknologi<br><span class="text-xs text-gray-600">Guru menggunakan media visual, alat peraga, atau teknologi digital untuk memperjelas pembelajaran (dengan strategi yang menguatkan literasi dan numerasi).</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a8" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a8" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a8" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a8" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.9 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">9</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Diferensiasi Pembelajaran<br><span class="text-xs text-gray-600">Guru menyesuaikan kegiatan atau contoh pembelajaran dengan kemampuan dan kebutuhan murid yang beragam.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a9" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a9" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a9" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a9" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- A.10 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">10</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Penilaian Formatif<br><span class="text-xs text-gray-600">Guru memberikan umpan balik langsung terhadap hasil kerja murid selama kegiatan belajar berlangsung.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a10" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a10" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_a10" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_a10" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+                                        
+                                        <!-- Section B -->
+                                        <tr class="bg-gray-50">
+                                            <td colspan="6" class="border border-gray-300 p-3 font-bold text-gray-800">B. Kondisi Lingkungan Kelas dan Sekolah</td>
+                                        </tr>
+
+                                        <!-- B.1 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">1</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Lingkungan Kelas yang Menguatkan Literasi<br><span class="text-xs text-gray-600">Terdapat bahan bacaan (yang sesuai dengan pembacanya) di kelas seperti buku, poster, atau karya tulis murid yang mendukung budaya literasi.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b1" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b1" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b1" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b1" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.2 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">2</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Lingkungan Kelas yang Menguatkan Numerasi<br><span class="text-xs text-gray-600">Ada alat bantu atau tampilan yang memperkuat pemahaman numerasi seperti grafik, tabel, atau data hasil proyek.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b2" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b2" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b2" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b2" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.3 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">3</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Pojok Baca / Sudut Literasi<br><span class="text-xs text-gray-600">Kelas memiliki area khusus untuk membaca atau menulis.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b3" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.4 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">4</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Paparan Karya Murid<br><span class="text-xs text-gray-600">Karya tulis, hasil proyek, atau refleksi murid ditampilkan di ruang kelas atau koridor sekolah.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b4" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.5 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">5</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Kebersihan dan Kerapian Ruang Belajar<br><span class="text-xs text-gray-600">Ruang kelas tertata dengan baik, ventilasi cukup, dan suasana mendukung konsentrasi belajar.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b5" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.6 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">6</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Fasilitas Pendukung Sekolah<br><span class="text-xs text-gray-600">Sekolah memiliki fasilitas pendukung literasi-numerasi seperti perpustakaan, laboratorium, atau ruang multimedia.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b6" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b6" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td classD="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b6" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b6" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.7 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">7</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Kegiatan Literasi Sekolah<br><span class="text-xs text-gray-600">Terlihat adanya kegiatan literasi terjadwal (misalnya membaca bersama, hari literasi, atau jurnal pagi).</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b7" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b7" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b7" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b7" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+                                        
+                                        <!-- B.8 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">8</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Kegiatan Numerasi Sekolah<br><span class="text-xs text-gray-600">Ada aktivitas numerasi di luar kelas seperti permainan edukatif, proyek data, atau lomba numerasi.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b8" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.9 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">9</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Keterlibatan Kepala Sekolah dan Guru<br><span class="text-xs text-gray-600">Kepala sekolah dan guru aktif memantau serta memberi dukungan terhadap kegiatan literasi dan numerasi.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b9" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+
+                                        <!-- B.10 -->
+                                        <tr>
+                                            <td class="border border-gray-300 p-3 align-top text-center">10</td>
+                                            <td class="border border-gray-300 p-3 align-top text-sm">Suasana Sekolah yang Mendorong Belajar<br><span class="text-xs text-gray-600">Lingkungan sekolah menampilkan poster edukatif, slogan motivasi, atau simbol yang mendorong semangat belajar.</span></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="ya" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="tidak" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b10" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Simpan -->
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-save mr-2"></i> Simpan Observasi
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-pdf mr-2"></i> Cetak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Logika JavaScript untuk Sidebar dan Navigasi Form
+
+        // Ambil elemen-elemen DOM
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menu-toggle');
+        const overlay = document.getElementById('overlay');
+        const formSections = document.querySelectorAll('.form-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        // Fungsi untuk menampilkan form yang dipilih
+        function showForm(formId, clickedLink) {
+            // Sembunyikan semua form
+            formSections.forEach(form => {
+                form.classList.add('hidden');
+            });
+
+            // Tampilkan form yang sesuai dengan ID
+            const activeForm = document.getElementById(formId);
+            if (activeForm) {
+                activeForm.classList.remove('hidden');
+            }
+
+            // Atur style link aktif di sidebar
+            sidebarLinks.forEach(link => {
+                link.classList.remove('bg-gray-900', 'text-white');
+                link.classList.add('text-gray-300', 'hover:bg-gray-700', 'hover:text-white');
+            });
+            if (clickedLink) {
+                clickedLink.classList.add('bg-gray-900', 'text-white');
+                clickedLink.classList.remove('text-gray-300', 'hover:bg-gray-700');
+            }
+
+            // Tutup sidebar di mobile setelah mengklik link
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Event listener untuk tombol toggle menu mobile
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+
+        // Event listener untuk overlay (menutup sidebar)
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+
+        // Pastikan form pertama (Wawancara Guru) terlihat saat halaman dimuat
+        // (Ini sudah diatur oleh class 'hidden' di form lain dan tidak di form guru)
+    </script>
+
+</body>
+</html>
+
+
+

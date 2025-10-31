@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
+    <title>Pendampingan Litnum</title>
+    <style>
+        /* Pengaturan Dasar Halaman */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-color: #f4f7f6;
+        }
+
+        /* Kontainer Utama (Flexbox) */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar (Menu Samping) */
+        .sidebar {
+            width: 240px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            /* Menjaga sidebar tetap di tempat saat konten di-scroll */
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+
+        .sidebar-menu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #bdc3c7;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer; /* Menunjukkan bisa di-klik */
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+
+        /* Konten Utama */
+        .main-content {
+            flex-grow: 1; /* Mengisi sisa ruang */
+            padding: 30px;
+            overflow-y: auto; /* Agar bisa scroll jika konten panjang */
+        }
+
+        .main-content h1 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        /* Kontainer untuk setiap halaman/konten */
+        .content-section {
+            display: none; /* Semua disembunyikan by default */
+        }
+        .content-section.active {
+            display: block; /* Yang aktif akan ditampilkan */
+        }
+
+
+        /* Styling untuk Tabel Data */
+        .data-table-container {
+            /* Membuat tabel bisa di-scroll horizontal jika terlalu lebar */
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            min-width: 1200px; /* Lebar minimum agar muat */
+            border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .data-table th {
+            background-color: #ecf0f1;
+            color: #34495e;
+            font-weight: bold;
+            text-align: center; /* Meratakan header di tengah */
+            vertical-align: middle;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* STYLING UNTUK FORM (Tetap ada, mungkin dipakai di menu lain) */
+        .data-form {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        /* ... (Style form lainnya tetap di sini) ... */
+        .data-form h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        .data-form h3:first-child {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Agar padding tidak menambah lebar */
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .form-submit-button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .form-submit-button:hover {
+            background-color: #34495e;
+        }
+
+        /* Tombol Aksi di Tabel */
+        .btn-edit, .btn-delete {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .btn-edit {
+            background-color: #3498db; /* Biru */
+        }
+        .btn-edit:hover {
+            background-color: #2980b9;
+        }
+        .btn-delete {
+            background-color: #e74c3c; /* Merah */
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- ==================
+             SIDEBAR (MENU)
+        =================== -->
+        <aside class="sidebar">
+            <h2>LITNUM APP</h2>
+            <ul class="sidebar-menu">
+                <li><a data-target="./" class="active">Home</a></li>
+                <li><a data-target="content-input">Progres</a></li>                
+                <li><a data-target="content-lokus" class="active">Data Lokus</a></li>
+                <li><a data-target="content-sekolah">Sekolah</a></li>
+                <li><a data-target="content-input">Progres</a></li>
+                <li><a data-target="content-laporan">Laporan</a></li>
+                <li><a data-target="content-petugas">Manajemen Petugas</a></li>
+            </ul>
+        </aside>
+
+        <!-- ==================
+             KONTEN UTAMA
+        =================== -->
+        <main class="main-content">
+
+            <!-- ================================== -->
+            <!--   HALAMAN 1: DATA LOKUS (DEFAULT)  -->
+            <!-- ================================== -->
+            <div id="content-lokus" class="content-section active">
+                <h1>Data Lokus Monitoring</h1>
+                <p>Ini adalah halaman untuk mengelola data Lokus sekolah yang akan di-monev oleh petugas.</p>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <!-- Baris Pertama Header -->
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Provinsi</th>
+                                <th rowspan="2">Kab/Kota</th>
+                                <!-- Kolom Username/Password dipindah dari sini -->
+                                <th colspan="2">Sekolah 1</th>
+                                <th colspan="2">Sekolah 2</th>
+                                <th colspan="2">Petugas 1</th>
+                                <th colspan="2">Petugas 2</th>
+                                <th colspan="2">Dinas</th>
+                                <!-- PENAMBAHAN KOLOM BARU (Posisi Baru) -->
+                                <th rowspan="2">Username</th>
+                                <th rowspan="2">Password</th>
+                                <!-- AKHIR PENAMBAHAN -->
+                            </tr>
+                            <!-- Baris Kedua Header (Sub-kolom) -->
+                            <tr>
+                                <!-- Sub Sekolah 1 -->
+                                <th>NPSN</th>
+                                <th>Nama Sekolah</th>
+                                <!-- Sub Sekolah 2 -->
+                                <th>NPSN</th>
+                                <th>Nama Sekolah</th>
+                                <!-- Sub Petugas 1 -->
+                                <th>Nama</th>
+                                <th>Tempat</th>
+                                <!-- Sub Petugas 2 -->
+                                <th>Nama</th>
+                                <th>Tempat</th>
+                                <!-- Sub Dinas -->
+                                <th>Narahubung</th>
+                                <th>Kontak</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Contoh Data (Sesuai Struktur Baru) -->
+                            <tr>
+                                <td>1</td>
+                                <td>Jawa Barat</td>
+                                <td>Kota Bandung</td>
+                                <!-- Kolom Username/Password dipindah dari sini -->
+                                <td>20219001</td>
+                                <td>SDN Merdeka 1</td>
+                                <td>20219002</td>
+                                <td>SDN Merdeka 2</td>
+                                <td>Ahmad</td>
+                                <td>Pusat</td>
+                                <td>Budi</td>
+                                <td>Daerah</td>
+                                <td>Ibu Ida</td>
+                                <td>08123456789</td>
+                                <!-- PENAMBAHAN KOLOM BARU (Posisi Baru) -->
+                                <td>Jawa Barat</td>
+                                <td>123</td>
+                                <!-- AKHIR PENAMBAHAN -->
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Jawa Tengah</td>
+                                <td>Kota Semarang</td>
+                                <!-- Kolom Username/Password dipindah dari sini -->
+                                <td>20328001</td>
+                                <td>SDN Pelita</td>
+                                <td>20328002</td>
+                                <td>SDN Harapan</td>
+                                <td>Citra</td>
+                                <td>Pusat</td>
+                                <td>Doni</td>
+                                <td>Daerah</td>
+                                <td>Bapak Eko</td>
+                                <td>08211112222</td>
+                                <!-- PENAMBAHAN KOLOM BARU (Posisi Baru) -->
+                                <td>Jawa Tengah</td>
+                                <td>123</td>
+                                <!-- AKHIR PENAMBAHAN -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- Penutup #content-lokus -->
+
+
+            <!-- ================================== -->
+            <!--      HALAMAN 2: TABEL SEKOLAH      -->
+            <!-- ================================== -->
+            <div id="content-sekolah" class="content-section">
+                <h1>Data Master Sekolah</h1>
+                <p>Halaman ini berisi daftar semua sekolah yang terdaftar dalam sistem.</p>
+
+                <!-- 
+                  KONTEN FORM DIUBAH MENJADI TABEL
+                -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NPSN</th>
+                                <th>Nama Sekolah</th>
+                                <th>Provinsi</th>
+                                <th>Kab/Kota</th>
+                                <th>Alamat</th>
+                                <th>Email</th>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Pangkat Gol</th>
+                                <th>Jabatan</th>
+                                <th>No. HP</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Contoh Data untuk Tabel Sekolah -->
+                            <tr>
+                                <td>1</td>
+                                <td>20219001</td>
+                                <td>SDN Merdeka 1</td>
+                                <td>Jawa Barat</td>
+                                <td>Kota Bandung</td>
+                                <td>Jl. Merdeka No. 10, Bandung</td>
+                                <td>sdnmerdeka1@sekolah.id</td>
+                                <td>Jajang Sukmara, S.Pd.</td>
+                                <td>197001011990031001</td>
+                                <td>IV/a</td>
+                                <td>Kepala Sekolah</td>
+                                <td>08111111111</td>
+                                <td>
+                                    <button class="btn-edit">Edit</button>
+                                    <button class="btn-delete">Hapus</button>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>2</td>
+                                <td>20328001</td>
+                                <td>SDN Pelita</td>
+                                <td>Jawa Tengah</td>
+                                <td>Kota Semarang</td>
+                                <td>Jl. Pelita No. 5, Semarang</td>
+                                <td>sdnpelita@sekolah.id</td>
+                                <td>Sri Handayani, M.Pd.</td>
+                                <td>197502021995032002</td>
+                                <td>IV/b</td>
+                                <td>Kepala Sekolah</td>
+                                <td>08222222222</td>
+                                <td>
+                                    <button class="btn-edit">Edit</button>
+                                    <button class="btn-delete">Hapus</button>
+                                </td>
+                            </tr>
+                            <!-- Data sekolah lainnya -->
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- Penutup #content-sekolah -->
+
+            <!-- Placeholder untuk menu lain -->
+            <div id="content-input" class="content-section">
+                <h1>Input Monev</h1>
+                <p>Konten untuk Input Monev akan ada di sini.</p>
+            </div>
+            <div id="content-laporan" class="content-section">
+                <h1>Laporan</h1>
+                <p>Konten untuk Laporan akan ada di sini.</p>
+            </div>
+            <div id="content-petugas" class="content-section">
+                <h1>Manajemen Petugas</h1>
+                <p>Konten untuk Manajemen Petugas akan ada di sini.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ==================
+         JAVASCRIPT
+    =================== -->
+    <script>
+        // Menunggu sampai semua HTML dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Ambil semua link menu
+            const menuLinks = document.querySelectorAll('.sidebar-menu a');
+            // Ambil semua bagian konten
+            const contentSections = document.querySelectorAll('.content-section');
+
+            // Tambahkan 'click listener' ke setiap link menu
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Mencegah pindah halaman (karena href="#")
+
+                    // 1. Dapatkan ID target konten (dari atribut data-target)
+                    const targetId = link.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+
+                    // 2. Hapus 'active' dari semua link dan konten
+                    menuLinks.forEach(ml => ml.classList.remove('active'));
+                    contentSections.forEach(cs => cs.classList.remove('active'));
+
+                    // 3. Tambahkan 'active' ke link yang di-klik dan konten targetnya
+                    link.classList.add('active');
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
