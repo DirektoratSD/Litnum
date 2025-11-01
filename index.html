@@ -77,7 +77,7 @@
         -->
         <main class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
-            <!-- Card 1: Preview Slide Google (Membuka Modal) -->
+            <!-- Card 1: Materi Pendampingan (Membuka Modal Slide) -->
             <a href="javascript:void(0)" id="openSlideModalBtn" class="group block rounded-xl bg-white shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                 <div class="p-6">
                     <!-- Ikon -->
@@ -129,7 +129,7 @@
                     </div>
                     <!-- Konten Teks -->
                     <h3 class="text-xl font-semibold text-slate-800 mb-2 transition-colors duration-300 group-hover:text-green-600">
-                        Modal Surat
+                        Surat
                     </h3>
                     <p class="text-slate-500 text-base">
                         Akses berbagai templat surat dan dokumen perjalanan dinas.
@@ -139,17 +139,7 @@
 
         </main> <!-- PENUTUP GRID <main> PERTAMA -->
 
-        <!-- SECTION BARU UNTUK AKSES CEPAT (DESAIN LINGKARAN) -->
-        <section class="mt-16 lg:mt-20">
-            <!-- Header untuk Section Baru -->
-            <header class="text-center mb-12 lg:mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl">
-                    Akses Cepat
-                </h2>
-                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-                    Navigasi untuk admin, petugas, dan informasi travel.
-                </p>
-            </header>
+            <section class="mt-16 lg:mt-20">
 
             <!-- Layout Flexbox untuk 3 Card Lingkaran Baru -->
             <!-- Menggunakan flexbox agar lebih rapi untuk item lingkaran, dan justify-center untuk menengahkan -->
@@ -207,38 +197,100 @@
         <p class="text-slate-500">&copy; 2025 Pendampingan Literasi & Numerasi. Dibuat dengan Tailwind CSS.</p>
     </footer>
 
-    <!-- ===== MODAL UNTUK PREVIEW SLIDE ===== -->
+    <!-- ===== MODAL UNTUK PREVIEW SLIDE (DIUBAH) ===== -->
     <div id="slideModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
-        <!-- Kotak Modal -->
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl mx-auto overflow-hidden">
-            <!-- Header Modal -->
-            <div class="flex items-center justify-between p-4 border-b">
-                <h3 class="text-lg font-semibold">Preview Materi Pendampingan</h3>
+        <!-- Kotak Modal (Diubah strukturnya) -->
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl mx-auto overflow-hidden flex flex-col" style="max-height: 90vh;">
+            <!-- Header Modal (Diubah) -->
+            <div class="flex items-center justify-between p-4 border-b shrink-0">
+                <h3 id="slideModalTitle" class="text-lg font-semibold">Materi Pendampingan</h3>
                 <button id="closeSlideModalBtn" class="text-slate-400 hover:text-slate-600">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
-            <!-- Body Modal (Konten Slide) -->
-            <div class="p-4 bg-slate-100">
-                <!-- 
-                  SRC IFRAME DI BAWAH INI TELAH DIPERBARUI SESUAI PERMINTAAN ANDA
-                -->
-                <div class="aspect-video w-full">
-                    <iframe 
-                        src="https://docs.google.com/presentation/d/e/2PACX-1vRHLrM1loLAxqOm57FU9q2W7CSSa8Ih-nKFAdaBqsrJ5kZ4g38q-BayMAB28oqzs26FIxdGgec_O1ad/pubembed?start=true&loop=true&delayms=5000" 
-                        frameborder="0" 
-                        width="100%" 
-                        height="100%" 
-                        allowfullscreen="true" 
-                        mozallowfullscreen="true" 
-                        webkitallowfullscreen="true">
-                    </iframe>
+
+            <!-- Body Modal: Wrapper untuk dua view (BARU) -->
+            <div class="flex-grow overflow-auto">
+                
+                <!-- View 1: Daftar Materi (BARU) -->
+                <div id="materiList" class="p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        
+                        <!-- Card 1.1: Desain Program -->
+                        <a href="javascript:void(0)" class="materi-preview-btn block p-6 rounded-lg bg-yellow-50 hover:bg-yellow-100 transition-colors border border-yellow-200"
+                           data-title="Desain Program"
+                           data-src="https://docs.google.com/presentation/d/e/2PACX-1vRHLrM1loLAxqOm57FU9q2W7CSSa8Ih-nKFAdaBqsrJ5kZ4g38q-BayMAB28oqzs26FIxdGgec_O1ad/pubembed?start=true&loop=true&delayms=5000">
+                            <h4 class="font-semibold text-yellow-800">Desain Program</h4>
+                            <p class="text-sm text-yellow-700">Lihat slide presentasi utama.</p>
+                        </a>
+                        
+                        <!-- Card 1.2: Paparan Sesi Orientasi -->
+                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
+                        <a href="https://drive.google.com/drive/folders/1FFudQw01PoAH253BwZSHzmRsJABJBkHx" target="_blank" class="materi-link-btn block p-6 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors border border-blue-200">
+                            <h4 class="font-semibold text-blue-800">Paparan Sesi Orientasi</h4>
+                            <p class="text-sm text-blue-700">Materi dari sesi orientasi.</p>
+                        </a>
+
+                        <!-- Card 1.3: Format Rencana Program -->
+                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
+                        <a href="https://docs.google.com/document/d/1zvbGw69WzrjFz0rOvI2hK6aARCDDjE0JaCBGd0RNE-c/edit?usp=drive_link" target="_blank" class="materi-link-btn block p-6 rounded-lg bg-teal-50 hover:bg-teal-100 transition-colors border border-teal-200">
+                            <h4 class="font-semibold text-teal-800">Format Rencana Program</h4>
+                            <p class="text-sm text-teal-700">Unduh template format.</p>
+                        </a>
+
+                        <!-- Card 1.4: Unggah Draf Rencana -->
+                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
+                        <a href="javascript:void(0)" class="open-soon-modal-btn block p-6 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors border border-purple-200">
+                            <h4 class="font-semibold text-purple-800">Unggah Draf Rencana</h4>
+                            <p class="text-sm text-purple-700">Upload draf Anda di sini.</p>
+                        </a>
+                        
+                        <!-- Card 1.5: Unggah Rencana Final -->
+                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
+                        <a href="javascript:void(0)" class="open-soon-modal-btn block p-6 rounded-lg bg-green-50 hover:bg-green-100 transition-colors border border-green-200">
+                            <h4 class="font-semibold text-green-800">Unggah Rencana Final</h4>
+                            <p class="text-sm text-green-700">Upload versi final Anda.</p>
+                        </a>
+
+                        <!-- Card 1.6: Unggah Log Implementasi -->
+                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
+                        <a href="javascript:void(0)" class="open-soon-modal-btn block p-6 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-200">
+                            <h4 class="font-semibold text-gray-800">Unggah Log Implementasi</h4>
+                            <p class="text-sm text-gray-700">Catatan implementasi.</p>
+                        </a>
+                    </div>
                 </div>
+
+                <!-- View 2: Preview Iframe (Dipindahkan) -->
+                <div id="materiPreview" class="hidden h-full flex flex-col">
+                    <!-- Konten Iframe -->
+                    <div class="p-4 bg-slate-100 flex-grow overflow-auto">
+                        <div class="aspect-video w-full">
+                            <iframe id="materiIframe" 
+                                src="about:blank" 
+                                frameborder="0" 
+                                width="100%" 
+                                height="100%" 
+                                allowfullscreen="true" 
+                                mozallowfullscreen="true" 
+                                webkitallowfullscreen="true">
+                            </iframe>
+                        </div>
+                    </div>
+                    <!-- Footer (Tombol Kembali) -->
+                    <div class="p-4 border-t shrink-0 bg-slate-50 flex justify-between items-center">
+                        <button id="materiBackBtn" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors duration-200 hover:bg-slate-300">
+                            &larr; Kembali
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+
 
     <!-- ===== MODAL UNTUK DATA SEKOLAH ===== -->
     <div id="dataModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
@@ -393,6 +445,30 @@
         </div>
     </div>
 
+    <!-- ===== MODAL UNTUK "COMING SOON" (BARU) ===== -->
+    <div id="soonModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <!-- Kotak Modal (dibuat mirip travelModal/Admin.html) -->
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto overflow-hidden relative">
+            <!-- Tombol Close (dipindah ke dalam agar mudah) -->
+            <button id="closeSoonModalBtn" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <!-- Body Modal (Konten) -->
+            <div class="p-8 pt-10 text-center">
+                <!-- Gambar Admin (sesuai permintaan) -->
+                <!-- Pastikan file 'awalia.png' ada di folder yang sama dengan index.htm -->
+                <img src="awalia.png" alt="Admin Sibuk" class="w-40 h-40 rounded-full object-cover mb-6 mx-auto border-4 border-orange-200 shadow-lg transition-transform duration-300 hover:scale-110">
+                
+                <h3 class="text-2xl font-bold text-slate-800 mb-3">Mohon Maaf</h3>
+                <p class="text-slate-600 text-lg">
+                    Halaman akan segera terbit, Admin saat ini sedang sibuk berenang di Danau Batur.
+                </p>
+            </div>
+        </div>
+    </div>
+
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
@@ -415,10 +491,17 @@
                 { npsn: '20700072', sekolah: 'SD INPRES SAMATA', provinsi: 'Sulawesi Selatan', kota: 'Kab. Gowa' },
             ];
 
-            // --- Elemen Modal Slide ---
+            // --- Elemen Modal Slide (DIUBAH) ---
             const openSlideModalBtn = document.getElementById('openSlideModalBtn');
             const closeSlideModalBtn = document.getElementById('closeSlideModalBtn');
             const slideModal = document.getElementById('slideModal');
+            // Elemen baru di dalam Modal Slide (BARU)
+            const slideModalTitle = document.getElementById('slideModalTitle');
+            const materiList = document.getElementById('materiList');
+            const materiPreview = document.getElementById('materiPreview');
+            const materiPreviewButtons = document.querySelectorAll('.materi-preview-btn');
+            const materiBackBtn = document.getElementById('materiBackBtn');
+            const materiIframe = document.getElementById('materiIframe');
 
             // --- Elemen Modal Data ---
             const openDataModalBtn = document.getElementById('openDataModalBtn');
@@ -443,6 +526,11 @@
             const closeTravelModalBtn = document.getElementById('closeTravelModalBtn');
             const travelModal = document.getElementById('travelModal');
 
+            // --- Elemen Modal "Soon" (BARU) ---
+            const soonModal = document.getElementById('soonModal');
+            const closeSoonModalBtn = document.getElementById('closeSoonModalBtn');
+            const openSoonModalBtns = document.querySelectorAll('.open-soon-modal-btn');
+
             // --- Elemen Filter dan Tabel ---
             const provinsiFilter = document.getElementById('provinsiFilter');
             const sekolahFilter = document.getElementById('sekolahFilter');
@@ -452,12 +540,47 @@
             const openModal = (modal) => modal.classList.remove('hidden');
             const closeModal = (modal) => modal.classList.add('hidden');
 
-            // Event Listener Modal Slide
+            // --- FUNGSI UNTUK MODAL MATERI (BARU) ---
+            function showMateriList() {
+                materiPreview.classList.add('hidden');
+                materiList.classList.remove('hidden');
+                slideModalTitle.textContent = 'Materi Pendampingan';
+                materiIframe.src = 'about:blank'; // Kosongkan iframe
+            }
+
+            // Event Listener Modal Slide (DIUBAH)
             openSlideModalBtn.addEventListener('click', () => openModal(slideModal));
-            closeSlideModalBtn.addEventListener('click', () => closeModal(slideModal));
-            slideModal.addEventListener('click', (e) => {
-                if (e.target === slideModal) closeModal(slideModal); // Tutup jika klik di luar kotak
+            
+            closeSlideModalBtn.addEventListener('click', () => {
+                closeModal(slideModal);
+                setTimeout(showMateriList, 300); // Reset view saat ditutup
             });
+            
+            slideModal.addEventListener('click', (e) => {
+                if (e.target === slideModal) {
+                    closeModal(slideModal);
+                    setTimeout(showMateriList, 300); // Reset view saat ditutup
+                }
+            });
+
+            // Event listener untuk tombol "Desain Program" (BARU)
+            materiPreviewButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const title = button.getAttribute('data-title');
+                    const iframeSrc = button.getAttribute('data-src');
+
+                    // Set content modal preview
+                    slideModalTitle.textContent = `Preview: ${title}`;
+                    materiIframe.src = iframeSrc;
+
+                    // Ganti view
+                    materiList.classList.add('hidden');
+                    materiPreview.classList.remove('hidden');
+                });
+            });
+
+            // Event Listener untuk Tombol "Kembali" di preview materi (BARU)
+            materiBackBtn.addEventListener('click', showMateriList);
 
             // Event Listener Modal Data
             openDataModalBtn.addEventListener('click', () => {
@@ -523,6 +646,16 @@
             closeTravelModalBtn.addEventListener('click', () => closeModal(travelModal));
             travelModal.addEventListener('click', (e) => {
                 if (e.target === travelModal) closeModal(travelModal); // Tutup jika klik di luar kotak
+            });
+
+            // --- Event Listener Modal "Soon" (BARU) ---
+            openSoonModalBtns.forEach(btn => {
+                btn.addEventListener('click', () => openModal(soonModal));
+            });
+            closeSoonModalBtn.addEventListener('click', () => closeModal(soonModal));
+            soonModal.addEventListener('click', (e) => {
+                // Pastikan yang diklik adalah overlay, BUKAN konten di dalamnya
+                if (e.target === soonModal) closeModal(soonModal); 
             });
 
 
@@ -652,6 +785,4 @@
 
 </body>
 </html>
-
-
 
