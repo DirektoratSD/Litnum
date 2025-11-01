@@ -73,6 +73,7 @@
             - 1 kolom di layar kecil
             - 2 kolom di layar tablet
             - 3 kolom di layar besar
+            (Sekarang akan berisi 6 card)
         -->
         <main class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
@@ -136,7 +137,69 @@
                 </div>
             </a>
 
-        </main>
+        </main> <!-- PENUTUP GRID <main> PERTAMA -->
+
+        <!-- SECTION BARU UNTUK AKSES CEPAT (DESAIN LINGKARAN) -->
+        <section class="mt-16 lg:mt-20">
+            <!-- Header untuk Section Baru -->
+            <header class="text-center mb-12 lg:mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl">
+                    Akses Cepat
+                </h2>
+                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+                    Navigasi untuk admin, petugas, dan informasi travel.
+                </p>
+            </header>
+
+            <!-- Layout Flexbox untuk 3 Card Lingkaran Baru -->
+            <!-- Menggunakan flexbox agar lebih rapi untuk item lingkaran, dan justify-center untuk menengahkan -->
+            <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-8 lg:gap-12">
+            
+                <!-- Card 4: Admin (Bentuk Lingkaran) -->
+                <a href="Admin.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                    <!-- Ikon Bulat -->
+                    <div class="flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 text-purple-600 mb-2 transition-all duration-300 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.602-3.751m-.228-1.120a14.247 14.247 0 0 0-1.226-1.045M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </div>
+                    <!-- Konten Teks -->
+                    <h3 class="text-2xl font-semibold text-slate-800 transition-colors duration-300 group-hover:text-purple-600">
+                        Admin
+                    </h3>
+                </a>
+            
+                <!-- Card 5: Petugas (Bentuk Lingkaran) -->
+                <a href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                    <!-- Ikon Bulat -->
+                    <div class="flex items-center justify-center w-20 h-20 rounded-full bg-teal-100 text-teal-600 mb-2 transition-all duration-300 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
+                        </svg>
+                    </div>
+                    <!-- Konten Teks -->
+                    <h3 class="text-2xl font-semibold text-slate-800 transition-colors duration-300 group-hover:text-teal-600">
+                        Petugas
+                    </h3>
+                </a>
+                
+                <!-- Card 6: Travel (Bentuk Lingkaran, Membuka Modal) -->
+                <a href="javascript:void(0)" id="openTravelModalBtn" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                    <!-- Ikon Bulat -->
+                    <div class="flex items-center justify-center w-20 h-20 rounded-full bg-cyan-100 text-cyan-600 mb-2 transition-all duration-300 group-hover:bg-cyan-600 group-hover:text-white group-hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L6 12Zm0 0h7.5" />
+                        </svg>
+                    </div>
+                    <!-- Konten Teks -->
+                    <h3 class="text-2xl font-semibold text-slate-800 transition-colors duration-300 group-hover:text-cyan-600">
+                        Travel
+                    </h3>
+                </a>
+
+            </div> <!-- PENUTUP FLEXBOX "AKSES CEPAT" -->
+        </section> <!-- PENUTUP SECTION "AKSES CEPAT" -->
+
     </div>
 
     <!-- Footer -->
@@ -293,6 +356,42 @@
             </div>
         </div>
     </div>
+    
+    <!-- ===== MODAL UNTUK TRAVEL (BARU) ===== -->
+    <div id="travelModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <!-- Kotak Modal -->
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto overflow-hidden">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">Informasi Travel</h3>
+                <button id="closeTravelModalBtn" class="text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Body Modal (Konten) -->
+            <div class="p-6">
+                <h4 class="text-xl font-semibold text-slate-800 mb-2">PT. Angkasa Raya Muda</h4>
+                <p class="text-slate-600 mb-4">Biro Perjalanan Wisata Tour and Travel</p>
+                
+                <!-- Tombol WhatsApp -->
+                <a href="https://wa.me/6281356788023" target="_blank" class="mb-6 w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-500 text-white rounded-lg font-semibold transition-colors duration-200 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M16.75 13.96c.25.13.41.38.41.66v.38c0 .32-.19.61-.48.74c-.5.21-1.11.36-1.7.36c-.88 0-1.71-.21-2.48-.61c-1.31-.68-2.44-1.63-3.3-2.8c-.61-.83-1.02-1.74-1.2-2.71c-.03-.17-.04-.33-.04-.5c0-.78.23-1.5.61-2.1c.2-.31.51-.5.87-.5h.38c.32 0 .61.19.73.48c.18.45.41.89.68 1.3c.13.19.16.44.07.66c-.14.33-.3.65-.48.94c-.17.28-.14.65.08.89c.5.55 1.08 1.04 1.71 1.45c.4.26.85.42 1.32.42c.3 0 .59-.08.84-.23c.27-.16.56-.28.88-.36c.27-.07.56.02.76.21l.2.2zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z"/></svg>
+                    WhatsApp: 6281356788023
+                </a>
+
+                <h5 class="font-semibold text-slate-700 mb-2">Melayani :</h5>
+                <ul class="list-disc list-inside text-slate-600 space-y-1">
+                    <li>Tiket Pesawat</li>
+                    <li>Voucher Hotel</li>
+                    <li>Pembuatan Visa/Passport</li>
+                    <li>Rental Car</li>
+                    <li>Pijat Refleksi++</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
 
     <!-- ===== JAVASCRIPT ===== -->
@@ -338,6 +437,11 @@
             const suratBackBtn = document.getElementById('suratBackBtn');
             const suratIframe = document.getElementById('suratIframe');
             const suratDownloadBtn = document.getElementById('suratDownloadBtn');
+
+            // --- Elemen Modal Travel (BARU) ---
+            const openTravelModalBtn = document.getElementById('openTravelModalBtn');
+            const closeTravelModalBtn = document.getElementById('closeTravelModalBtn');
+            const travelModal = document.getElementById('travelModal');
 
             // --- Elemen Filter dan Tabel ---
             const provinsiFilter = document.getElementById('provinsiFilter');
@@ -413,6 +517,13 @@
 
             // Event Listener untuk Tombol "Kembali" di preview
             suratBackBtn.addEventListener('click', showSuratList);
+
+            // --- Event Listener Modal Travel (BARU) ---
+            openTravelModalBtn.addEventListener('click', () => openModal(travelModal));
+            closeTravelModalBtn.addEventListener('click', () => closeModal(travelModal));
+            travelModal.addEventListener('click', (e) => {
+                if (e.target === travelModal) closeModal(travelModal); // Tutup jika klik di luar kotak
+            });
 
 
             // --- FUNGSI TABEL DAN FILTER ---
@@ -508,7 +619,7 @@
 
             // Saat Provinsi berubah
             provinsiFilter.addEventListener('change', (e) => {
-                currentProvinsi = e.g.value;
+                currentProvinsi = e.target.value; // Perbaikan: e.target.value, bukan e.g.value
                 currentSekolah = 'semua'; // Reset pilihan sekolah
                 populateSekolahFilter(currentProvinsi); // Update dropdown sekolah
                 applyFilters(); // Update tabel
@@ -541,4 +652,6 @@
 
 </body>
 </html>
+
+
 
