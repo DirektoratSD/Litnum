@@ -145,8 +145,8 @@
             <!-- Menggunakan flexbox agar lebih rapi untuk item lingkaran, dan justify-center untuk menengahkan -->
             <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-8 lg:gap-12">
             
-                <!-- Card 4: Admin (Bentuk Lingkaran) -->
-                <a href="Admin.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                <!-- Card 4: Admin (Bentuk Lingkaran) - DIUBAH -->
+                <a href="javascript:void(0)" id="openAdminPasswordBtn" data-href="Admin.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 text-purple-600 mb-2 transition-all duration-300 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
@@ -159,8 +159,8 @@
                     </h3>
                 </a>
             
-                <!-- Card 5: Petugas (Bentuk Lingkaran) -->
-                <a href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                <!-- Card 5: Petugas (Bentuk Lingkaran) - DIUBAH -->
+                <a href="javascript:void(0)" id="openPetugasPasswordBtn" data-href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-teal-100 text-teal-600 mb-2 transition-all duration-300 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
@@ -291,8 +291,7 @@
         </div>
     </div>
 
-
-    <!-- ===== MODAL UNTUK DATA SEKOLAH ===== -->
+    <!-- ===== MODAL UNTUK DATA SEKOLAH (DIKEMBALIKAN) ===== -->
     <div id="dataModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
         <!-- Kotak Modal -->
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl mx-auto overflow-hidden flex flex-col" style="max-height: 90vh;">
@@ -348,7 +347,7 @@
         </div>
     </div>
 
-    <!-- ===== MODAL UNTUK SURAT ===== -->
+    <!-- ===== MODAL UNTUK SURAT (DIKEMBALIKAN) ===== -->
     <div id="suratModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
         <!-- Kotak Modal -->
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl mx-auto overflow-hidden flex flex-col" style="max-height: 90vh;">
@@ -409,7 +408,7 @@
         </div>
     </div>
     
-    <!-- ===== MODAL UNTUK TRAVEL (BARU) ===== -->
+    <!-- ===== MODAL UNTUK TRAVEL (DIKEMBALIKAN) ===== -->
     <div id="travelModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
         <!-- Kotak Modal -->
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto overflow-hidden">
@@ -445,7 +444,7 @@
         </div>
     </div>
 
-    <!-- ===== MODAL UNTUK "COMING SOON" (BARU) ===== -->
+    <!-- ===== MODAL UNTUK "COMING SOON" (DIKEMBALIKAN) ===== -->
     <div id="soonModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
         <!-- Kotak Modal (dibuat mirip travelModal/Admin.html) -->
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto overflow-hidden relative">
@@ -465,6 +464,31 @@
                 <p class="text-slate-600 text-lg">
                     Halaman akan segera terbit, Admin saat ini sedang sibuk berenang di Danau Batur.
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL UNTUK PASSWORD (BARU) ===== -->
+    <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <!-- Kotak Modal -->
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-auto overflow-hidden">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">Akses Terbatas</h3>
+                <button id="closePasswordModalBtn" class="text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Body Modal (Konten) -->
+            <div class="p-6">
+                <label for="passwordInput" class="block text-sm font-medium text-slate-700 mb-2">Masukkan Password:</label>
+                <input type="password" id="passwordInput" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="********">
+                <p id="passwordError" class="text-red-600 text-sm mt-2 hidden">Password salah. Silakan coba lagi.</p>
+                <button id="submitPasswordBtn" class="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200 hover:bg-blue-700">
+                    Login
+                </button>
             </div>
         </div>
     </div>
@@ -503,12 +527,12 @@
             const materiBackBtn = document.getElementById('materiBackBtn');
             const materiIframe = document.getElementById('materiIframe');
 
-            // --- Elemen Modal Data ---
+            // --- Elemen Modal Data (DIKEMBALIKAN) ---
             const openDataModalBtn = document.getElementById('openDataModalBtn');
             const closeDataModalBtn = document.getElementById('closeDataModalBtn');
             const dataModal = document.getElementById('dataModal');
 
-            // --- Elemen Modal Surat ---
+            // --- Elemen Modal Surat (DIKEMBALIKAN) ---
             const openSuratModalBtn = document.getElementById('openSuratModalBtn');
             const closeSuratModalBtn = document.getElementById('closeSuratModalBtn');
             const suratModal = document.getElementById('suratModal');
@@ -521,17 +545,28 @@
             const suratIframe = document.getElementById('suratIframe');
             const suratDownloadBtn = document.getElementById('suratDownloadBtn');
 
-            // --- Elemen Modal Travel (BARU) ---
+            // --- Elemen Modal Travel (DIKEMBALIKAN) ---
             const openTravelModalBtn = document.getElementById('openTravelModalBtn');
             const closeTravelModalBtn = document.getElementById('closeTravelModalBtn');
             const travelModal = document.getElementById('travelModal');
 
-            // --- Elemen Modal "Soon" (BARU) ---
+            // --- Elemen Modal "Soon" (DIKEMBALIKAN) ---
             const soonModal = document.getElementById('soonModal');
             const closeSoonModalBtn = document.getElementById('closeSoonModalBtn');
             const openSoonModalBtns = document.querySelectorAll('.open-soon-modal-btn');
 
-            // --- Elemen Filter dan Tabel ---
+            // --- Elemen Modal Password (BARU) ---
+            const passwordModal = document.getElementById('passwordModal');
+            const closePasswordModalBtn = document.getElementById('closePasswordModalBtn');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const passwordInput = document.getElementById('passwordInput');
+            const passwordError = document.getElementById('passwordError');
+            const openAdminPasswordBtn = document.getElementById('openAdminPasswordBtn');
+            const openPetugasPasswordBtn = document.getElementById('openPetugasPasswordBtn');
+            
+            let passwordRedirectUrl = ''; // Untuk menyimpan URL tujuan
+
+            // --- Elemen Filter dan Tabel (DIKEMBALIKAN) ---
             const provinsiFilter = document.getElementById('provinsiFilter');
             const sekolahFilter = document.getElementById('sekolahFilter');
             const tableBody = document.getElementById('tableBody');
@@ -582,7 +617,7 @@
             // Event Listener untuk Tombol "Kembali" di preview materi (BARU)
             materiBackBtn.addEventListener('click', showMateriList);
 
-            // Event Listener Modal Data
+            // Event Listener Modal Data (DIKEMBALIKAN)
             openDataModalBtn.addEventListener('click', () => {
                 openModal(dataModal);
                 // Selalu inisialisasi ulang filter saat modal dibuka, jika datanya dinamis
@@ -593,7 +628,7 @@
                 if (e.target === dataModal) closeModal(dataModal); // Tutup jika klik di luar kotak
             });
 
-            // --- FUNGSI UNTUK MODAL SURAT ---
+            // --- FUNGSI UNTUK MODAL SURAT (DIKEMBALIKAN) ---
 
             // Fungsi untuk menampilkan daftar surat (view 1)
             function showSuratList() {
@@ -641,14 +676,14 @@
             // Event Listener untuk Tombol "Kembali" di preview
             suratBackBtn.addEventListener('click', showSuratList);
 
-            // --- Event Listener Modal Travel (BARU) ---
+            // --- Event Listener Modal Travel (DIKEMBALIKAN) ---
             openTravelModalBtn.addEventListener('click', () => openModal(travelModal));
             closeTravelModalBtn.addEventListener('click', () => closeModal(travelModal));
             travelModal.addEventListener('click', (e) => {
                 if (e.target === travelModal) closeModal(travelModal); // Tutup jika klik di luar kotak
             });
 
-            // --- Event Listener Modal "Soon" (BARU) ---
+            // --- Event Listener Modal "Soon" (DIKEMBALIKAN) ---
             openSoonModalBtns.forEach(btn => {
                 btn.addEventListener('click', () => openModal(soonModal));
             });
@@ -658,8 +693,62 @@
                 if (e.target === soonModal) closeModal(soonModal); 
             });
 
+            // --- Event Listener Modal Password (BARU) ---
 
-            // --- FUNGSI TABEL DAN FILTER ---
+            // Fungsi untuk membuka modal password
+            function openPasswordModal(event) {
+                event.preventDefault();
+                // Dapatkan URL tujuan dari atribut data-href
+                passwordRedirectUrl = event.currentTarget.getAttribute('data-href');
+                // Reset modal
+                passwordInput.value = '';
+                passwordError.classList.add('hidden');
+                // Buka modal
+                openModal(passwordModal);
+                passwordInput.focus(); // Langsung fokus ke input
+            }
+
+            // Terapkan ke kedua tombol
+            openAdminPasswordBtn.addEventListener('click', openPasswordModal);
+            openPetugasPasswordBtn.addEventListener('click', openPasswordModal);
+
+            // Fungsi untuk cek password
+            function checkPassword() {
+                const correctPassword = 'awalia123';
+                if (passwordInput.value === correctPassword) {
+                    // Password benar, alihkan
+                    window.location.href = passwordRedirectUrl;
+                    closeModal(passwordModal);
+                } else {
+                    // Password salah
+                    passwordError.classList.remove('hidden');
+                    passwordInput.value = ''; // Kosongkan input
+                    passwordInput.focus(); // Fokus kembali ke input
+                }
+            }
+
+            // Event listener untuk tombol submit
+            submitPasswordBtn.addEventListener('click', checkPassword);
+
+            // Event listener untuk tombol "Enter" di input
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+
+            // Event listener untuk tombol close
+            closePasswordModalBtn.addEventListener('click', () => closeModal(passwordModal));
+
+            // Event listener untuk klik di luar modal
+            passwordModal.addEventListener('click', (e) => {
+                if (e.target === passwordModal) {
+                    closeModal(passwordModal);
+                }
+            });
+
+
+            // --- FUNGSI TABEL DAN FILTER (DIKEMBALIKAN) ---
 
             // Fungsi untuk mengisi tabel dengan data
             function populateTable(data) {
@@ -778,7 +867,12 @@
             }
             
             // Panggil inisialisasi saat script dimuat
-            initializeFilters();
+            // Melakukan pengecekan null sederhana untuk elemen penting sebelum inisialisasi
+            if (provinsiFilter && sekolahFilter && tableBody) {
+                initializeFilters();
+            } else {
+                console.error("Elemen filter atau tabel tidak ditemukan. Inisialisasi dibatalkan.");
+            }
 
         });
     </script>
