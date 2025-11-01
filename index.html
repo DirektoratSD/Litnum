@@ -292,9 +292,10 @@
     </div>
 
     <!-- ===== MODAL UNTUK DATA SEKOLAH (DIKEMBALIKAN) ===== -->
+    <!-- DIUBAH: max-w-4xl menjadi max-w-6xl untuk menampung kolom baru -->
     <div id="dataModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
         <!-- Kotak Modal -->
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl mx-auto overflow-hidden flex flex-col" style="max-height: 90vh;">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl mx-auto overflow-hidden flex flex-col" style="max-height: 90vh;">
             <!-- Header Modal -->
             <div class="flex items-center justify-between p-4 border-b shrink-0">
                 <h3 class="text-lg font-semibold">Data Sekolah Lokus</h3>
@@ -329,13 +330,17 @@
             <!-- Container Tabel dengan Scroll Vertikal dan Horizontal -->
             <div class="p-4 overflow-auto table-scrollbar">
                 <div class="overflow-x-auto rounded-lg border">
-                    <table id="sekolahTable" class="w-full min-w-[700px] text-left text-sm">
+                    <!-- DIUBAH: min-w-[700px] menjadi min-w-[900px] -->
+                    <table id="sekolahTable" class="w-full min-w-[900px] text-left text-sm">
                         <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider sticky top-0">
                             <tr>
                                 <th class="p-4">NPSN</th>
                                 <th class="p-4">Nama Sekolah</th>
                                 <th class="p-4">Provinsi</th>
                                 <th class="p-4">Kab/Kota</th>
+                                <!-- DIUBAH: Kolom baru ditambahkan -->
+                                <th class="p-4">Petugas 1</th>
+                                <th class="p-4">Petugas 2</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody" class="divide-y">
@@ -498,21 +503,68 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- DATA SEKOLAH (Contoh Data) ---
+            // --- DATA SEKOLAH (DIUBAH SESUAI PERMINTAAN PENGGUNA) ---
             const dataSekolah = [
-                { npsn: '20100011', sekolah: 'SDN CENDRAWASIH 1', provinsi: 'Jawa Barat', kota: 'Kota Bandung' },
-                { npsn: '20100012', sekolah: 'SDN HARAPAN 3', provinsi: 'Jawa Barat', kota: 'Kota Bandung' },
-                { npsn: '20200021', sekolah: 'SDN MERDEKA 5', provinsi: 'DKI Jakarta', kota: 'Jakarta Pusat' },
-                { npsn: '20200022', sekolah: 'SDIT AL-IKHLAS', provinsi: 'DKI Jakarta', kota: 'Jakarta Selatan' },
-                { npsn: '20300031', sekolah: 'SDN PERTIWI 2', provinsi: 'Jawa Tengah', kota: 'Kota Semarang' },
-                { npsn: '20300032', sekolah: 'SDN MAJU JAYA', provinsi: 'Jawa Tengah', kota: 'Kab. Klaten' },
-                { npsn: '20400041', sekolah: 'SDN GATOT SUBROTO 1', provinsi: 'Jawa Timur', kota: 'Kota Surabaya' },
-                { npsn: '20400042', sekolah: 'SD MUHAMMADIYAH 4', provinsi: 'Jawa Timur', kota: 'Kota Malang' },
-                { npsn: '20500051', sekolah: 'SDN 1 DENPASAR', provinsi: 'Bali', kota: 'Kota Denpasar' },
-                { npsn: '20500052', sekolah: 'SDN 5 SANUR', provinsi: 'Bali', kota: 'Kota Denpasar' },
-                { npsn: '20600061', sekolah: 'SDN 2 MATARAM', provinsi: 'Nusa Tenggara Barat', kota: 'Kota Mataram' },
-                { npsn: '20700071', sekolah: 'SDN UNGGULAN 1', provinsi: 'Sulawesi Selatan', kota: 'Kota Makassar' },
-                { npsn: '20700072', sekolah: 'SD INPRES SAMATA', provinsi: 'Sulawesi Selatan', kota: 'Kab. Gowa' },
+                // Prov. Sumatera Utara
+                { npsn: '10210587', sekolah: 'UPT SD NEGERI 060804', provinsi: 'Prov. Sumatera Utara', kota: 'Kota Medan', petugas1: 'Asmaniar Sinaga', petugas2: 'Faujiah Marlina' },
+                { npsn: '10210176', sekolah: 'UPT SD NEGERI 066655', provinsi: 'Prov. Sumatera Utara', kota: 'Kota Medan', petugas1: 'Asmaniar Sinaga', petugas2: 'Faujiah Marlina' },
+                // Prov. Sumatera Barat
+                { npsn: '10304135', sekolah: 'SD NEGERI 38 SEBERANG PD. SELATAN', provinsi: 'Prov. Sumatera Barat', kota: 'Kota Padang', petugas1: 'Rahmat Hidayat', petugas2: 'Fakhriza Akbar' },
+                { npsn: '10304454', sekolah: 'SD NEGERI 06 PIAI TENGAH', provinsi: 'Prov. Sumatera Barat', kota: 'Kota Padang', petugas1: 'Rahmat Hidayat', petugas2: 'Fakhriza Akbar' },
+                // Prov. Lampung
+                { npsn: '10810488', sekolah: 'SDN 2 BANDAR DALAM', provinsi: 'Prov. Lampung', kota: 'Kab. Lampung Selatan', petugas1: 'Heri Fitriono', petugas2: 'Yanto Musthofa' },
+                { npsn: '10800301', sekolah: 'SDN 2 SUKAMARGA', provinsi: 'Prov. Lampung', kota: 'Kab. Lampung Selatan', petugas1: 'Heri Fitriono', petugas2: 'Yanto Musthofa' },
+                // Prov. Banten
+                { npsn: '20602929', sekolah: 'SD NEGERI KEDAUNG I', provinsi: 'Prov. Banten', kota: 'Kab. Tangerang', petugas1: 'Muhammad Noor Ginanjar Jaelani', petugas2: 'Billy Antoro' },
+                { npsn: '20603480', sekolah: 'SD NEGERI SETIA BHAKTI', provinsi: 'Prov. Banten', kota: 'Kab. Tangerang', petugas1: 'Muhammad Noor Ginanjar Jaelani', petugas2: 'Billy Antoro' },
+                // Prov. Jawa Barat - Kota Bogor
+                { npsn: '20238443', sekolah: 'SD NEGERI CILENDEK TIMUR 2', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bogor', petugas1: 'Lanny Anggraini', petugas2: 'Rossi Marinjani' },
+                { npsn: '20220537', sekolah: 'SD NEGERI SITU GEDE 1', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bogor', petugas1: 'Lanny Anggraini', petugas2: 'Rossi Marinjani' },
+                // Prov. Jawa Barat - Kota Bandung
+                { npsn: '20245797', sekolah: 'SDN 160 SUKALAKSANA', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bandung', petugas1: 'Ine Rahmawati', petugas2: 'Sofie Dewayani' },
+                { npsn: '20245731', sekolah: 'SDN 253 PANGGUNGSARI', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bandung', petugas1: 'Ine Rahmawati', petugas2: 'Sofie Dewayani' },
+                // Prov. Jawa Barat - Kab. Bekasi
+                { npsn: '20245341', sekolah: 'SD NEGERI KARANG REJA 01', provinsi: 'Prov. Jawa Barat', kota: 'Kab. Bekasi', petugas1: 'Dwi Nurani', petugas2: 'Roosie Setiawan' },
+                { npsn: '20218584', sekolah: 'SD NEGERI SUKAMURNI 02', provinsi: 'Prov. Jawa Barat', kota: 'Kab. Bekasi', petugas1: 'Dwi Nurani', petugas2: 'Roosie Setiawan' },
+                // Prov. Jawa Tengah - Kab. Sukoharjo
+                { npsn: '20330782', sekolah: 'SD NEGERI WIRONANGGAN 02', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Sukoharjo', petugas1: 'Auwalia Ramadhani', petugas2: 'Riski' },
+                { npsn: '20310486', sekolah: 'SD NEGERI PUCANGAN 06', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Sukoharjo', petugas1: 'Auwalia Ramadhani', petugas2: 'Riski' },
+                // Prov. Jawa Tengah - Kab. Karanganyar
+                { npsn: '20312197', sekolah: 'SDN 06 TAWANGMANGU', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Karanganyar', petugas1: 'Anggia Sabrina', petugas2: 'Dewi Liyana Katili (081289933075)' },
+                { npsn: '20311911', sekolah: 'SDN 03 JATISUKO', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Karanganyar', petugas1: 'Anggia Sabrina', petugas2: 'Dewi Liyana Katili (081289933075)' },
+                // Prov. D.I. Yogyakarta
+                { npsn: '20402548', sekolah: 'SD GETAS II', provinsi: 'Prov. D.I. Yogyakarta', kota: 'Kab. Gunung Kidul', petugas1: 'Amala Sholiha', petugas2: 'Andry Novi' },
+                { npsn: '20401741', sekolah: 'SD SEMIN III SEMIN', provinsi: 'Prov. D.I. Yogyakarta', kota: 'Kab. Gunung Kidul', petugas1: 'Amala Sholiha', petugas2: 'Andry Novi' },
+                // Prov. Jawa Timur - Kota Surabaya
+                { npsn: '20533175', sekolah: 'SDN PEGIRIAN I / 47', provinsi: 'Prov. Jawa Timur', kota: 'Kota Surabaya', petugas1: 'R. Mitra Irianarya', petugas2: 'Dicky Susanto' },
+                { npsn: '20533538', sekolah: 'SDN KREMBANGAN SELATAN IX NO. 20', provinsi: 'Prov. Jawa Timur', kota: 'Kota Surabaya', petugas1: 'R. Mitra Irianarya', petugas2: 'Dicky Susanto' },
+                // Prov. Jawa Timur - Kab. Banyuwangi
+                { npsn: '20525398', sekolah: 'SDN 2 TEGALREJO', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Banyuwangi', petugas1: 'Enfira Yanuaristi', petugas2: 'Mita Hidayati (085921430783)' },
+                { npsn: '20525883', sekolah: 'SDN 8 SUMBERBERAS', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Banyuwangi', petugas1: 'Enfira Yanuaristi', petugas2: 'Mita Hidayati (085921430783)' },
+                // Prov. Nusa Tenggara Barat
+                { npsn: '50204433', sekolah: 'SD NEGERI 36 AMPENAN', provinsi: 'Prov. Nusa Tenggara Barat', kota: 'Kota Mataram', petugas1: 'Waluyo', petugas2: 'Bintang Permana (081310051985)' },
+                { npsn: '50204622', sekolah: 'SD NEGERI 23 MATARAM', provinsi: 'Prov. Nusa Tenggara Barat', kota: 'Kota Mataram', petugas1: 'Waluyo', petugas2: 'Bintang Permana (081310051985)' },
+                // Prov. Nusa Tenggara Timur
+                { npsn: '50306417', sekolah: 'SD NEGERI TO\'BATAN', provinsi: 'Prov. Nusa Tenggara Timur', kota: 'Kab. Kupang', petugas1: 'Citra Adi Pratiwi', petugas2: 'Namira Syahda' },
+                { npsn: '50300419', sekolah: 'SD INPRES FATUKNUTU', provinsi: 'Prov. Nusa Tenggara Timur', kota: 'Kab. Kupang', petugas1: 'Citra Adi Pratiwi', petugas2: 'Namira Syahda' },
+                // Prov. Kalimantan Barat
+                { npsn: '30101481', sekolah: 'SD NEGERI 9 SUNGAI AMBAWANG', provinsi: 'Prov. Kalimantan Barat', kota: 'Kab. Kuburaya', petugas1: 'Supriyatin', petugas2: 'Dewi Puji Lestari (081212509903)' },
+                { npsn: '30100783', sekolah: 'SD NEGERI 34 SUNGAI AMBAWANG', provinsi: 'Prov. Kalimantan Barat', kota: 'Kab. Kuburaya', petugas1: 'Supriyatin', petugas2: 'Dewi Puji Lestari (081212509903)' },
+                // Prov. Kalimantan Tengah
+                { npsn: '30203527', sekolah: 'SDN - 1 BANTURUNG', provinsi: 'Prov. Kalimantan Tengah', kota: 'Kota Palangka Raya', petugas1: 'Andi Havyana', petugas2: 'Astri Oktina Budianti (089663364467)' },
+                { npsn: '30203411', sekolah: 'SDN - 3 TANGKILING', provinsi: 'Prov. Kalimantan Tengah', kota: 'Kota Palangka Raya', petugas1: 'Andi Havyana', petugas2: 'Astri Oktina Budianti (089663364467)' },
+                // Prov. Sulawesi Selatan
+                { npsn: '40300273', sekolah: 'SDN 37 PANAIKANG', provinsi: 'Prov. Sulawesi Selatan', kota: 'Kab. Maros', petugas1: 'Abdul Halim Muharram', petugas2: 'Yohan Rubiyantoro' },
+                { npsn: '69858811', sekolah: 'SDN 245 CABBELLA', provinsi: 'Prov. Sulawesi Selatan', kota: 'Kab. Maros', petugas1: 'Abdul Halim Muharram', petugas2: 'Yohan Rubiyantoro' },
+                // Prov. Gorontalo
+                { npsn: '40501379', sekolah: 'SD NEGERI NO. 45 DUMBO RAYA', provinsi: 'Prov. Gorontalo', kota: 'Kota Gorontalo', petugas1: 'Noor Cahyo Kiki', petugas2: 'Irfandha Fatan (‪081311031067‬)' },
+                { npsn: '40501362', sekolah: 'SD NEGERI NO. 44 HULONTALANGI', provinsi: 'Prov. Gorontalo', kota: 'Kota Gorontalo', petugas1: 'Noor Cahyo Kiki', petugas2: 'Irfandha Fatan (‪081311031067‬)' },
+                // Prov. Papua
+                { npsn: '60301127', sekolah: 'SD NEGERI INPRES ARDIPURA I', provinsi: 'Prov. Papua', kota: 'Kota Jayapura', petugas1: 'Deni Komarudin (082126011609)', petugas2: 'Ronald Stevanus (081281225788)' },
+                { npsn: '60301130', sekolah: 'SD NEGERI INPRES BHAYANGKARA', provinsi: 'Prov. Papua', kota: 'Kota Jayapura', petugas1: 'Deni Komarudin (082126011609)', petugas2: 'Ronald Stevanus (081281225788)' },
+                // Prov. Jawa Timur - Kab. Malang
+                { npsn: '20518538', sekolah: 'SDN 2 LANDUNGSARI', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Malang', petugas1: 'Sri Widyowati Kinasih', petugas2: 'Wily Ariwiguna' },
+                { npsn: '20576079', sekolah: 'SD NEGERI 3 BANJAREJO', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Malang', petugas1: 'Sri Widyowati Kinasih', petugas2: 'Wily Ariwiguna' },
             ];
 
             // --- Elemen Modal Slide (DIUBAH) ---
@@ -757,7 +809,8 @@
                 if (data.length === 0) {
                     tableBody.innerHTML = `
                         <tr>
-                            <td colspan="4" class="text-center p-6 text-slate-500">
+                            <!-- DIUBAH: colspan="4" menjadi colspan="6" -->
+                            <td colspan="6" class="text-center p-6 text-slate-500">
                                 Data tidak ditemukan.
                             </td>
                         </tr>
@@ -766,12 +819,15 @@
                 }
 
                 data.forEach(item => {
+                    // DIUBAH: Menambahkan <td> untuk petugas1 dan petugas2
                     const row = `
                         <tr class="hover:bg-slate-50">
                             <td class="p-4">${item.npsn}</td>
                             <td class="p-4 font-medium text-slate-800">${item.sekolah}</td>
                             <td class="p-4">${item.provinsi}</td>
                             <td class="p-4">${item.kota}</td>
+                            <td class="p-4">${item.petugas1}</td>
+                            <td class="p-4">${item.petugas2}</td>
                         </tr>
                     `;
                     tableBody.innerHTML += row;
