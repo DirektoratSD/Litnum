@@ -7,12 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
   	<link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- MODIFIKASI: Menambahkan library html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsPna9C/G1VsVLoJSglLOYdSgPSpEHNZcwde5cOcb9kscNlTddCmyjGMSQxetEHEjP9S5pl+oEwNMcVb1iUcgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <style>
-        /* Menggunakan font Inter */
+        /* ... (style tidak berubah) ... */
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Style kustom untuk scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -58,8 +61,6 @@
                         <option value="">Pilih Kab/Kota</option>
                     </select>
                 </div>
-                
-                <!-- 3. Password (Dihapus) -->
                 
                 <!-- Pesan Error -->
                 <p id="login-error" class="text-red-600 text-sm text-center h-4"></p>
@@ -220,10 +221,11 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit (Tidak Berubah) -->
+                        <!-- Tombol Submit -->
                         <div class="mt-8 flex justify-end gap-4">
-                            <button type="button" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
-                                <i class="fas fa-print mr-2"></i> Cetak
+                            <!-- MODIFIKASI: Tombol Cetak PDF -->
+                            <button type="button" onclick="generatePdf('form-wawancara-guru')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-print mr-2"></i> Cetak PDF
                             </button>
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
                                 <i class="fas fa-save mr-2"></i> Simpan Wawancara
@@ -325,10 +327,11 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit (Tidak Berubah) -->
+                        <!-- Tombol Submit -->
                         <div class="mt-8 flex justify-end gap-4">
-                            <button type="button" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
-                                <i class="fas fa-print mr-2"></i> Cetak
+                            <!-- MODIFIKASI: Tombol Cetak PDF -->
+                            <button type="button" onclick="generatePdf('form-fgd')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-print mr-2"></i> Cetak PDF
                             </button>
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
                                 <i class="fas fa-save mr-2"></i> Simpan FGD
@@ -443,10 +446,11 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit (Tidak Berubah) -->
+                        <!-- Tombol Submit -->
                         <div class="mt-8 flex justify-end gap-4">
-                            <button type="button" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
-                                <i class="fas fa-print mr-2"></i> Cetak
+                            <!-- MODIFIKASI: Tombol Cetak PDF -->
+                            <button type="button" onclick="generatePdf('form-wawancara-murid')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-print mr-2"></i> Cetak PDF
                             </button>
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
                                 <i class="fas fa-save mr-2"></i> Simpan Wawancara Murid
@@ -545,10 +549,11 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit (Tidak Berubah) -->
+                        <!-- Tombol Submit -->
                         <div class="mt-8 flex justify-end gap-4">
-                            <button type="button" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
-                                <i class="fas fa-print mr-2"></i> Cetak
+                            <!-- MODIFIKASI: Tombol Cetak PDF -->
+                            <button type="button" onclick="generatePdf('form-observasi')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-print mr-2"></i> Cetak PDF
                             </button>
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
                                 <i class="fas fa-save mr-2"></i> Simpan Observasi
@@ -589,6 +594,7 @@
         // Logika JavaScript untuk Sidebar dan Navigasi Form
         // (Kode ini sudah ada dan tidak diubah)
         const sidebar = document.getElementById('sidebar');
+        // ... (kode sidebar tidak berubah) ...
         const menuToggle = document.getElementById('menu-toggle');
         const overlay = document.getElementById('overlay');
         const formSections = document.querySelectorAll('.form-section');
@@ -631,6 +637,123 @@
             showForm(defaultFormId, defaultLink);
         }
     </script>
+
+    <!-- MODIFIKASI: Skrip untuk Cetak PDF (ditempatkan di global scope) -->
+    <script>
+        function generatePdf(formId) {
+            // 1. Dapatkan elemen form
+            const formElement = document.getElementById(formId);
+            if (!formElement) {
+                console.error('Elemen form tidak ditemukan:', formId);
+                return;
+            }
+
+            // 2. Dapatkan judul dan nama sekolah untuk nama file
+            // MODIFIKASI: Cari h1 di parent section, bukan di dalam form
+            const parentSection = formElement.closest('.form-section');
+            const titleElement = parentSection ? parentSection.querySelector('h1') : null;
+            const title = titleElement ? titleElement.textContent.trim() : 'Laporan';
+            
+            const npsnInput = formElement.querySelector('input[id^="npsn"]');
+            const sekolahInput = formElement.querySelector('input[id^="nama_sekolah"]');
+            
+            let npsn = npsnInput ? npsnInput.value : '';
+            let sekolah = sekolahInput ? sekolahInput.value : 'Data';
+            
+            const filename = `${title} - ${sekolah} (${npsn}).pdf`;
+
+            // 3. Opsi untuk html2pdf
+            const opt = {
+                margin:       [0.5, 0.5, 0.5, 0.5], // [top, left, bottom, right] in inches
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                // mode 'css' akan mencoba menghindari memecah elemen
+                pagebreak:    { mode: 'css', avoid: '.bg-white' } 
+            };
+
+            // 4. Buat klon dari elemen untuk dimodifikasi
+            // MODIFIKASI: Klon seluruh parent section agar judulnya ikut
+            const elementToPrint = parentSection ? parentSection.cloneNode(true) : formElement.cloneNode(true);
+
+            // 5. Modifikasi klon untuk cetak (sembunyikan tombol, dll.)
+            const buttons = elementToPrint.querySelectorAll('button');
+            buttons.forEach(btn => btn.style.display = 'none'); // Sembunyikan semua tombol
+
+            // Sembunyikan penghitung kata
+            const counters = elementToPrint.querySelectorAll('div[id^="counter_"]');
+            counters.forEach(counter => counter.style.display = 'none');
+            
+            // Ubah textarea menjadi div agar rapi dan semua teks terlihat
+            const textareas = elementToPrint.querySelectorAll('textarea');
+            textareas.forEach(ta => {
+                // Buat div baru untuk menggantikan textarea
+                const div = document.createElement('div');
+                div.innerHTML = ta.value.replace(/\n/g, '<br>'); // Ganti baris baru dengan <br>
+                div.style.border = '1px solid #eee';
+                div.style.padding = '8px';
+                div.style.minHeight = '30px';
+                div.style.backgroundColor = '#f9f9f9';
+                div.style.whiteSpace = 'pre-wrap'; // Jaga formatting
+                div.style.wordBreak = 'break-word';
+                div.style.fontSize = '12px'; // Kecilkan font agar muat
+                div.style.color = '#000';
+                
+                // Ganti textarea dengan div baru
+                if (ta.parentNode) {
+                    ta.parentNode.replaceChild(div, ta);
+                }
+            });
+
+            // Ubah radio button yang ter-check menjadi icon
+            const radios = elementToPrint.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                const icon = document.createElement('span');
+                icon.style.fontFamily = "'Font Awesome 5 Free'";
+                icon.style.fontWeight = '900';
+                icon.style.fontSize = '14px';
+
+                if (radio.checked) {
+                    icon.innerHTML = '&#xf058;'; // Ikon check-circle
+                    icon.style.color = 'green';
+                } else {
+                    icon.innerHTML = '&#xf11a;'; // Ikon circle (kosong)
+                    icon.style.color = '#ccc';
+                }
+                
+                if (radio.parentNode) {
+                    radio.parentNode.replaceChild(icon, radio);
+                }
+            });
+
+            // Sederhanakan tampilan tabel observasi
+            const tables = elementToPrint.querySelectorAll('table');
+            tables.forEach(table => {
+                table.style.borderCollapse = 'collapse';
+                table.style.width = '100%';
+            });
+            const ths = elementToPrint.querySelectorAll('th');
+            ths.forEach(th => {
+                th.style.border = '1px solid #ddd';
+                th.style.padding = '4px';
+                th.style.backgroundColor = '#f2f2f2';
+                th.style.fontSize = '10px';
+            });
+            const tds = elementToPrint.querySelectorAll('td');
+            tds.forEach(td => {
+                td.style.border = '1px solid #ddd';
+                td.style.padding = '4px';
+                td.style.fontSize = '10px';
+                td.style.verticalAlign = 'top';
+            });
+
+
+            // 6. Jalankan html2pdf pada elemen klon
+            html2pdf().from(elementToPrint).set(opt).save();
+        }
+    </script>
+
 
     <script type="module">
         // ==================================
@@ -1073,7 +1196,7 @@
             const textareas = document.querySelectorAll(
                 '#wawancara-guru-questions textarea, #fgd-questions textarea'
             );
-            const MIN_WORDS = 300;
+            const MIN_WORDS = 100;
 
             textareas.forEach(textarea => {
                 const counterId = 'counter_' + textarea.id;
@@ -1263,7 +1386,7 @@
             // ==================================
             // MODIFIKASI: Blok Validasi 300 Kata
             // ==================================
-            const MIN_WORDS = 300;
+            const MIN_WORDS = 100;
             if (collectionName === 'wawancara_guru' || collectionName === 'fgd') {
                 let isValid = true;
                 let firstInvalidField = null;
