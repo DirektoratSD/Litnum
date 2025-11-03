@@ -137,12 +137,6 @@
             <!-- Layout Flexbox untuk 3 Card Lingkaran Baru -->
             <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-8 lg:gap-12">
             
-                <!-- 
-                  PERUBAHAN 1:
-                  - Menghapus id="openAdminPasswordBtn"
-                  - Menghapus data-href="Admin.html"
-                  - Mengubah href="javascript:void(0)" menjadi href="Admin.html"
-                -->
                 <a href="Admin.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 text-purple-600 mb-2 transition-all duration-300 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-110">
@@ -155,13 +149,7 @@
                         Admin
                     </h3>
                 </a>
-            
-                <!-- 
-                  PERUBAHAN 2:
-                  - Menghapus id="openPetugasPasswordBtn"
-                  - Menghapus data-href="Form.html"
-                  - Mengubah href="javascript:void(0)" menjadi href="Form.html"
-                -->
+
                 <a href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-teal-100 text-teal-600 mb-2 transition-all duration-300 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-110">
@@ -174,7 +162,23 @@
                         Petugas
                     </h3>
                 </a>
-                
+
+                <!-- ===== CARD BARU DITAMBAHKAN DI SINI ===== -->
+                <a href="Sekolah.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                    <!-- Ikon Bulat -->
+                    <div class="flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 text-blue-600 mb-2 transition-all duration-300 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110">
+                        <!-- Ikon Gedung Sekolah (disesuaikan w-10 h-10) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                        </svg>
+                    </div>
+                    <!-- Konten Teks -->
+                    <h3 class="text-2xl font-semibold text-slate-800 transition-colors duration-300 group-hover:text-blue-600">
+                        Sekolah
+                    </h3>
+                </a>
+                <!-- ===== AKHIR CARD BARU ===== -->
+
                 <!-- Card 6: Travel (Bentuk Lingkaran, Membuka Modal) -->
                 <a href="javascript:void(0)" id="openTravelModalBtn" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
@@ -436,7 +440,6 @@
                     <li>Voucher Hotel</li>
                     <li>Pembuatan Visa/Passport</li>
                     <li>Rental Car</li>
-                    <li>Pijat Refleksi++</li>
                 </ul>
             </div>
         </div>
