@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">
-    <!-- TAMBAHAN: Link Font Awesome untuk ikon hamburger -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
     <title>Pendampingan Litnum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Pengaturan Dasar Halaman */
         body, html {
@@ -15,75 +14,41 @@
             font-family: Arial, sans-serif;
             height: 100%;
             background-color: #f4f7f6;
-            /* Mencegah scroll horizontal saat sidebar animasi */
-            overflow-x: hidden; 
         }
 
-        /* Kontainer Utama */
+        /* Kontainer Utama (Flexbox) */
         .app-container {
             display: flex;
             min-height: 100vh;
-            /* Transisi untuk penyesuaian padding/margin */
-            transition: padding-left 0.3s ease-in-out;
+        }
+        
+        /* MODIFIKASI: Sembunyikan app container by default */
+        #app-container {
+            display: none;
         }
 
-        /* Sidebar (Menu Samping) - Logika Baru */
+        /* Sidebar (Menu Samping) */
         .sidebar {
             width: 240px;
             background-color: #2c3e50;
             color: white;
-            /* MODIFIKASI: Menggunakan position fixed */
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
+            padding: 20px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            /* Transisi untuk efek buka/tutup */
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(0); /* Default state: terbuka */
-        }
-
-        /* KONTEN HEADER BARU (UNTUK TOMBOL TOGGLE) */
-        .main-header {
-            background-color: #ffffff;
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            /* Menggunakan sticky agar header tetap terlihat saat scroll */
             position: sticky;
             top: 0;
-            z-index: 900;
-            display: flex;
-            align-items: center;
-        }
-
-        #sidebar-toggle {
-            background: none;
-            border: none;
-            font-size: 22px;
-            color: #2c3e50;
-            cursor: pointer;
-            padding: 10px;
-            margin-right: 15px;
-            border-radius: 50%;
-            transition: background-color 0.2s;
-        }
-        #sidebar-toggle:hover {
-            background-color: #f0f0f0;
+            height: 100vh;
+            overflow-y: auto;
         }
 
         .sidebar h2 {
             text-align: center;
             margin-bottom: 30px;
             color: #ecf0f1;
-            padding: 20px 0 0 0; /* Sesuaikan padding h2 */
         }
-        
+
         .sidebar-menu {
             list-style-type: none;
-            padding: 0 20px; /* Sesuaikan padding menu */
+            padding: 0;
             margin: 0;
         }
 
@@ -98,7 +63,7 @@
             color: #bdc3c7;
             border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
-            cursor: pointer; /* Menunjukkan bisa di-klik */
+            cursor: pointer;
         }
 
         .sidebar-menu li a:hover,
@@ -107,20 +72,19 @@
             color: #ffffff;
         }
 
-        /* Konten Utama - Logika Baru */
-        .main-content {
-            /* MODIFIKASI: Menggunakan margin-left untuk memberi ruang sidebar */
-            margin-left: 240px;
-            flex-grow: 1;
-            padding: 0; /* Padding utama dipindah ke .content-wrapper */
-            width: 100%; /* Memastikan lebar penuh */
-            box-sizing: border-box;
-            transition: margin-left 0.3s ease-in-out;
+        .sidebar-menu li.menu-separator {
+            margin-top: 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            padding: 0 15px;
+            font-weight: bold;
         }
 
-        /* Wrapper di dalam main-content untuk padding */
-        .content-wrapper {
+        /* Konten Utama */
+        .main-content {
+            flex-grow: 1;
             padding: 30px;
+            overflow-y: auto;
         }
 
         .main-content h1 {
@@ -128,6 +92,22 @@
             border-bottom: 2px solid #ecf0f1;
             padding-bottom: 10px;
         }
+        
+        /* Penambahan: Tombol Aksi Header */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .header-actions .form-submit-button {
+            margin-top: 0;
+            background-color: #27ae60; /* Warna hijau */
+        }
+        .header-actions .form-submit-button:hover {
+            background-color: #229955;
+        }
+
 
         /* Kontainer untuk setiap halaman/konten */
         .content-section {
@@ -140,14 +120,12 @@
 
         /* Styling untuk Tabel Data */
         .data-table-container {
-            /* Membuat tabel bisa di-scroll horizontal jika terlalu lebar */
             overflow-x: auto;
             margin-top: 20px;
         }
 
         .data-table {
             width: 100%;
-            min-width: 1200px; /* Lebar minimum agar muat */
             border-collapse: collapse;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             background-color: #ffffff;
@@ -158,21 +136,25 @@
             padding: 12px;
             text-align: left;
             vertical-align: top;
+            white-space: nowrap;
         }
 
         .data-table th {
             background-color: #ecf0f1;
             color: #34495e;
             font-weight: bold;
-            text-align: center; /* Meratakan header di tengah */
+            text-align: center;
             vertical-align: middle;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .data-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        /* STYLING UNTUK FORM (Tetap ada, mungkin dipakai di menu lain) */
+        /* STYLING UNTUK FORM (di dalam Modal dan Filter) */
         .data-form {
             background-color: #ffffff;
             padding: 25px;
@@ -180,7 +162,13 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-top: 20px;
         }
-        /* ... (Style form lainnya tetap di sini) ... */
+        .modal-content .data-form {
+            margin-top: 0;
+            padding: 0;
+            box-shadow: none;
+            text-align: left;
+        }
+        
         .data-form h3 {
             color: #2c3e50;
             border-bottom: 1px solid #ecf0f1;
@@ -193,6 +181,15 @@
         .form-group {
             margin-bottom: 15px;
         }
+        .form-group-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .form-group-grid .form-group {
+            margin-bottom: 0;
+        }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
@@ -202,12 +199,15 @@
         .form-group input[type="text"],
         .form-group input[type="email"],
         .form-group input[type="tel"],
-        .form-group textarea {
+        .form-group input[type="password"],
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            box-sizing: border-box; /* Agar padding tidak menambah lebar */
+            box-sizing: border-box;
+            background-color: #fff;
         }
         .form-group textarea {
             height: 100px;
@@ -226,6 +226,23 @@
         .form-submit-button:hover {
             background-color: #34495e;
         }
+        .form-submit-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .form-action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .btn-cancel {
+            background-color: #7f8c8d;
+        }
+        .btn-cancel:hover {
+            background-color: #95a5a6;
+        }
+
 
         /* Tombol Aksi di Tabel */
         .btn-edit, .btn-delete {
@@ -238,15 +255,21 @@
             margin-right: 5px;
         }
         .btn-edit {
-            background-color: #3498db; /* Biru */
+            background-color: #3498db;
         }
         .btn-edit:hover {
             background-color: #2980b9;
         }
         .btn-delete {
-            background-color: #e74c3c; /* Merah */
+            background-color: #e74c3c;
         }
         .btn-delete:hover {
+            background-color: #c0392b;
+        }
+        .btn-confirm-delete {
+            background-color: #e74c3c;
+        }
+        .btn-confirm-delete:hover {
             background-color: #c0392b;
         }
 
@@ -260,7 +283,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
-            display: none; /* Sembunyi by default */
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -283,7 +306,13 @@
             width: 90%;
             transform: scale(0.9);
             transition: transform 0.3s ease;
-            position: relative; /* Diperlukan untuk tombol close */
+            position: relative;
+        }
+        .modal-content.modal-lg {
+            max-width: 700px;
+        }
+        .modal-content.modal-sm {
+            max-width: 400px;
         }
         
         .modal-overlay.active .modal-content {
@@ -300,6 +329,14 @@
             color: #34495e;
             font-size: 1.1em;
             line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 15px;
+            display: none;
         }
 
         .modal-close {
@@ -318,114 +355,117 @@
             color: #2c3e50;
         }
 
-        /* =================================
-           GAYA BARU UNTUK GAMBAR DI MODAL
-           - Perbaikan: Scale dipindah ke :hover
-        ================================= */
         .modal-content .profile-image { 
-            width: 180px; /* Ukuran dasar */
-            height: 180px; /* Harus sama dengan lebar untuk lingkaran sempurna */
-            border-radius: 50%; /* Membuat gambar menjadi lingkaran */
-            object-fit: cover; /* Penting! Memastikan gambar di-crop agar pas dalam lingkaran */
+            width: 180px; 
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
             margin-bottom: 20px;
-            /* transform: scale(1.5); <-- DIPINDAH ke :hover */
-            border: 4px solid #3498db; /* Tambahkan border agar lebih menonjol */
+            border: 4px solid #3498db;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            
-            /* TAMBAHAN: Transisi untuk efek mulus */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative; /* Diperlukan agar z-index berfungsi */
+            position: relative; 
         }
 
-        /* TAMBAHAN: Efek :hover */
         .modal-content .profile-image:hover {
-            transform: scale(1.5); /* BARU: Efek scale hanya saat hover */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Bayangan lebih besar saat hover */
-            z-index: 10; /* Memastikan gambar di atas elemen lain */
+            transform: scale(1.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        /* Gaya untuk status loading */
+        .loading-placeholder {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+        .loading-placeholder i {
+            margin-right: 10px;
         }
 
         /* ==================
-           RESPONSIVE & TOGGLE LOGIC
+           GAYA FILTER
         =================== */
-
-        /* LOGIKA SIDEBAR TERTUTUP (Berlaku di semua ukuran) */
-        .app-container.sidebar-toggled .sidebar {
-            /* Sembunyikan sidebar ke kiri */
-            transform: translateX(-240px);
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+            margin-bottom: 20px;
         }
-        .app-container.sidebar-toggled .main-content {
-            /* Konten utama mengisi layar penuh */
-            margin-left: 0;
+        .filter-container .form-group {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 0;
         }
-
-        /* OVERLAY UNTUK MOBILE (Hanya muncul saat sidebar-toggled di mobile) */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999; /* Di bawah sidebar, di atas konten */
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .filter-container select:disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
         }
-
-
-        /* BREAKPOINT MOBILE (Layar Kecil) */
-        @media (max-width: 768px) {
-            
-            /* 1. Di mobile, sidebar default tertutup */
-            .sidebar {
-                transform: translateX(-240px);
-            }
-
-            /* 2. Di mobile, konten utama default lebar penuh */
-            .main-content {
-                margin-left: 0;
-            }
-
-            /* 3. Di mobile, class .sidebar-toggled justru MEMBUKA sidebar */
-            .app-container.sidebar-toggled .sidebar {
-                transform: translateX(0);
-            }
-
-            /* 4. Tampilkan overlay HANYA saat sidebar terbuka di mobile */
-            .app-container.sidebar-toggled .sidebar-overlay {
-                display: block;
-                opacity: 1;
-            }
-
-            /* 5. Buat tabel bisa di-scroll di kontainernya */
-            .data-table-container {
-                overflow-x: auto;
-            }
-            .data-table {
-                /* Set min-width agar tidak hancur di mobile */
-                min-width: 800px; 
-            }
+        .filter-container .form-submit-button {
+            flex-shrink: 0;
+            height: 40px;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            line-height: 1;
+        }
+        .filter-container .form-submit-button:hover {
+            background-color: #c0392b;
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Kontainer utama sekarang memiliki class untuk state toggling -->
-    <div class="app-container">
+    <!-- ==================
+         MODIFIKASI: MODAL LOGIN (BUKAN PASSWORD)
+    =================== -->
+    <div id="modal-login" class="modal-overlay active">
+        <div class="modal-content modal-sm">
+            <h3>Login Admin</h3>
+            <p>Hanya role 'admin' yang dapat mengakses halaman ini.</p>
+            
+            <form id="login-form" class="data-form">
+                <div class="form-group">
+                    <label for="username-input">Username</label>
+                    <input type="text" id="username-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-input">Password</label>
+                    <input type="password" id="password-input" required>
+                </div>
+                <button type="submit" id="login-button" class="form-submit-button" style="width: 100%;">Login</button>
+                <p id="login-error" class="error-message">Username atau password salah.</p>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="app-container" id="app-container">
         
         <!-- ==================
              SIDEBAR (MENU)
         =================== -->
         <aside class="sidebar">
-            <h2>LITNUM APP</h2>
+            <h2 id="sidebar-title">LITNUM (ADMIN)</h2>
             <ul class="sidebar-menu">
-                <!-- PERUBAHAN: Link Home menggunakan href standar --><li><a href="./">Home</a></li>
+                <li><a data-target="content-lokus" class="active">Data Lokus</a></li>
+                <li><a data-target="content-sekolah">Data Sekolah</a></li>
+                <!-- MODIFIKASI: Menu Manajemen User -->
+                <li><a data-target="content-manajemen-user">Manajemen User</a></li>
+                
                 <li><a data-target="content-input">Progres</a></li>      
-                <!-- "Data Lokus" dijadikan aktif by default --><li><a data-target="content-lokus" class="active">Data Lokus</a></li>
-                <li><a data-target="content-sekolah">Sekolah</a></li>
-                <!-- <li><a data-target="content-input">Progres</a></li> (Duplikat, bisa dihapus jika mau) --><!-- PERUBAHAN: Link Laporan & Petugas diberi class "show-modal" --><li><a href="#" class="show-modal">Laporan</a></li>
-                <li><a href="#" class="show-modal">Manajemen Petugas</a></li>
+                <li><a href="#" class="show-modal">Laporan</a></li>
+                
+                <li class="menu-separator">ROLE LAIN</li>
+                <li><a href="#" class="show-modal">Halaman Petugas</a></li>
+                <li><a href="#" class="show-modal">Halaman Supervisor</a></li>
+
+                <!-- MODIFIKASI: Tombol Logout -->
+                <li class="menu-separator" style="margin-top: 30px;">
+                    <a href="#" id="logout-button" style="background-color: #c0392b; color: white;">Logout</a>
+                </li>
             </ul>
         </aside>
 
@@ -434,275 +474,986 @@
         =================== -->
         <main class="main-content">
 
-            <!-- HEADER BARU UNTUK TOMBOL TOGGLE -->
-            <header class="main-header">
-                <button id="sidebar-toggle" aria-label="Toggle sidebar">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <!-- Judul atau elemen lain bisa ditambahkan di sini -->
-            </header>
+            <!-- ================================== -->
+            <!--   HALAMAN 1: DATA LOKUS (DEFAULT)  -->
+            <!-- ================================== -->
+            <div id="content-lokus" class="content-section active">
+                <h1>Data Lokus Monitoring</h1>
+                <p>Data lokus sekolah yang akan di-monev oleh petugas. Gunakan filter di bawah untuk mencari data lokus.</p>
 
-            <!-- Wrapper untuk padding konten -->
-            <div class="content-wrapper">
-
-                <!-- ================================== --><!--   HALAMAN 1: DATA LOKUS (DEFAULT)  --><!-- ================================== --><div id="content-lokus" class="content-section active">
-                    <h1>Data Lokus Monitoring</h1>
-                    <p>Ini adalah halaman untuk mengelola data Lokus sekolah yang akan di-monev oleh petugas.</p>
-
-                    <div class="data-table-container">
-                        <table class="data-table">
-                            <thead>
-                                <!-- Baris Pertama Header --><tr>
-                                    <th rowspan="2">No</th>
-                                    <th rowspan="2">Provinsi</th>
-                                    <th rowspan="2">Kab/Kota</th>
-                                    <!-- Kolom Username/Password dipindah dari sini --><th colspan="2">Sekolah 1</th>
-                                    <th colspan="2">Sekolah 2</th>
-                                    <th colspan="2">Petugas 1</th>
-                                    <th colspan="2">Petugas 2</th>
-                                    <th colspan="2">Dinas</th>
-                                    <!-- PENAMBAHAN KOLOM BARU (Posisi Baru) --><th rowspan="2">Username</th>
-                                    <th rowspan="2">Password</th>
-                                    <!-- AKHIR PENAMBAHAN --></tr>
-                                <!-- Baris Kedua Header (Sub-kolom) --><tr>
-                                    <!-- Sub Sekolah 1 --><th>NPSN</th>
-                                    <th>Nama Sekolah</th>
-                                    <!-- Sub Sekolah 2 --><th>NPSN</th>
-                                    <th>Nama Sekolah</th>
-                                    <!-- Sub Petugas 1 --><th>Nama</th>
-                                    <th>Tempat</th>
-                                    <!-- Sub Petugas 2 --><th>Nama</th>
-                                    <th>Tempat</th>
-                                    <!-- Sub Dinas --><th>Narahubung</th>
-                                    <th>Kontak</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Contoh Data (Sesuai Struktur Baru) --><tr>
-                                    <td>1</td>
-                                    <td>Jawa Barat</td>
-                                    <td>Kota Bandung</td>
-                                    <!-- Kolom Username/Password dipindah dari sini --><td>20219001</td>
-                                    <td>SDN Merdeka 1</td>
-                                    <td>20219002</td>
-                                    <td>SDN Merdeka 2</td>
-                                    <td>Ahmad</td>
-                                    <td>Pusat</td>
-                                    <td>Budi</td>
-                                    TDaerah</td>
-                                    <td>Ibu Ida</td>
-                                    <td>08123456789</td>
-                                    <!-- PENAMBAHAN KOLOM BARU (Posisi Baru) --><td>Jawa Barat</td>
-                                    <td>123</td>
-                                    <!-- AKHIR PENAMBAHAN --></tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jawa Tengah</td>
-                                    <td>Kota Semarang</td>
-                                    <!-- Kolom Username/Password dipindah dari sini --><td>20328001</td>
-                                    <td>SDN Pelita</td>
-                                    <td>20328002</td>
-                                    <td>SDN Harapan</td>
-                                    <td>Citra</td>
-                                    <td>Pusat</td>
-                                    <td>Doni</td>
-                                    <td>Daerah</td>
-                                    <td>Bapak Eko</td>
-                                    <td>08211112222</td>
-                                    <!-- PENAMBAHAN KOLOM BARU (Posisi Baru) --><td>Jawa Tengah</td>
-                                    <td>123</td>
-                                    <!-- AKHIR PENAMBAHAN --></tr>
-                            </tbody>
-                        </table>
+                <div class="filter-container data-form">
+                    <div class="form-group">
+                        <label for="lokus-filter-provinsi">Provinsi</label>
+                        <select id="lokus-filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
                     </div>
-                </div> <!-- Penutup #content-lokus --><!-- ================================== --><!--      HALAMAN 2: TABEL SEKOLAH      --><!-- ================================== --><div id="content-sekolah" class="content-section">
-                    <h1>Data Master Sekolah</h1>
-                    <p>Halaman ini berisi daftar semua sekolah yang terdaftar dalam sistem.</p>
-
-                    <!-- 
-                    KONTEN FORM DIUBAH MENJADI TABEL
-                    --><div class="data-table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>NPSN</th>
-                                    <th>Nama Sekolah</th>
-                                    <th>Provinsi</th>
-                                    <th>Kab/Kota</th>
-                                    <th>Alamat</th>
-                                    <th>Email</th>
-                                    <th>Nama</th>
-                                    <th>NIP</th>
-                                    <th>Pangkat Gol</th>
-                                    <th>Jabatan</th>
-                                    <th>No. HP</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Contoh Data untuk Tabel Sekolah --><tr>
-                                    <td>1</td>
-                                    <td>20219001</td>
-                                    <td>SDN Merdeka 1</td>
-                                    <td>Jawa Barat</td>
-                                    <td>Kota Bandung</td>
-                                    <td>Jl. Merdeka No. 10, Bandung</td>
-                                    <td>sdnmerdeka1@sekolah.id</td>
-                                    <td>Jajang Sukmara, S.Pd.</td>
-                                    <td>197001011990031001</td>
-                                    TD>IV/a</td>
-                                    <td>Kepala Sekolah</td>
-                                    <td>08111111111</td>
-                                    <td>
-                                        <button class="btn-edit">Edit</button>
-                                        <button class="btn-delete">Hapus</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>20328001</td>
-                                    <td>SDN Pelita</td>
-                                    <td>Jawa Tengah</td>
-                                    <td>Kota Semarang</td>
-                                    <td>Jl. Pelita No. 5, Semarang</td>
-                                    <td>sdnpelita@sekolah.id</td>
-                                    <td>Sri Handayani, M.Pd.</td>
-                                    <td>197502021995032002</td>
-                                    <td>IV/b</td>
-                                    <td>Kepala Sekolah</td>
-                                    <td>08222222222</td>
-                                    <td>
-                                        <button class="btn-edit">Edit</button>
-                                        <button class="btn-delete">Hapus</button>
-                                    </td>
-                                </tr>
-                                <!-- Data sekolah lainnya --></tbody>
-                        </table>
+                    <div class="form-group">
+                        <label for="lokus-filter-kabkota">Kab/Kota</label>
+                        <select id="lokus-filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
                     </div>
-                </div> <!-- Penutup #content-sekolah --><!-- Placeholder untuk menu lain --><div id="content-input" class="content-section">
-                    <h1>Input Monev</h1>
-                    <p>Konten untuk Input Monev akan ada di sini.</p>
+                    <button id="lokus-reset-filter" class="form-submit-button">Reset</button>
                 </div>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Provinsi</th>
+                                <th rowspan="2">Kab/Kota</th>
+                                <th colspan="2">Sekolah 1</th>
+                                <th colspan="2">Sekolah 2</th>
+                                <th colspan="2">Petugas 1</th>
+                                <th colspan="2">Petugas 2</th>
+                                <th rowspan="2">Username</th>
+                                <th rowspan="2">Password</th>
+                                <th rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th>NPSN</th>
+                                <th>Nama Sekolah</th>
+                                <th>NPSN</th>
+                                <th>Nama Sekolah</th>
+                                <th>Nama</th>
+                                <th>Kontak</th>
+                                <th>Nama</th>
+                                <th>Kontak</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lokus-tbody">
+                            <tr>
+                                <td colspan="13" class="loading-placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i> Memuat data lokus...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- Penutup #content-lokus -->
+
+            <!-- ================================== -->
+            <!--      HALAMAN 2: TABEL SEKOLAH      -->
+            <!-- ================================== -->
+            <div id="content-sekolah" class="content-section">
+                <h1>Data Master Sekolah</h1>
+                <p>Daftar semua sekolah yang terdaftar dalam sistem. Gunakan filter di bawah untuk mencari data sekolah.</p>
                 
-                <!-- Halaman Laporan dan Petugas tidak perlu div konten lagi karena akan menampilkan modal --><!--
-                <div id="content-laporan" class="content-section">
-                    <h1>Laporan</h1>
-                    <p>Konten untuk Laporan akan ada di sini.</p>
+                <div class="filter-container data-form">
+                    <div class="form-group">
+                        <label for="filter-provinsi">Provinsi</label>
+                        <select id="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota">Kab/Kota</label>
+                        <select id="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-sekolah">Sekolah (NPSN)</label>
+                        <select id="filter-sekolah" disabled>
+                            <option value="">Semua Sekolah</option>
+                        </select>
+                    </div>
+                    <button id="reset-filter" class="form-submit-button">Reset</button>
                 </div>
-                <div id="content-petugas" class="content-section">
-                    <h1>Manajemen Petugas</h1>
-                    <p>Konten untuk Manajemen Petugas akan ada di sini.</p>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NPSN</th>
+                                <th>Nama Sekolah</th>
+                                <th>Provinsi</th>
+                                <th>Kab/Kota</th>
+                                <th>Petugas 1</th>
+                                <th>Petugas 2</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sekolah-tbody">
+                            <tr>
+                                <td colspan="8" class="loading-placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i> Memuat data sekolah...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                -->
-            </div> <!-- Penutup .content-wrapper -->
+            </div> <!-- Penutup #content-sekolah -->
+
+            <!-- ================================== -->
+            <!--   PENAMBAHAN: HALAMAN 3: MANAJEMEN USER -->
+            <!-- ================================== -->
+            <div id="content-manajemen-user" class="content-section">
+                <div class="header-actions">
+                    <h1>Manajemen User</h1>
+                    <button class="form-submit-button" id="btn-show-add-user">
+                        <i class="fas fa-plus"></i> Tambah User Baru
+                    </button>
+                </div>
+                <p>Kelola akun yang dapat login ke sistem (Admin, Supervisor, Petugas).</p>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Kab/Kota</th>
+                                <th>Role</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-tbody">
+                            <tr>
+                                <td colspan="6" class="loading-placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i> Memuat data user...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- Penutup #content-manajemen-user -->
+
+
+            <!-- Placeholder untuk menu lain -->
+            <div id="content-input" class="content-section">
+                <h1>Input Monev</h1>
+                <p>Konten untuk Input Monev akan ada di sini.</p>
+            </div>
+            
         </main>
     </div>
 
-    <!-- TAMBAHAN: Overlay untuk menu mobile -->
-    <div class="sidebar-overlay"></div>
-
     <!-- ==================
-         MODAL BARU
-    =================== --><div id="soon-modal" class="modal-overlay">
+         MODAL "COMING SOON"
+    =================== -->
+    <div id="soon-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close">&times;</button>
-            <!-- 
-                GANTI 'src' DI BAWAH INI DENGAN PATH FILE 'awalia.png' ANDA.
-                Contoh: src="awalia.png" atau src="images/awalia.png"
-                Perhatikan class "profile-image" yang baru ditambahkan
-            --><img src="awalia.png" alt="Admin Sibuk" class="profile-image">
+            <img src="https://placehold.co/180x180/3498db/ffffff?text=Admin&font=play" alt="Admin Sibuk" class="profile-image">
             <h3>Mohon Maaf</h3>
-            <p>Halaman akan segera terbit, Admin saat ini sedang sibuk berenang di Danau Batur.</p>
+            <p>Halaman akan segera terbit.</p>
         </div>
     </div>
 
     <!-- ==================
+         MODAL EDIT SEKOLAH
+    =================== -->
+    <div id="modal-edit-sekolah" class="modal-overlay">
+        <div class="modal-content modal-lg">
+            <button class="modal-close">&times;</button>
+            <h3>Edit Data Sekolah</h3>
+            
+            <form id="form-edit-sekolah" class="data-form">
+                <input type="hidden" id="edit-sekolah-id">
+                <div class="form-group-grid">
+                    <div class="form-group">
+                        <label for="edit-npsn">NPSN</label>
+                        <input type="text" id="edit-npsn" placeholder="Contoh: 12345678" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-sekolah-nama">Nama Sekolah</label>
+                        <input type="text" id="edit-sekolah-nama" placeholder="Contoh: SDN 1 Jakarta" required>
+                    </div>
+                </div>
+                <div class="form-group-grid">
+                    <div class="form-group">
+                        <label for="edit-provinsi">Provinsi</label>
+                        <input type="text" id="edit-provinsi" placeholder="Contoh: DKI Jakarta" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-kota">Kab/Kota</label>
+                        <input type="text" id="edit-kota" placeholder="Contoh: Kota Jakarta Pusat" required>
+                    </div>
+                </div>
+                <div class="form-group-grid">
+                    <div class="form-group">
+                        <label for="edit-petugas1">Petugas 1</label>
+                        <input type="text" id="edit-petugas1" placeholder="Nama Petugas 1 (No. HP)">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-petugas2">Petugas 2</label>
+                        <input type="text" id="edit-petugas2" placeholder="Nama Petugas 2 (No. HP)">
+                    </div>
+                </div>
+                <div class="form-action-buttons">
+                    <button type="button" class="form-submit-button btn-cancel modal-close">Batal</button>
+                    <button type="submit" id="btn-save-sekolah" class="form-submit-button">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================
+         PENAMBAHAN: MODAL TAMBAH/EDIT USER
+    =================== -->
+    <div id="modal-user" class="modal-overlay">
+        <div class="modal-content modal-lg">
+            <button class="modal-close">&times;</button>
+            <h3 id="modal-user-title">Tambah User Baru</h3>
+            
+            <form id="form-user" class="data-form">
+                <input type="hidden" id="user-id">
+                <div class="form-group">
+                    <label for="user-username">Username</label>
+                    <input type="text" id="user-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-password">Password</label>
+                    <input type="text" id="user-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-kota">Kab/Kota (Kosongkan jika Admin/Supervisor)</label>
+                    <input type="text" id="user-kota" placeholder="Contoh: Kota Bandung">
+                </div>
+                <div class="form-group">
+                    <label for="user-role">Role</label>
+                    <select id="user-role" required>
+                        <option value="petugas">Petugas</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <div class="form-action-buttons">
+                    <button type="button" class="form-submit-button btn-cancel modal-close">Batal</button>
+                    <button type="submit" id="btn-save-user" class="form-submit-button">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ==================
+         MODAL KONFIRMASI HAPUS
+    =================== -->
+    <div id="modal-confirm-delete" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 id="delete-confirm-title">Konfirmasi Hapus</h3>
+            <p id="delete-confirm-message">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="form-action-buttons" style="justify-content: center;">
+                <button type="button" class="form-submit-button btn-cancel modal-close">Batal</button>
+                <button type="button" id="delete-confirm-button" class="form-submit-button btn-confirm-delete">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================
          JAVASCRIPT
-    =================== --><script>
-        // Menunggu sampai semua HTML dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // --- LOGIKA BARU UNTUK TOGGLE SIDEBAR ---
-            const appContainer = document.querySelector('.app-container');
-            const toggleButton = document.getElementById('sidebar-toggle');
-            const sidebarOverlay = document.querySelector('.sidebar-overlay');
+    =================== -->
 
-            // 1. Tombol hamburger di header
-            if (toggleButton) {
-                toggleButton.addEventListener('click', function() {
-                    appContainer.classList.toggle('sidebar-toggled');
-                });
+    <script type="module">
+        // 1. Impor modul Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getFirestore, collection, setLogLevel,
+            onSnapshot, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs,
+            addDoc // Penambahan
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 2. Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxH9Do9ecrEHW8sNxfpGjLUQ3qP14ONGM",
+            authDomain: "litnum2025.firebaseapp.com",
+            projectId: "litnum2025",
+            storageBucket: "litnum2025.firebasestorage.app",
+            messagingSenderId: "233586560867",
+            appId: "1:233586560867:web:2800372b3a62dde68a8d56"
+        };
+
+        // 3. Inisialisasi Firebase
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            setLogLevel('debug');
+            console.log("Firebase berhasil diinisialisasi untuk Admin.html.");
+        } catch (e) {
+            console.error("Error inisialisasi Firebase:", e);
+        }
+
+        // --- Variabel Global untuk menyimpan data ---
+        let allSekolahList = [];
+        let allUsersList = [];
+
+        // --- Variabel Global untuk Modal ---
+        const editSekolahModal = document.getElementById('modal-edit-sekolah');
+        const editSekolahForm = document.getElementById('form-edit-sekolah');
+        const btnSaveSekolah = document.getElementById('btn-save-sekolah');
+        
+        const deleteConfirmModal = document.getElementById('modal-confirm-delete');
+        const deleteConfirmTitle = document.getElementById('delete-confirm-title');
+        const deleteConfirmMessage = document.getElementById('delete-confirm-message');
+        const deleteConfirmButton = document.getElementById('delete-confirm-button');
+        
+        const userModal = document.getElementById('modal-user');
+        const userForm = document.getElementById('form-user');
+        const userModalTitle = document.getElementById('modal-user-title');
+        const btnSaveUser = document.getElementById('btn-save-user');
+        const hiddenUserId = document.getElementById('user-id');
+        
+        let activeDeleteFunction = null; 
+
+        // --- Variabel Modal Login & App Container ---
+        const modalLogin = document.getElementById('modal-login');
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        const loginError = document.getElementById('login-error');
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const appContainer = document.getElementById('app-container');
+
+        // --- FUNGSI UNTUK MENGAMBIL DATA (REAL-TIME) ---
+
+        function setupSekolahListener() {
+            const sekolahCol = collection(db, "sekolah");
+            onSnapshot(sekolahCol, (snapshot) => {
+                console.log("Data sekolah diperbarui (onSnapshot)...");
+                allSekolahList = snapshot.docs.map(doc => ({ 
+                    id: doc.id,
+                    ...doc.data() 
+                }));
+                allSekolahList.sort((a, b) => (a.provinsi || "").localeCompare(b.provinsi || "") || (a.kota || "").localeCompare(b.kota || ""));
+                handleDataUpdate();
+            }, (error) => {
+                console.error("Error listening to sekolah collection:", error);
+            });
+        }
+
+        function setupUsersListener() {
+            const usersCol = collection(db, "users");
+            onSnapshot(usersCol, (snapshot) => {
+                console.log("Data users diperbarui (onSnapshot)...");
+                allUsersList = snapshot.docs.map(doc => ({ 
+                    id: doc.id,
+                    ...doc.data() 
+                }));
+                allUsersList.sort((a, b) => (a.username || "").localeCompare(b.username || ""));
+                handleDataUpdate();
+            }, (error) => {
+                console.error("Error listening to users collection:", error);
+            });
+        }
+
+        function handleDataUpdate() {
+            // Cek jika filter-provinsi ada (mungkin belum di-load jika user belum login)
+            if (!document.getElementById('filter-provinsi')) return;
+
+            // Simpan nilai filter yang sedang aktif
+            const lokusProvVal = document.getElementById('lokus-filter-provinsi').value;
+            const lokusKabVal = document.getElementById('lokus-filter-kabkota').value;
+            const sekolahProvVal = document.getElementById('filter-provinsi').value;
+            const sekolahKabVal = document.getElementById('filter-kabkota').value;
+            const sekolahNpsnVal = document.getElementById('filter-sekolah').value;
+
+            // Update dropdown filter (jika ada data baru)
+            populateProvinsiFilter(allSekolahList, document.getElementById('lokus-filter-provinsi'));
+            populateProvinsiFilter(allSekolahList, document.getElementById('filter-provinsi'));
+            
+            updateDependentFilters('lokus-filter-provinsi', 'lokus-filter-kabkota', null);
+            updateDependentFilters('filter-provinsi', 'filter-kabkota', 'filter-sekolah');
+
+            // Kembalikan nilai filter yang tadi aktif
+            document.getElementById('lokus-filter-provinsi').value = lokusProvVal;
+            document.getElementById('lokus-filter-kabkota').value = lokusKabVal;
+            document.getElementById('filter-provinsi').value = sekolahProvVal;
+            document.getElementById('filter-kabkota').value = sekolahKabVal;
+            document.getElementById('filter-sekolah').value = sekolahNpsnVal;
+
+            // Render ulang tabel berdasarkan filter yang aktif
+            filterLokusTabel();
+            filterSekolahTabel();
+            renderUserTable(allUsersList); // Render tabel user
+        }
+
+
+        // --- FUNGSI UNTUK MERENDER TABEL ---
+
+        function renderMasterSekolah(sekolahList) {
+            const tbody = document.getElementById('sekolah-tbody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            if (sekolahList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">Tidak ada data sekolah ditemukan untuk filter ini.</td></tr>`;
+                return;
             }
 
-            // 2. Overlay gelap (hanya muncul di mobile)
-            if (sidebarOverlay) {
-                sidebarOverlay.addEventListener('click', function() {
-                    // Selalu tutup sidebar jika overlay diklik
-                    appContainer.classList.remove('sidebar-toggled');
+            sekolahList.forEach((sekolah, index) => {
+                const row = `
+                    <tr>
+                        <td style="text-align: center;">${index + 1}</td>
+                        <td>${sekolah.npsn || '-'}</td>
+                        <td>${sekolah.sekolah || '-'}</td>
+                        <td>${sekolah.provinsi || '-'}</td>
+                        <td>${sekolah.kota || '-'}</td>
+                        <td>${sekolah.petugas1 || '-'}</td>
+                        <td>${sekolah.petugas2 || '-'}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-edit btn-edit-sekolah" data-id="${sekolah.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn-delete btn-delete-sekolah" data-id="${sekolah.id}" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function populateDataLokus(sekolahList, usersList) {
+            const tbody = document.getElementById('lokus-tbody');
+            if (!tbody) return;
+
+            const userMap = new Map();
+            usersList.forEach(user => {
+                userMap.set(user.kota, user); 
+            });
+
+            const lokusMap = new Map();
+            sekolahList.forEach(sekolah => {
+                if (!lokusMap.has(sekolah.kota)) {
+                    lokusMap.set(sekolah.kota, {
+                        provinsi: sekolah.provinsi,
+                        kota: sekolah.kota,
+                        sekolah: [],
+                        petugas1: sekolah.petugas1,
+                        petugas2: sekolah.petugas2
+                    });
+                }
+                lokusMap.get(sekolah.kota).sekolah.push({
+                    npsn: sekolah.npsn,
+                    nama: sekolah.sekolah
                 });
-            }
+            });
+
+            tbody.innerHTML = '';
+            let counter = 1;
             
-            // --- LOGIKA LAMA (Navigasi Konten & Modal) ---
+            if (lokusMap.size === 0) {
+                 tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; padding: 20px;">Tidak ada data lokus ditemukan untuk filter ini.</td></tr>`;
+                return;
+            }
+
+            lokusMap.forEach((lokus) => {
+                const sekolah1 = lokus.sekolah[0] || { npsn: '-', nama: '-' };
+                const sekolah2 = lokus.sekolah[1] || { npsn: '-', nama: '-' };
+                const user = userMap.get(lokus.kota);
+                const username = user ? user.username : '-';
+                const password = user ? user.password : '-';
+                const [namaPetugas1, kontakPetugas1] = pisahNamaDanKontak(lokus.petugas1);
+                const [namaPetugas2, kontakPetugas2] = pisahNamaDanKontak(lokus.petugas2);
+
+                const row = `
+                    <tr>
+                        <td style="text-align: center;">${counter++}</td>
+                        <td>${lokus.provinsi}</td>
+                        <td>${lokus.kota}</td>
+                        <td>${sekolah1.npsn}</td>
+                        <td>${sekolah1.nama}</td>
+                        <td>${sekolah2.npsn}</td>
+                        <td>${sekolah2.nama}</td>
+                        <td>${namaPetugas1}</td>
+                        <td>${kontakPetugas1}</td>
+                        <td>${namaPetugas2}</td>
+                        <td>${kontakPetugas2}</td>
+                        <td>${username}</td>
+                        <td>${password}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-delete btn-delete-lokus" data-kota="${lokus.kota}" title="Hapus Lokus Ini"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+        
+        function renderUserTable(usersList) {
+            const tbody = document.getElementById('user-tbody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            if (usersList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">Belum ada data user.</td></tr>`;
+                return;
+            }
+
+            usersList.forEach((user, index) => {
+                const row = `
+                    <tr>
+                        <td style="text-align: center;">${index + 1}</td>
+                        <td>${user.username || '-'}</td>
+                        <td>${user.password || '-'}</td>
+                        <td>${user.kota || '-'}</td>
+                        <td>${user.role || 'petugas'}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-edit btn-edit-user" data-id="${user.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn-delete btn-delete-user" data-id="${user.id}" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+
+        function pisahNamaDanKontak(teks) {
+            if (!teks) return ['-', '-'];
+            const match = teks.match(/^(.*?)\s*(\(.*\)|08\d{8,})$/);
+            if (match) {
+                return [match[1].trim(), match[2].trim()];
+            }
+            return [teks, '-'];
+        }
+
+
+        // --- FUNGSI-FUNGSI FILTER ---
+
+        function filterLokusTabel() {
+            const selectedProvinsi = document.getElementById('lokus-filter-provinsi').value;
+            const selectedKabKota = document.getElementById('lokus-filter-kabkota').value;
+            let filteredList = [...allSekolahList];
+            if (selectedProvinsi) {
+                filteredList = filteredList.filter(s => s.provinsi === selectedProvinsi);
+            }
+            if (selectedKabKota) {
+                filteredList = filteredList.filter(s => s.kota === selectedKabKota);
+            }
+            populateDataLokus(filteredList, allUsersList);
+        }
+
+        function filterSekolahTabel() {
+            const selectedProvinsi = document.getElementById('filter-provinsi').value;
+            const selectedKabKota = document.getElementById('filter-kabkota').value;
+            const selectedNPSN = document.getElementById('filter-sekolah').value;
+            let filteredList = [...allSekolahList];
+            if (selectedProvinsi) {
+                filteredList = filteredList.filter(s => s.provinsi === selectedProvinsi);
+            }
+            if (selectedKabKota) {
+                filteredList = filteredList.filter(s => s.kota === selectedKabKota);
+            }
+            if (selectedNPSN) {
+                filteredList = filteredList.filter(s => s.npsn === selectedNPSN);
+            }
+            renderMasterSekolah(filteredList);
+        }
+
+        function populateProvinsiFilter(sekolahList, selectElement) {
+            if (!selectElement) return;
+            const provinsiSet = new Set(sekolahList.map(s => s.provinsi).filter(Boolean));
+            const sortedProvinsi = [...provinsiSet].sort();
+            
+            const selectedValue = selectElement.value;
+            
+            selectElement.innerHTML = '<option value="">Semua Provinsi</option>';
+            sortedProvinsi.forEach(prov => {
+                selectElement.innerHTML += `<option value="${prov}">${prov}</option>`;
+            });
+
+            selectElement.value = selectedValue;
+        }
+
+        function updateDependentFilters(provId, kabId, npsnId) {
+            const selectedProvinsi = document.getElementById(provId).value;
+            const kabSelect = document.getElementById(kabId);
+            const kabValue = kabSelect.value; 
+
+            kabSelect.innerHTML = '<option value="">Semua Kab/Kota</option>';
+            if (selectedProvinsi) {
+                const kabKotaSet = new Set(allSekolahList
+                    .filter(s => s.provinsi === selectedProvinsi)
+                    .map(s => s.kota).filter(Boolean));
+                [...kabKotaSet].sort().forEach(kota => {
+                    kabSelect.innerHTML += `<option value="${kota}">${kota}</option>`;
+                });
+                kabSelect.disabled = false;
+                kabSelect.value = kabValue;
+            } else {
+                kabSelect.disabled = true;
+            }
+
+            if (npsnId) {
+                const npsnSelect = document.getElementById(npsnId);
+                const npsnValue = npsnSelect.value;
+                const selectedKabKota = kabSelect.value;
+                
+                npsnSelect.innerHTML = '<option value="">Semua Sekolah</option>';
+                if (selectedKabKota) {
+                    const sekolahSet = allSekolahList.filter(s => s.provinsi === selectedProvinsi && s.kota === selectedKabKota).filter(Boolean);
+                    sekolahSet.sort((a, b) => (a.sekolah || "").localeCompare(b.sekolah || "")).forEach(sekolah => {
+                        npsnSelect.innerHTML += `<option value="${sekolah.npsn}">${sekolah.sekolah} (${sekolah.npsn})</option>`;
+                    });
+                    npsnSelect.disabled = false;
+                    npsnSelect.value = npsnValue;
+                } else {
+                    npsnSelect.disabled = true;
+                }
+            }
+        }
+
+        function setupLokusFilterListeners() {
+            const filterProvinsi = document.getElementById('lokus-filter-provinsi');
+            const filterKabKota = document.getElementById('lokus-filter-kabkota');
+            const resetBtn = document.getElementById('lokus-reset-filter');
+
+            filterProvinsi.addEventListener('change', () => {
+                updateDependentFilters('lokus-filter-provinsi', 'lokus-filter-kabkota', null);
+                filterLokusTabel();
+            });
+            filterKabKota.addEventListener('change', () => {
+                filterLokusTabel();
+            });
+            resetBtn.addEventListener('click', () => {
+                filterProvinsi.value = "";
+                filterKabKota.innerHTML = '<option value="">Semua Kab/Kota</option>';
+                filterKabKota.disabled = true;
+                filterLokusTabel();
+            });
+        }
+
+        function setupSekolahFilterListeners() {
+            const filterProvinsi = document.getElementById('filter-provinsi');
+            const filterKabKota = document.getElementById('filter-kabkota');
+            const filterSekolah = document.getElementById('filter-sekolah');
+            const resetBtn = document.getElementById('reset-filter');
+
+            filterProvinsi.addEventListener('change', () => {
+                updateDependentFilters('filter-provinsi', 'filter-kabkota', 'filter-sekolah');
+                filterSekolahTabel();
+            });
+            filterKabKota.addEventListener('change', () => {
+                updateDependentFilters('filter-provinsi', 'filter-kabkota', 'filter-sekolah');
+                filterSekolahTabel();
+            });
+            filterSekolah.addEventListener('change', () => {
+                filterSekolahTabel();
+            });
+            resetBtn.addEventListener('click', () => {
+                filterProvinsi.value = "";
+                filterKabKota.innerHTML = '<option value="">Semua Kab/Kota</option>';
+                filterKabKota.disabled = true;
+                filterSekolah.innerHTML = '<option value="">Semua Sekolah</option>';
+                filterSekolah.disabled = true;
+                filterSekolahTabel();
+            });
+        }
+
+
+        // --- FUNGSI INISIALISASI UTAMA (Dipanggil setelah login) ---
+        async function initializeAdminPanel() {
+            
+            // Ambil elemen menu dan modal "coming soon"
             const menuLinks = document.querySelectorAll('.sidebar-menu a');
             const contentSections = document.querySelectorAll('.content-section');
-            const modal = document.getElementById('soon-modal');
-            const modalCloseButtons = document.querySelectorAll('#soon-modal .modal-close, #soon-modal.modal-overlay'); 
+            const soonModal = document.getElementById('soon-modal');
+            const allModalCloseButtons = document.querySelectorAll('.modal-close, .modal-overlay'); 
             
             // Listener untuk link menu
             menuLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
-                    
                     const targetId = link.getAttribute('data-target');
                     const isModalTrigger = link.classList.contains('show-modal');
 
                     if (isModalTrigger) {
-                        // Jika link adalah pemicu modal (Laporan / Manajemen Petugas)
-                        event.preventDefault(); // Hentikan aksi default (pindah halaman)
-                        modal.classList.add('active'); // Tampilkan modal
-                    
+                        event.preventDefault(); 
+                        soonModal.classList.add('active'); 
                     } else if (targetId) {
-                        // Jika link adalah navigasi SPA (data-target ada)
-                        event.preventDefault(); // Hentikan aksi default
-
-                        // 1. Dapatkan ID target konten
+                        event.preventDefault(); 
                         const targetContent = document.getElementById(targetId);
-
-                        // 2. Hapus 'active' dari semua link dan konten
                         menuLinks.forEach(ml => ml.classList.remove('active'));
                         contentSections.forEach(cs => cs.classList.remove('active'));
-
-                        // 3. Tambahkan 'active' ke link yang di-klik dan konten targetnya
                         link.classList.add('active');
                         if (targetContent) {
                             targetContent.classList.add('active');
                         }
                     }
-                    // Jika link "Home" (href="./") diklik, biarkan navigasi default terjadi.
-
-                    // TAMBAHAN: Otomatis tutup sidebar di mobile setelah klik menu
-                    if (window.innerWidth <= 768) {
-                        appContainer.classList.remove('sidebar-toggled');
-                    }
                 });
             });
 
-            // Listener untuk menutup modal
-            modalCloseButtons.forEach(button => {
+            // Listener untuk menutup SEMUA modal
+            allModalCloseButtons.forEach(button => {
                 button.addEventListener('click', function(event) {
-                    // Pastikan yang diklik adalah overlay atau tombol close, 
-                    // BUKAN area konten modal di dalamnya
                     if (event.target === this || event.target.classList.contains('modal-close')) {
-                        modal.classList.remove('active'); // Sembunyikan modal
+                        document.querySelectorAll('.modal-overlay').forEach(modal => {
+                            // Jangan tutup modal login
+                            if (modal.id !== 'modal-login') {
+                                modal.classList.remove('active');
+                            }
+                        });
+                        activeDeleteFunction = null;
                     }
                 });
             });
 
-            // Menyesuaikan state awal sidebar berdasarkan ukuran layar
-            // Jika layar besar, defaultnya terbuka (hapus class toggled jika ada)
-            // Jika layar kecil, defaultnya tertutup (tambahkan class toggled jika tidak ada)
-            // KOREKSI: Logika CSS sudah menangani state default, JS tidak perlu intervensi di awal.
-            // Biarkan default CSS (desktop: terbuka, mobile: tertutup)
+            // Setup listener real-time dan filter
+            setupSekolahListener();
+            setupUsersListener();
+            setupLokusFilterListeners();
+            setupSekolahFilterListeners();
+
+            
+            // Event Listener untuk Tombol Aksi
+
+            // 1. Event listener untuk tombol SIMPAN di modal EDIT SEKOLAH
+            editSekolahForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                btnSaveSekolah.disabled = true;
+                btnSaveSekolah.textContent = "Menyimpan...";
+                const docId = document.getElementById('edit-sekolah-id').value;
+                const updatedData = {
+                    npsn: document.getElementById('edit-npsn').value,
+                    sekolah: document.getElementById('edit-sekolah-nama').value,
+                    provinsi: document.getElementById('edit-provinsi').value,
+                    kota: document.getElementById('edit-kota').value,
+                    petugas1: document.getElementById('edit-petugas1').value,
+                    petugas2: document.getElementById('edit-petugas2').value,
+                };
+                try {
+                    await updateDoc(doc(db, "sekolah", docId), updatedData);
+                    editSekolahModal.classList.remove('active');
+                } catch (error) {
+                    console.error("Error updating document: ", error);
+                } finally {
+                    btnSaveSekolah.disabled = false;
+                    btnSaveSekolah.textContent = "Simpan Perubahan";
+                }
+            });
+
+            // 2. Event listener untuk tombol KONFIRMASI HAPUS
+            deleteConfirmButton.addEventListener('click', async () => {
+                if (typeof activeDeleteFunction === 'function') {
+                    deleteConfirmButton.disabled = true;
+                    deleteConfirmButton.textContent = "Menghapus...";
+                    try {
+                        await activeDeleteFunction();
+                    } catch (error) {
+                        console.error("Error saat menjalankan aksi hapus: ", error);
+                    } finally {
+                        deleteConfirmButton.disabled = false;
+                        deleteConfirmButton.textContent = "Ya, Hapus";
+                        deleteConfirmModal.classList.remove('active');
+                        activeDeleteFunction = null;
+                    }
+                }
+            });
+
+            // 3. Event delegation untuk tombol EDIT dan DELETE di tabel SEKOLAH
+            document.getElementById('sekolah-tbody').addEventListener('click', (e) => {
+                const editBtn = e.target.closest('.btn-edit-sekolah');
+                const deleteBtn = e.target.closest('.btn-delete-sekolah');
+                if (editBtn) {
+                    const docId = editBtn.dataset.id;
+                    const school = allSekolahList.find(s => s.id === docId);
+                    if (school) {
+                        document.getElementById('edit-sekolah-id').value = school.id;
+                        document.getElementById('edit-npsn').value = school.npsn || '';
+                        document.getElementById('edit-sekolah-nama').value = school.sekolah || '';
+                        document.getElementById('edit-provinsi').value = school.provinsi || '';
+                        document.getElementById('edit-kota').value = school.kota || '';
+                        document.getElementById('edit-petugas1').value = school.petugas1 || '';
+                        document.getElementById('edit-petugas2').value = school.petugas2 || '';
+                        editSekolahModal.classList.add('active');
+                    }
+                }
+                if (deleteBtn) {
+                    const docId = deleteBtn.dataset.id;
+                    const school = allSekolahList.find(s => s.id === docId);
+                    if (school) {
+                        deleteConfirmTitle.textContent = "Hapus Sekolah";
+                        deleteConfirmMessage.textContent = `Apakah Anda yakin ingin menghapus sekolah: ${school.sekolah} (${school.npsn})?`;
+                        activeDeleteFunction = async () => {
+                            await deleteDoc(doc(db, "sekolah", docId));
+                        };
+                        deleteConfirmModal.classList.add('active');
+                    }
+                }
+            });
+
+            // 4. Event delegation untuk tombol DELETE di tabel LOKUS
+            document.getElementById('lokus-tbody').addEventListener('click', (e) => {
+                const deleteBtn = e.target.closest('.btn-delete-lokus');
+                if (deleteBtn) {
+                    const kota = deleteBtn.dataset.kota;
+                    const schoolsInLokus = allSekolahList.filter(s => s.kota === kota);
+                    const userInLokus = allUsersList.find(u => u.kota === kota);
+                    deleteConfirmTitle.textContent = "Hapus Lokus";
+                    deleteConfirmMessage.innerHTML = `PERINGATAN: Yakin hapus LOKUS "<strong>${kota}</strong>"?<br>Ini akan menghapus <strong>${schoolsInLokus.length} sekolah</strong> dan <strong>${userInLokus ? 1 : 0} user</strong> terkait.`;
+                    activeDeleteFunction = async () => {
+                        const batch = writeBatch(db);
+                        schoolsInLokus.forEach(school => {
+                            batch.delete(doc(db, "sekolah", school.id));
+                        });
+                        if (userInLokus) {
+                            batch.delete(doc(db, "users", userInLokus.id));
+                        }
+                        await batch.commit();
+                    };
+                    deleteConfirmModal.classList.add('active');
+                }
+            });
+
+            // 5. Event listener untuk MANAJEMEN USER
+            document.getElementById('btn-show-add-user').addEventListener('click', () => {
+                userForm.reset();
+                hiddenUserId.value = ''; // Pastikan ID kosong untuk mode "Tambah"
+                userModalTitle.textContent = "Tambah User Baru";
+                userModal.classList.add('active');
+            });
+
+            document.getElementById('user-tbody').addEventListener('click', (e) => {
+                const editBtn = e.target.closest('.btn-edit-user');
+                const deleteBtn = e.target.closest('.btn-delete-user');
+                
+                if (editBtn) {
+                    const docId = editBtn.dataset.id;
+                    const user = allUsersList.find(u => u.id === docId);
+                    if (user) {
+                        hiddenUserId.value = user.id;
+                        document.getElementById('user-username').value = user.username || '';
+                        document.getElementById('user-password').value = user.password || '';
+                        document.getElementById('user-kota').value = user.kota || '';
+                        document.getElementById('user-role').value = user.role || 'petugas';
+                        userModalTitle.textContent = "Edit User";
+                        userModal.classList.add('active');
+                    }
+                }
+
+                if (deleteBtn) {
+                    const docId = deleteBtn.dataset.id;
+                    const user = allUsersList.find(u => u.id === docId);
+                    if (user) {
+                        deleteConfirmTitle.textContent = "Hapus User";
+                        deleteConfirmMessage.textContent = `Apakah Anda yakin ingin menghapus user: ${user.username}?`;
+                        activeDeleteFunction = async () => {
+                            await deleteDoc(doc(db, "users", docId));
+                        };
+                        deleteConfirmModal.classList.add('active');
+                    }
+                }
+            });
+
+            // 6. Event listener untuk form SIMPAN USER (Tambah/Edit)
+            userForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                btnSaveUser.disabled = true;
+                btnSaveUser.textContent = "Menyimpan...";
+
+                const docId = hiddenUserId.value;
+                const data = {
+                    username: document.getElementById('user-username').value,
+                    password: document.getElementById('user-password').value,
+                    kota: document.getElementById('user-kota').value,
+                    role: document.getElementById('user-role').value,
+                };
+
+                try {
+                    if (docId) {
+                        // Mode Edit
+                        await updateDoc(doc(db, "users", docId), data);
+                    } else {
+                        // Mode Tambah
+                        await addDoc(collection(db, "users"), data);
+                    }
+                    userModal.classList.remove('active');
+                } catch (error) {
+                    console.error("Error saving user:", error);
+                } finally {
+                    btnSaveUser.disabled = false;
+                    btnSaveUser.textContent = "Simpan";
+                }
+            });
+
+            // 7. Event listener untuk tombol LOGOUT
+            document.getElementById('logout-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                // Hapus data login palsu dan segarkan halaman
+                appContainer.style.display = 'none';
+                modalLogin.classList.add('active');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                loginError.style.display = 'none';
+            });
+        }
+
+        // --- LOGIKA UTAMA SCRIPT (Fokus pada Login) ---
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            if (!db) {
+                console.error("Koneksi Firestore gagal.");
+                loginError.textContent = "Koneksi ke database gagal. Cek konsol.";
+                loginError.style.display = 'block';
+                return;
+            }
+
+            // Listener untuk form login
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                loginButton.disabled = true;
+                loginButton.textContent = "Mencoba Login...";
+                loginError.style.display = 'none';
+
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+
+                try {
+                    // 1. Cari user berdasarkan username
+                    const usersCol = collection(db, "users");
+                    const q = query(usersCol, where("username", "==", username));
+                    const querySnapshot = await getDocs(q);
+
+                    if (querySnapshot.empty) {
+                        throw new Error("Username atau password salah.");
+                    }
+
+                    let userFound = false;
+                    let isAdmin = false;
+
+                    querySnapshot.forEach(doc => {
+                        const user = doc.data();
+                        
+                        // 2. Cek password
+                        if (user.password === password) {
+                            userFound = true;
+                            // 3. Cek role
+                            if (user.role === 'admin') {
+                                isAdmin = true;
+                            }
+                        }
+                    });
+
+                    if (!userFound) {
+                        throw new Error("Username atau password salah.");
+                    }
+
+                    if (!isAdmin) {
+                        throw new Error("Login berhasil, namun Anda bukan 'admin'.");
+                    }
+
+                    // 4. Jika lolos semua:
+                    modalLogin.classList.remove('active');
+                    appContainer.style.display = 'flex'; // Tampilkan konten admin
+                    initializeAdminPanel(); // Panggil inisialisasi panel admin
+
+                } catch (error) {
+                    console.error("Login gagal:", error);
+                    loginError.textContent = error.message;
+                    loginError.style.display = 'block';
+                    loginButton.disabled = false;
+                    loginButton.textContent = "Login";
+                }
+            });
+
         });
     </script>
 
