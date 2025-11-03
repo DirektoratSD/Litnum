@@ -68,13 +68,6 @@
         </header>
 
         <!-- Grid untuk Card -->
-        <!-- 
-            Responsive Grid:
-            - 1 kolom di layar kecil
-            - 2 kolom di layar tablet
-            - 3 kolom di layar besar
-            (Sekarang akan berisi 6 card)
-        -->
         <main class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
             <!-- Card 1: Materi Pendampingan (Membuka Modal Slide) -->
@@ -142,11 +135,15 @@
             <section class="mt-16 lg:mt-20">
 
             <!-- Layout Flexbox untuk 3 Card Lingkaran Baru -->
-            <!-- Menggunakan flexbox agar lebih rapi untuk item lingkaran, dan justify-center untuk menengahkan -->
             <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-8 lg:gap-12">
             
-                <!-- Card 4: Admin (Bentuk Lingkaran) - DIUBAH -->
-                <a href="javascript:void(0)" id="openAdminPasswordBtn" data-href="Admin.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                <!-- 
+                  PERUBAHAN 1:
+                  - Menghapus id="openAdminPasswordBtn"
+                  - Menghapus data-href="Admin.html"
+                  - Mengubah href="javascript:void(0)" menjadi href="Admin.html"
+                -->
+                <a href="Admin.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 text-purple-600 mb-2 transition-all duration-300 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
@@ -159,8 +156,13 @@
                     </h3>
                 </a>
             
-                <!-- Card 5: Petugas (Bentuk Lingkaran) - DIUBAH -->
-                <a href="javascript:void(0)" id="openPetugasPasswordBtn" data-href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                <!-- 
+                  PERUBAHAN 2:
+                  - Menghapus id="openPetugasPasswordBtn"
+                  - Menghapus data-href="Form.html"
+                  - Mengubah href="javascript:void(0)" menjadi href="Form.html"
+                -->
+                <a href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-teal-100 text-teal-600 mb-2 transition-all duration-300 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
@@ -227,35 +229,30 @@
                         </a>
                         
                         <!-- Card 1.2: Paparan Sesi Orientasi -->
-                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
                         <a href="https://drive.google.com/drive/folders/1FFudQw01PoAH253BwZSHzmRsJABJBkHx" target="_blank" class="materi-link-btn block p-6 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors border border-blue-200">
                             <h4 class="font-semibold text-blue-800">Paparan Sesi Orientasi</h4>
                             <p class="text-sm text-blue-700">Materi dari sesi orientasi.</p>
                         </a>
 
                         <!-- Card 1.3: Format Rencana Program -->
-                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
                         <a href="https://docs.google.com/document/d/1zvbGw69WzrjFz0rOvI2hK6aARCDDjE0JaCBGd0RNE-c/edit?usp=drive_link" target="_blank" class="materi-link-btn block p-6 rounded-lg bg-teal-50 hover:bg-teal-100 transition-colors border border-teal-200">
                             <h4 class="font-semibold text-teal-800">Format Rencana Program</h4>
                             <p class="text-sm text-teal-700">Unduh template format.</p>
                         </a>
 
                         <!-- Card 1.4: Unggah Draf Rencana -->
-                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
                         <a href="javascript:void(0)" class="open-soon-modal-btn block p-6 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors border border-purple-200">
                             <h4 class="font-semibold text-purple-800">Unggah Draf Rencana</h4>
                             <p class="text-sm text-purple-700">Upload draf Anda di sini.</p>
                         </a>
                         
                         <!-- Card 1.5: Unggah Rencana Final -->
-                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
                         <a href="javascript:void(0)" class="open-soon-modal-btn block p-6 rounded-lg bg-green-50 hover:bg-green-100 transition-colors border border-green-200">
                             <h4 class="font-semibold text-green-800">Unggah Rencana Final</h4>
                             <p class="text-sm text-green-700">Upload versi final Anda.</p>
                         </a>
 
                         <!-- Card 1.6: Unggah Log Implementasi -->
-                        <!-- TAUTAN '#' SEBAGAI CONTOH, SILAKAN DIGANTI -->
                         <a href="javascript:void(0)" class="open-soon-modal-btn block p-6 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-200">
                             <h4 class="font-semibold text-gray-800">Unggah Log Implementasi</h4>
                             <p class="text-sm text-gray-700">Catatan implementasi.</p>
@@ -292,7 +289,6 @@
     </div>
 
     <!-- ===== MODAL UNTUK DATA SEKOLAH (DIKEMBALIKAN) ===== -->
-    <!-- DIUBAH: max-w-4xl menjadi max-w-6xl untuk menampung kolom baru -->
     <div id="dataModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
         <!-- Kotak Modal -->
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl mx-auto overflow-hidden flex flex-col" style="max-height: 90vh;">
@@ -313,24 +309,22 @@
                     <div>
                         <label for="provinsiFilter" class="block text-sm font-medium text-slate-700 mb-1">Provinsi</label>
                         <select id="provinsiFilter" class="w-full p-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <!-- Opsi akan diisi oleh JavaScript -->
+                            <option value="semua">Semua Provinsi</option>
                         </select>
                     </div>
                     <!-- Dropdown Nama Sekolah -->
                     <div>
                         <label for="sekolahFilter" class="block text-sm font-medium text-slate-700 mb-1">Nama Sekolah</label>
                         <select id="sekolahFilter" class="w-full p-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <!-- Opsi akan diisi oleh JavaScript -->
+                             <option value="semua">Semua Sekolah</option>
                         </select>
                     </div>
                 </div>
             </div>
 
             <!-- Body Modal (Konten Tabel) -->
-            <!-- Container Tabel dengan Scroll Vertikal dan Horizontal -->
             <div class="p-4 overflow-auto table-scrollbar">
                 <div class="overflow-x-auto rounded-lg border">
-                    <!-- DIUBAH: min-w-[700px] menjadi min-w-[900px] -->
                     <table id="sekolahTable" class="w-full min-w-[900px] text-left text-sm">
                         <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider sticky top-0">
                             <tr>
@@ -338,13 +332,17 @@
                                 <th class="p-4">Nama Sekolah</th>
                                 <th class="p-4">Provinsi</th>
                                 <th class="p-4">Kab/Kota</th>
-                                <!-- DIUBAH: Kolom baru ditambahkan -->
                                 <th class="p-4">Petugas 1</th>
                                 <th class="p-4">Petugas 2</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody" class="divide-y">
-                            <!-- Data akan diisi oleh JavaScript -->
+                            <!-- PERUBAHAN: Status loading awal -->
+                            <tr>
+                                <td colspan="6" class="text-center p-6 text-slate-500">
+                                    Memuat data dari database...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -372,11 +370,6 @@
                 <!-- View 1: Daftar Surat (Tombol) -->
                 <div id="suratList" class="p-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- 
-                          LINK PDF DI BAWAH INI TELAH DIPERBARUI.
-                          data-pdf-src: Link untuk preview (embed).
-                          data-download-src: Link untuk tombol download.
-                        -->
                         <a href="javascript:void(0)" data-title="Surat Tugas" data-pdf-src="https://drive.google.com/file/d/1mP3d0u3ChumUJxIxjroW3awmUuN_jH8v/preview" data-download-src="https://drive.google.com/uc?export=download&id=1mP3d0u3ChumUJxIxjroW3awmUuN_jH8v" class="pdf-button block text-center w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Surat Tugas
                         </a>
@@ -462,7 +455,6 @@
             <!-- Body Modal (Konten) -->
             <div class="p-8 pt-10 text-center">
                 <!-- Gambar Admin (sesuai permintaan) -->
-                <!-- Pastikan file 'awalia.png' ada di folder yang sama dengan index.htm -->
                 <img src="awalia.png" alt="Admin Sibuk" class="w-40 h-40 rounded-full object-cover mb-6 mx-auto border-4 border-orange-200 shadow-lg transition-transform duration-300 hover:scale-110">
                 
                 <h3 class="text-2xl font-bold text-slate-800 mb-3">Mohon Maaf</h3>
@@ -473,105 +465,59 @@
         </div>
     </div>
 
-    <!-- ===== MODAL UNTUK PASSWORD (BARU) ===== -->
-    <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
-        <!-- Kotak Modal -->
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-auto overflow-hidden">
-            <!-- Header Modal -->
-            <div class="flex items-center justify-between p-4 border-b">
-                <h3 class="text-lg font-semibold">Akses Terbatas</h3>
-                <button id="closePasswordModalBtn" class="text-slate-400 hover:text-slate-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <!-- Body Modal (Konten) -->
-            <div class="p-6">
-                <label for="passwordInput" class="block text-sm font-medium text-slate-700 mb-2">Masukkan Password:</label>
-                <input type="password" id="passwordInput" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="********">
-                <p id="passwordError" class="text-red-600 text-sm mt-2 hidden">Password salah. Silakan coba lagi.</p>
-                <button id="submitPasswordBtn" class="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200 hover:bg-blue-700">
-                    Login
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- 
+      PERUBAHAN 3:
+      - Modal Password telah dihapus seluruhnya dari HTML.
+    -->
 
 
     <!-- ===== JAVASCRIPT ===== -->
-    <script>
+    
+    <!-- PERUBAHAN 4: Menambahkan skrip Firebase -->
+    <script type="module">
+        // Impor modul Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            onSnapshot,
+            setLogLevel
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxH9Do9ecrEHW8sNxfpGjLUQ3qP14ONGM",
+            authDomain: "litnum2025.firebaseapp.com",
+            projectId: "litnum2025",
+            storageBucket: "litnum2025.firebasestorage.app",
+            messagingSenderId: "233586560867",
+            appId: "1:233586560867:web:2800372b3a62dde68a8d56"
+        };
+
+        // Inisialisasi Firebase
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            setLogLevel('debug');
+            console.log("Firebase berhasil diinisialisasi untuk index.html.");
+        } catch (e) {
+            console.error("Error inisialisasi Firebase:", e);
+            document.getElementById('tableBody').innerHTML = `<tr><td colspan="6" class="text-center p-6 text-red-500">Gagal terhubung ke database.</td></tr>`;
+        }
+
+        // PERUBAHAN 5: Variabel global untuk data (menggantikan data hardcoded)
+        let allSekolahList = [];
+
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- DATA SEKOLAH (DIUBAH SESUAI PERMINTAAN PENGGUNA) ---
-            const dataSekolah = [
-                // Prov. Sumatera Utara
-                { npsn: '10210587', sekolah: 'UPT SD NEGERI 060804', provinsi: 'Prov. Sumatera Utara', kota: 'Kota Medan', petugas1: 'Asmaniar Sinaga', petugas2: 'Faujiah Marlina' },
-                { npsn: '10210176', sekolah: 'UPT SD NEGERI 066655', provinsi: 'Prov. Sumatera Utara', kota: 'Kota Medan', petugas1: 'Asmaniar Sinaga', petugas2: 'Faujiah Marlina' },
-                // Prov. Sumatera Barat
-                { npsn: '10304135', sekolah: 'SD NEGERI 38 SEBERANG PD. SELATAN', provinsi: 'Prov. Sumatera Barat', kota: 'Kota Padang', petugas1: 'Rahmat Hidayat', petugas2: 'Fakhriza Akbar' },
-                { npsn: '10304454', sekolah: 'SD NEGERI 06 PIAI TENGAH', provinsi: 'Prov. Sumatera Barat', kota: 'Kota Padang', petugas1: 'Rahmat Hidayat', petugas2: 'Fakhriza Akbar' },
-                // Prov. Lampung
-                { npsn: '10810488', sekolah: 'SDN 2 BANDAR DALAM', provinsi: 'Prov. Lampung', kota: 'Kab. Lampung Selatan', petugas1: 'Heri Fitriono', petugas2: 'Yanto Musthofa' },
-                { npsn: '10800301', sekolah: 'SDN 2 SUKAMARGA', provinsi: 'Prov. Lampung', kota: 'Kab. Lampung Selatan', petugas1: 'Heri Fitriono', petugas2: 'Yanto Musthofa' },
-                // Prov. Banten
-                { npsn: '20602929', sekolah: 'SD NEGERI KEDAUNG I', provinsi: 'Prov. Banten', kota: 'Kab. Tangerang', petugas1: 'Muhammad Noor Ginanjar Jaelani', petugas2: 'Billy Antoro' },
-                { npsn: '20603480', sekolah: 'SD NEGERI SETIA BHAKTI', provinsi: 'Prov. Banten', kota: 'Kab. Tangerang', petugas1: 'Muhammad Noor Ginanjar Jaelani', petugas2: 'Billy Antoro' },
-                // Prov. Jawa Barat - Kota Bogor
-                { npsn: '20238443', sekolah: 'SD NEGERI CILENDEK TIMUR 2', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bogor', petugas1: 'Lanny Anggraini', petugas2: 'Rossi Marinjani' },
-                { npsn: '20220537', sekolah: 'SD NEGERI SITU GEDE 1', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bogor', petugas1: 'Lanny Anggraini', petugas2: 'Rossi Marinjani' },
-                // Prov. Jawa Barat - Kota Bandung
-                { npsn: '20245797', sekolah: 'SDN 160 SUKALAKSANA', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bandung', petugas1: 'Ine Rahmawati', petugas2: 'Sofie Dewayani' },
-                { npsn: '20245731', sekolah: 'SDN 253 PANGGUNGSARI', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bandung', petugas1: 'Ine Rahmawati', petugas2: 'Sofie Dewayani' },
-                // Prov. Jawa Barat - Kab. Bekasi
-                { npsn: '20245341', sekolah: 'SD NEGERI KARANG REJA 01', provinsi: 'Prov. Jawa Barat', kota: 'Kab. Bekasi', petugas1: 'Dwi Nurani', petugas2: 'Roosie Setiawan' },
-                { npsn: '20218584', sekolah: 'SD NEGERI SUKAMURNI 02', provinsi: 'Prov. Jawa Barat', kota: 'Kab. Bekasi', petugas1: 'Dwi Nurani', petugas2: 'Roosie Setiawan' },
-                // Prov. Jawa Tengah - Kab. Sukoharjo
-                { npsn: '20330782', sekolah: 'SD NEGERI WIRONANGGAN 02', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Sukoharjo', petugas1: 'Auwalia Ramadhani', petugas2: 'Riski' },
-                { npsn: '20310486', sekolah: 'SD NEGERI PUCANGAN 06', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Sukoharjo', petugas1: 'Auwalia Ramadhani', petugas2: 'Riski' },
-                // Prov. Jawa Tengah - Kab. Karanganyar
-                { npsn: '20312197', sekolah: 'SDN 06 TAWANGMANGU', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Karanganyar', petugas1: 'Anggia Sabrina', petugas2: 'Dewi Liyana Katili (081289933075)' },
-                { npsn: '20311911', sekolah: 'SDN 03 JATISUKO', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Karanganyar', petugas1: 'Anggia Sabrina', petugas2: 'Dewi Liyana Katili (081289933075)' },
-                // Prov. D.I. Yogyakarta
-                { npsn: '20402548', sekolah: 'SD GETAS II', provinsi: 'Prov. D.I. Yogyakarta', kota: 'Kab. Gunung Kidul', petugas1: 'Amala Sholiha', petugas2: 'Andry Novi' },
-                { npsn: '20401741', sekolah: 'SD SEMIN III SEMIN', provinsi: 'Prov. D.I. Yogyakarta', kota: 'Kab. Gunung Kidul', petugas1: 'Amala Sholiha', petugas2: 'Andry Novi' },
-                // Prov. Jawa Timur - Kota Surabaya
-                { npsn: '20533175', sekolah: 'SDN PEGIRIAN I / 47', provinsi: 'Prov. Jawa Timur', kota: 'Kota Surabaya', petugas1: 'R. Mitra Irianarya', petugas2: 'Dicky Susanto' },
-                { npsn: '20533538', sekolah: 'SDN KREMBANGAN SELATAN IX NO. 20', provinsi: 'Prov. Jawa Timur', kota: 'Kota Surabaya', petugas1: 'R. Mitra Irianarya', petugas2: 'Dicky Susanto' },
-                // Prov. Jawa Timur - Kab. Banyuwangi
-                { npsn: '20525398', sekolah: 'SDN 2 TEGALREJO', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Banyuwangi', petugas1: 'Enfira Yanuaristi', petugas2: 'Mita Hidayati (085921430783)' },
-                { npsn: '20525883', sekolah: 'SDN 8 SUMBERBERAS', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Banyuwangi', petugas1: 'Enfira Yanuaristi', petugas2: 'Mita Hidayati (085921430783)' },
-                // Prov. Nusa Tenggara Barat
-                { npsn: '50204433', sekolah: 'SD NEGERI 36 AMPENAN', provinsi: 'Prov. Nusa Tenggara Barat', kota: 'Kota Mataram', petugas1: 'Waluyo', petugas2: 'Bintang Permana (081310051985)' },
-                { npsn: '50204622', sekolah: 'SD NEGERI 23 MATARAM', provinsi: 'Prov. Nusa Tenggara Barat', kota: 'Kota Mataram', petugas1: 'Waluyo', petugas2: 'Bintang Permana (081310051985)' },
-                // Prov. Nusa Tenggara Timur
-                { npsn: '50306417', sekolah: 'SD NEGERI TO\'BATAN', provinsi: 'Prov. Nusa Tenggara Timur', kota: 'Kab. Kupang', petugas1: 'Citra Adi Pratiwi', petugas2: 'Namira Syahda' },
-                { npsn: '50300419', sekolah: 'SD INPRES FATUKNUTU', provinsi: 'Prov. Nusa Tenggara Timur', kota: 'Kab. Kupang', petugas1: 'Citra Adi Pratiwi', petugas2: 'Namira Syahda' },
-                // Prov. Kalimantan Barat
-                { npsn: '30101481', sekolah: 'SD NEGERI 9 SUNGAI AMBAWANG', provinsi: 'Prov. Kalimantan Barat', kota: 'Kab. Kuburaya', petugas1: 'Supriyatin', petugas2: 'Dewi Puji Lestari (081212509903)' },
-                { npsn: '30100783', sekolah: 'SD NEGERI 34 SUNGAI AMBAWANG', provinsi: 'Prov. Kalimantan Barat', kota: 'Kab. Kuburaya', petugas1: 'Supriyatin', petugas2: 'Dewi Puji Lestari (081212509903)' },
-                // Prov. Kalimantan Tengah
-                { npsn: '30203527', sekolah: 'SDN - 1 BANTURUNG', provinsi: 'Prov. Kalimantan Tengah', kota: 'Kota Palangka Raya', petugas1: 'Andi Havyana', petugas2: 'Astri Oktina Budianti (089663364467)' },
-                { npsn: '30203411', sekolah: 'SDN - 3 TANGKILING', provinsi: 'Prov. Kalimantan Tengah', kota: 'Kota Palangka Raya', petugas1: 'Andi Havyana', petugas2: 'Astri Oktina Budianti (089663364467)' },
-                // Prov. Sulawesi Selatan
-                { npsn: '40300273', sekolah: 'SDN 37 PANAIKANG', provinsi: 'Prov. Sulawesi Selatan', kota: 'Kab. Maros', petugas1: 'Abdul Halim Muharram', petugas2: 'Yohan Rubiyantoro' },
-                { npsn: '69858811', sekolah: 'SDN 245 CABBELLA', provinsi: 'Prov. Sulawesi Selatan', kota: 'Kab. Maros', petugas1: 'Abdul Halim Muharram', petugas2: 'Yohan Rubiyantoro' },
-                // Prov. Gorontalo
-                { npsn: '40501379', sekolah: 'SD NEGERI NO. 45 DUMBO RAYA', provinsi: 'Prov. Gorontalo', kota: 'Kota Gorontalo', petugas1: 'Noor Cahyo Kiki', petugas2: 'Irfandha Fatan (‪081311031067‬)' },
-                { npsn: '40501362', sekolah: 'SD NEGERI NO. 44 HULONTALANGI', provinsi: 'Prov. Gorontalo', kota: 'Kota Gorontalo', petugas1: 'Noor Cahyo Kiki', petugas2: 'Irfandha Fatan (‪081311031067‬)' },
-                // Prov. Papua
-                { npsn: '60301127', sekolah: 'SD NEGERI INPRES ARDIPURA I', provinsi: 'Prov. Papua', kota: 'Kota Jayapura', petugas1: 'Deni Komarudin (082126011609)', petugas2: 'Ronald Stevanus (081281225788)' },
-                { npsn: '60301130', sekolah: 'SD NEGERI INPRES BHAYANGKARA', provinsi: 'Prov. Papua', kota: 'Kota Jayapura', petugas1: 'Deni Komarudin (082126011609)', petugas2: 'Ronald Stevanus (081281225788)' },
-                // Prov. Jawa Timur - Kab. Malang
-                { npsn: '20518538', sekolah: 'SDN 2 LANDUNGSARI', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Malang', petugas1: 'Sri Widyowati Kinasih', petugas2: 'Wily Ariwiguna' },
-                { npsn: '20576079', sekolah: 'SD NEGERI 3 BANJAREJO', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Malang', petugas1: 'Sri Widyowati Kinasih', petugas2: 'Wily Ariwiguna' },
-            ];
+            // --- PERUBAHAN 6: Menghapus data hardcoded ---
+            // const dataSekolah = [ ... ]; // Dihapus
 
-            // --- Elemen Modal Slide (DIUBAH) ---
+            // --- Elemen Modal Slide ---
             const openSlideModalBtn = document.getElementById('openSlideModalBtn');
             const closeSlideModalBtn = document.getElementById('closeSlideModalBtn');
             const slideModal = document.getElementById('slideModal');
-            // Elemen baru di dalam Modal Slide (BARU)
             const slideModalTitle = document.getElementById('slideModalTitle');
             const materiList = document.getElementById('materiList');
             const materiPreview = document.getElementById('materiPreview');
@@ -579,16 +525,15 @@
             const materiBackBtn = document.getElementById('materiBackBtn');
             const materiIframe = document.getElementById('materiIframe');
 
-            // --- Elemen Modal Data (DIKEMBALIKAN) ---
+            // --- Elemen Modal Data ---
             const openDataModalBtn = document.getElementById('openDataModalBtn');
             const closeDataModalBtn = document.getElementById('closeDataModalBtn');
             const dataModal = document.getElementById('dataModal');
 
-            // --- Elemen Modal Surat (DIKEMBALIKAN) ---
+            // --- Elemen Modal Surat ---
             const openSuratModalBtn = document.getElementById('openSuratModalBtn');
             const closeSuratModalBtn = document.getElementById('closeSuratModalBtn');
             const suratModal = document.getElementById('suratModal');
-            // Element di dalam Modal Surat
             const suratModalTitle = document.getElementById('suratModalTitle');
             const suratList = document.getElementById('suratList');
             const suratPreview = document.getElementById('suratPreview');
@@ -597,28 +542,22 @@
             const suratIframe = document.getElementById('suratIframe');
             const suratDownloadBtn = document.getElementById('suratDownloadBtn');
 
-            // --- Elemen Modal Travel (DIKEMBALIKAN) ---
+            // --- Elemen Modal Travel ---
             const openTravelModalBtn = document.getElementById('openTravelModalBtn');
             const closeTravelModalBtn = document.getElementById('closeTravelModalBtn');
             const travelModal = document.getElementById('travelModal');
 
-            // --- Elemen Modal "Soon" (DIKEMBALIKAN) ---
+            // --- Elemen Modal "Soon" ---
             const soonModal = document.getElementById('soonModal');
             const closeSoonModalBtn = document.getElementById('closeSoonModalBtn');
             const openSoonModalBtns = document.querySelectorAll('.open-soon-modal-btn');
 
-            // --- Elemen Modal Password (BARU) ---
-            const passwordModal = document.getElementById('passwordModal');
-            const closePasswordModalBtn = document.getElementById('closePasswordModalBtn');
-            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
-            const passwordInput = document.getElementById('passwordInput');
-            const passwordError = document.getElementById('passwordError');
-            const openAdminPasswordBtn = document.getElementById('openAdminPasswordBtn');
-            const openPetugasPasswordBtn = document.getElementById('openPetugasPasswordBtn');
-            
-            let passwordRedirectUrl = ''; // Untuk menyimpan URL tujuan
+            // --- PERUBAHAN 7: Menghapus semua elemen modal password ---
+            // const passwordModal = ... // Dihapus
+            // const closePasswordModalBtn = ... // Dihapus
+            // ...dan seterusnya...
 
-            // --- Elemen Filter dan Tabel (DIKEMBALIKAN) ---
+            // --- Elemen Filter dan Tabel ---
             const provinsiFilter = document.getElementById('provinsiFilter');
             const sekolahFilter = document.getElementById('sekolahFilter');
             const tableBody = document.getElementById('tableBody');
@@ -627,189 +566,116 @@
             const openModal = (modal) => modal.classList.remove('hidden');
             const closeModal = (modal) => modal.classList.add('hidden');
 
-            // --- FUNGSI UNTUK MODAL MATERI (BARU) ---
+            // --- FUNGSI UNTUK MODAL MATERI ---
             function showMateriList() {
                 materiPreview.classList.add('hidden');
                 materiList.classList.remove('hidden');
                 slideModalTitle.textContent = 'Materi Pendampingan';
-                materiIframe.src = 'about:blank'; // Kosongkan iframe
+                materiIframe.src = 'about:blank'; 
             }
 
-            // Event Listener Modal Slide (DIUBAH)
             openSlideModalBtn.addEventListener('click', () => openModal(slideModal));
-            
             closeSlideModalBtn.addEventListener('click', () => {
                 closeModal(slideModal);
-                setTimeout(showMateriList, 300); // Reset view saat ditutup
+                setTimeout(showMateriList, 300); 
             });
-            
             slideModal.addEventListener('click', (e) => {
                 if (e.target === slideModal) {
                     closeModal(slideModal);
-                    setTimeout(showMateriList, 300); // Reset view saat ditutup
+                    setTimeout(showMateriList, 300); 
                 }
             });
 
-            // Event listener untuk tombol "Desain Program" (BARU)
             materiPreviewButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const title = button.getAttribute('data-title');
                     const iframeSrc = button.getAttribute('data-src');
-
-                    // Set content modal preview
                     slideModalTitle.textContent = `Preview: ${title}`;
                     materiIframe.src = iframeSrc;
-
-                    // Ganti view
                     materiList.classList.add('hidden');
                     materiPreview.classList.remove('hidden');
                 });
             });
 
-            // Event Listener untuk Tombol "Kembali" di preview materi (BARU)
             materiBackBtn.addEventListener('click', showMateriList);
 
-            // Event Listener Modal Data (DIKEMBALIKAN)
+            // Event Listener Modal Data
             openDataModalBtn.addEventListener('click', () => {
                 openModal(dataModal);
-                // Selalu inisialisasi ulang filter saat modal dibuka, jika datanya dinamis
-                initializeFilters();
+                // Tidak perlu panggil initializeFilters() di sini, 
+                // karena onSnapshot akan memanggilnya saat data siap
             });
             closeDataModalBtn.addEventListener('click', () => closeModal(dataModal));
             dataModal.addEventListener('click', (e) => {
-                if (e.target === dataModal) closeModal(dataModal); // Tutup jika klik di luar kotak
+                if (e.target === dataModal) closeModal(dataModal);
             });
 
-            // --- FUNGSI UNTUK MODAL SURAT (DIKEMBALIKAN) ---
-
-            // Fungsi untuk menampilkan daftar surat (view 1)
+            // --- FUNGSI UNTUK MODAL SURAT ---
             function showSuratList() {
                 suratPreview.classList.add('hidden');
                 suratList.classList.remove('hidden');
                 suratModalTitle.textContent = 'Pilih Jenis Surat';
-                suratIframe.src = 'about:blank'; // Kosongkan iframe
+                suratIframe.src = 'about:blank';
             }
 
-            // Event Listener Modal Surat (Tombol Buka)
             openSuratModalBtn.addEventListener('click', () => openModal(suratModal));
-
-            // Event Listener Modal Surat (Tombol Tutup Utama)
             closeSuratModalBtn.addEventListener('click', () => {
                 closeModal(suratModal);
-                setTimeout(showSuratList, 300); // Reset view setelah modal tertutup
+                setTimeout(showSuratList, 300);
             });
-
-            // Event Listener Modal Surat (Klik Latar Belakang)
             suratModal.addEventListener('click', (e) => {
                 if (e.target === suratModal) {
                     closeModal(suratModal);
-                    setTimeout(showSuratList, 300); // Reset view setelah modal tertutup
+                    setTimeout(showSuratList, 300);
                 }
             });
 
-            // Event Listener untuk 4 Tombol Surat -> Buka PDF Preview
             suratModalButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const title = button.getAttribute('data-title');
                     const pdfSrc = button.getAttribute('data-pdf-src');
                     const downloadSrc = button.getAttribute('data-download-src');
-
-                    // Set content modal preview
                     suratModalTitle.textContent = `Preview: ${title}`;
                     suratIframe.src = pdfSrc;
                     suratDownloadBtn.href = downloadSrc;
-
-                    // Ganti view
                     suratList.classList.add('hidden');
                     suratPreview.classList.remove('hidden');
                 });
             });
 
-            // Event Listener untuk Tombol "Kembali" di preview
             suratBackBtn.addEventListener('click', showSuratList);
 
-            // --- Event Listener Modal Travel (DIKEMBALIKAN) ---
+            // --- Event Listener Modal Travel ---
             openTravelModalBtn.addEventListener('click', () => openModal(travelModal));
             closeTravelModalBtn.addEventListener('click', () => closeModal(travelModal));
             travelModal.addEventListener('click', (e) => {
-                if (e.target === travelModal) closeModal(travelModal); // Tutup jika klik di luar kotak
+                if (e.target === travelModal) closeModal(travelModal);
             });
 
-            // --- Event Listener Modal "Soon" (DIKEMBALIKAN) ---
+            // --- Event Listener Modal "Soon" ---
             openSoonModalBtns.forEach(btn => {
                 btn.addEventListener('click', () => openModal(soonModal));
             });
             closeSoonModalBtn.addEventListener('click', () => closeModal(soonModal));
             soonModal.addEventListener('click', (e) => {
-                // Pastikan yang diklik adalah overlay, BUKAN konten di dalamnya
                 if (e.target === soonModal) closeModal(soonModal); 
             });
 
-            // --- Event Listener Modal Password (BARU) ---
-
-            // Fungsi untuk membuka modal password
-            function openPasswordModal(event) {
-                event.preventDefault();
-                // Dapatkan URL tujuan dari atribut data-href
-                passwordRedirectUrl = event.currentTarget.getAttribute('data-href');
-                // Reset modal
-                passwordInput.value = '';
-                passwordError.classList.add('hidden');
-                // Buka modal
-                openModal(passwordModal);
-                passwordInput.focus(); // Langsung fokus ke input
-            }
-
-            // Terapkan ke kedua tombol
-            openAdminPasswordBtn.addEventListener('click', openPasswordModal);
-            openPetugasPasswordBtn.addEventListener('click', openPasswordModal);
-
-            // Fungsi untuk cek password
-            function checkPassword() {
-                const correctPassword = 'awalia123';
-                if (passwordInput.value === correctPassword) {
-                    // Password benar, alihkan
-                    window.location.href = passwordRedirectUrl;
-                    closeModal(passwordModal);
-                } else {
-                    // Password salah
-                    passwordError.classList.remove('hidden');
-                    passwordInput.value = ''; // Kosongkan input
-                    passwordInput.focus(); // Fokus kembali ke input
-                }
-            }
-
-            // Event listener untuk tombol submit
-            submitPasswordBtn.addEventListener('click', checkPassword);
-
-            // Event listener untuk tombol "Enter" di input
-            passwordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
-
-            // Event listener untuk tombol close
-            closePasswordModalBtn.addEventListener('click', () => closeModal(passwordModal));
-
-            // Event listener untuk klik di luar modal
-            passwordModal.addEventListener('click', (e) => {
-                if (e.target === passwordModal) {
-                    closeModal(passwordModal);
-                }
-            });
+            // --- PERUBAHAN 8: Menghapus semua event listener modal password ---
+            // openAdminPasswordBtn.addEventListener(...) // Dihapus
+            // ...dan seterusnya...
 
 
-            // --- FUNGSI TABEL DAN FILTER (DIKEMBALIKAN) ---
+            // --- FUNGSI TABEL DAN FILTER ---
 
             // Fungsi untuk mengisi tabel dengan data
+            // PERUBAHAN 9: Mengganti parameter 'data' menjadi 'allSekolahList'
             function populateTable(data) {
-                tableBody.innerHTML = ''; // Kosongkan tabel
+                tableBody.innerHTML = ''; 
                 
                 if (data.length === 0) {
                     tableBody.innerHTML = `
                         <tr>
-                            <!-- DIUBAH: colspan="4" menjadi colspan="6" -->
                             <td colspan="6" class="text-center p-6 text-slate-500">
                                 Data tidak ditemukan.
                             </td>
@@ -819,15 +685,14 @@
                 }
 
                 data.forEach(item => {
-                    // DIUBAH: Menambahkan <td> untuk petugas1 dan petugas2
                     const row = `
                         <tr class="hover:bg-slate-50">
-                            <td class="p-4">${item.npsn}</td>
-                            <td class="p-4 font-medium text-slate-800">${item.sekolah}</td>
-                            <td class="p-4">${item.provinsi}</td>
-                            <td class="p-4">${item.kota}</td>
-                            <td class="p-4">${item.petugas1}</td>
-                            <td class="p-4">${item.petugas2}</td>
+                            <td class="p-4">${item.npsn || '-'}</td>
+                            <td class="p-4 font-medium text-slate-800">${item.sekolah || '-'}</td>
+                            <td class="p-4">${item.provinsi || '-'}</td>
+                            <td class="p-4">${item.kota || '-'}</td>
+                            <td class="p-4">${item.petugas1 || '-'}</td>
+                            <td class="p-4">${item.petugas2 || '-'}</td>
                         </tr>
                     `;
                     tableBody.innerHTML += row;
@@ -839,9 +704,9 @@
             let currentSekolah = 'semua';
 
             // 1. Isi Dropdown Provinsi
+            // PERUBAHAN 10: Menggunakan 'allSekolahList'
             function populateProvinsiFilter() {
-                // Ambil provinsi unik dan urutkan
-                const provinsi = ['semua', ...new Set(dataSekolah.map(item => item.provinsi).sort())];
+                const provinsi = ['semua', ...new Set(allSekolahList.map(item => item.provinsi).sort())];
                 provinsiFilter.innerHTML = '';
                 
                 provinsi.forEach(p => {
@@ -850,21 +715,21 @@
                     option.textContent = (p === 'semua') ? 'Semua Provinsi' : p;
                     provinsiFilter.appendChild(option);
                 });
-                provinsiFilter.value = currentProvinsi; // Pertahankan state filter
+                provinsiFilter.value = currentProvinsi;
             }
 
             // 2. Isi Dropdown Sekolah (berdasarkan provinsi)
+            // PERUBAHAN 11: Menggunakan 'allSekolahList'
             function populateSekolahFilter(provinsi) {
                 sekolahFilter.innerHTML = '';
                 let sekolahList = [];
 
                 if (provinsi === 'semua') {
-                    sekolahList = dataSekolah;
+                    sekolahList = allSekolahList;
                 } else {
-                    sekolahList = dataSekolah.filter(item => item.provinsi === provinsi);
+                    sekolahList = allSekolahList.filter(item => item.provinsi === provinsi);
                 }
 
-                // Ambil nama sekolah unik dan urutkan
                 const sekolah = ['semua', ...new Set(sekolahList.map(item => item.sekolah).sort())];
                 
                 sekolah.forEach(s => {
@@ -873,19 +738,18 @@
                     option.textContent = (s === 'semua') ? 'Semua Sekolah' : s;
                     sekolahFilter.appendChild(option);
                 });
-                sekolahFilter.value = currentSekolah; // Pertahankan state filter
+                sekolahFilter.value = currentSekolah;
             }
 
             // 3. Terapkan Filter ke Tabel
+            // PERUBAHAN 12: Menggunakan 'allSekolahList'
             function applyFilters() {
-                let filteredData = dataSekolah;
+                let filteredData = allSekolahList;
 
-                // Filter berdasarkan Provinsi
                 if (currentProvinsi !== 'semua') {
                     filteredData = filteredData.filter(item => item.provinsi === currentProvinsi);
                 }
 
-                // Filter berdasarkan Sekolah
                 if (currentSekolah !== 'semua') {
                     filteredData = filteredData.filter(item => item.sekolah === currentSekolah);
                 }
@@ -895,39 +759,47 @@
 
             // --- Event Listener untuk Filter ---
 
-            // Saat Provinsi berubah
             provinsiFilter.addEventListener('change', (e) => {
-                currentProvinsi = e.target.value; // Perbaikan: e.target.value, bukan e.g.value
-                currentSekolah = 'semua'; // Reset pilihan sekolah
-                populateSekolahFilter(currentProvinsi); // Update dropdown sekolah
-                applyFilters(); // Update tabel
+                currentProvinsi = e.target.value;
+                currentSekolah = 'semua'; 
+                populateSekolahFilter(currentProvinsi); 
+                applyFilters(); 
             });
 
-            // Saat Sekolah berubah
             sekolahFilter.addEventListener('change', (e) => {
                 currentSekolah = e.target.value;
-                applyFilters(); // Update tabel
+                applyFilters();
             });
 
 
             // --- Inisialisasi Saat Awal ---
             function initializeFilters() {
-                // Set state awal
                 currentProvinsi = 'semua';
                 currentSekolah = 'semua';
-                // Isi dropdown
                 populateProvinsiFilter();
                 populateSekolahFilter('semua');
-                // Tampilkan semua data
-                populateTable(dataSekolah);
+                applyFilters(); // Menggunakan applyFilters() yang sekarang mengambil dari allSekolahList
             }
             
-            // Panggil inisialisasi saat script dimuat
-            // Melakukan pengecekan null sederhana untuk elemen penting sebelum inisialisasi
-            if (provinsiFilter && sekolahFilter && tableBody) {
-                initializeFilters();
+            // PERUBAHAN 13: Memindahkan inisialisasi ke dalam listener Firebase
+            if (db) {
+                const sekolahCol = collection(db, "sekolah");
+                
+                onSnapshot(sekolahCol, (snapshot) => {
+                    console.log(`Menerima ${snapshot.docs.length} data sekolah.`);
+                    allSekolahList = snapshot.docs.map(doc => doc.data());
+                    allSekolahList.sort((a, b) => (a.provinsi || "").localeCompare(b.provinsi || "") || (a.kota || "").localeCompare(b.kota || ""));
+                    
+                    // Setelah data diterima, inisialisasi filter dan tabel
+                    initializeFilters();
+
+                }, (error) => {
+                    console.error("Error mengambil data sekolah:", error);
+                    tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-6 text-red-500">Error mengambil data: ${error.message}</td></tr>`;
+                });
             } else {
-                console.error("Elemen filter atau tabel tidak ditemukan. Inisialisasi dibatalkan.");
+                 console.error("Koneksi database (db) tidak tersedia.");
+                 tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-6 text-red-500">Koneksi database gagal.</td></tr>`;
             }
 
         });
