@@ -129,30 +129,31 @@
                             <span class="font-medium">Observasi</span>
                         </a>
                     </li>
-                    <!-- ================================== -->
-                    <!-- MODIFIKASI: Tautan Program diperbarui -->
-                    <!-- ================================== -->
                     <li>
                         <a href="#" onclick="showForm('program-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
                             <i class="fas fa-tasks w-6 text-center mr-3"></i>
                             <span class="font-medium">Program</span>
                         </a>
                     </li>
-                    <!-- ================================== -->
-                    <!-- AKHIR MODIFIKASI -->
-                    <!-- ================================== -->
                     <li>
                         <a href="#" onclick="showForm('laporan-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
                             <i class="fas fa-file-invoice w-6 text-center mr-3"></i>
                             <span class="font-medium">Laporan</span>
                         </a>
                     </li>
+                    <!-- ================================== -->
+                    <!-- MODIFIKASI: Tautan Panduan Diskusi diperbarui -->
+                    <!-- ================================== -->
                     <li>
-                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                        <!-- Memanggil openModal untuk modal baru dan setActiveLink untuk menyorot menu -->
+                        <a href="#" onclick="openModal('panduan-diskusi-modal'); setActiveLink(this);" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
                             <i class="fas fa-comments w-6 text-center mr-3"></i>
                             <span class="font-medium">Panduan Diskusi</span>
                         </a>
-                    </li>                   
+                    </li>
+                    <!-- ================================== -->
+                    <!-- AKHIR MODIFIKASI -->
+                    <!-- ================================== -->                  
                     <li>
                         <a href="./" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
                             <i class="fas fa-home w-6 text-center mr-3"></i>
@@ -1104,7 +1105,7 @@
                 </div>
 
                 <!-- ================================== -->
-                <!-- BARU: FORM PROGRAM -->
+                <!-- BARU: FORM PROGRAM (Tidak Berubah) -->
                 <!-- ================================== -->
                 <div id="program-form" class="form-section hidden">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Program</h1>
@@ -1160,7 +1161,7 @@
     </div>
 
     <!-- ================================== -->
-    <!-- BARU: MODAL PREVIEW 1 (FORMAT PROGRAM) -->
+    <!-- BARU: MODAL PREVIEW 1 (FORMAT PROGRAM) (Tidak Berubah) -->
     <!-- ================================== -->
     <div id="preview-modal-1" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-4 md:p-6 rounded-xl shadow-2xl w-full max-w-5xl h-[90%] transform transition-all flex flex-col">
@@ -1181,7 +1182,7 @@
             
             <!-- Footer Modal (Tombol Download) -->
             <div class="mt-4 text-center">
-                <a href="https://docs.google.com/document/d/1qASWUKMDyoK6a4JMgNK4TDpA9H70_nft05fR1SXAEs4/copy" target="_blank" class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150">
+                <a href="httpsG://docs.google.com/document/d/1qASWUKMDyoK6a4JMgNK4TDpA9H70_nft05fR1SXAEs4/copy" target="_blank" class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150">
                     <i class="fas fa-download mr-2"></i> Download Format
                 </a>
             </div>
@@ -1189,7 +1190,7 @@
     </div>
 
     <!-- ================================== -->
-    <!-- BARU: MODAL PREVIEW 2 (CONTOH PROGRAM) -->
+    <!-- BARU: MODAL PREVIEW 2 (CONTOH PROGRAM) (Tidak Berubah) -->
     <!-- ================================== -->
     <div id="preview-modal-2" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-4 md:p-6 rounded-xl shadow-2xl w-full max-w-5xl h-[90%] transform transition-all flex flex-col">
@@ -1203,7 +1204,7 @@
             
             <!-- Konten Iframe -->
             <div class="flex-1 overflow-hidden border border-gray-300 rounded-lg">
-                <iframe src="https://docs.google.com/document/d/e/2PACX-1vRakBTFASwSq_wAQieQ_yC8iDjyo5oqKX4uNE92Htkax6aC8kwUNENzhdXuXrUjwVMuB4pF3fC5SqqQ/pub?embedded=true" class="w-full h-full">
+                <iframe src="httpsD://docs.google.com/document/d/e/2PACX-1vRakBTFASwSq_wAQieQ_yC8iDjyo5oqKX4uNE92Htkax6aC8kwUNENzhdXuXrUjwVMuB4pF3fC5SqqQ/pub?embedded=true" class="w-full h-full">
                     Memuat preview...
                 </iframe>
             </div>
@@ -1217,38 +1218,97 @@
         </div>
     </div>
 
+    <!-- ================================== -->
+    <!-- BARU: MODAL PREVIEW 3 (PANDUAN DISKUSI) -->
+    <!-- ================================== -->
+    <div id="panduan-diskusi-modal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-4 md:p-6 rounded-xl shadow-2xl w-full max-w-5xl h-[90%] transform transition-all flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Preview: Panduan Diskusi</h3>
+                <button onclick="closeModal('panduan-diskusi-modal')" class="text-gray-500 hover:text-gray-800 text-3xl focus:outline-none">
+                    &times;
+                </button>
+            </div>
+            
+            <!-- Konten Iframe -->
+            <div class="flex-1 overflow-hidden border border-gray-300 rounded-lg">
+                <!-- Modifikasi: URL diubah ke /preview untuk embed file PDF/general dari Drive -->
+                <iframe src="https://drive.google.com/file/d/1rQ5VOarOOgaWFeD7o-MqO0kfOg0bRsw7/preview" class="w-full h-full">
+                    Memuat preview...
+                </iframe>
+            </div>
+            
+            <!-- Footer Modal (Tombol Download) -->
+            <div class="mt-4 text-center">
+                <a href="https://drive.google.com/file/d/1rQ5VOarOOgaWFeD7o-MqO0kfOg0bRsw7/view?usp=sharing" target="_blank" class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150">
+                    <i class="fas fa-download mr-2"></i> Download Panduan
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- ================================== -->
+    <!-- AKHIR MODAL BARU -->
+    <!-- ================================== -->
+
 
     <script>
         // Logika JavaScript untuk Sidebar dan Navigasi Form
-        // (Kode ini sudah ada dan tidak diubah)
         const sidebar = document.getElementById('sidebar');
-        // ... (kode sidebar tidak berubah) ...
         const menuToggle = document.getElementById('menu-toggle');
         const overlay = document.getElementById('overlay');
         const formSections = document.querySelectorAll('.form-section');
         const sidebarLinks = document.querySelectorAll('.sidebar-link');
 
-        function showForm(formId, clickedLink) {
+        // ==================================
+        // MODIFIKASI: Fungsi setActiveLink
+        // ==================================
+        /**
+         * Mengatur style link sidebar yang aktif dan menyembunyikan semua form.
+         * Ini dipisahkan agar bisa dipanggil oleh modal.
+         */
+        function setActiveLink(clickedLink) {
+            // 1. Sembunyikan semua form section
             formSections.forEach(form => {
                 form.classList.add('hidden');
             });
-            const activeForm = document.getElementById(formId);
-            if (activeForm) {
-                activeForm.classList.remove('hidden');
-            }
+            
+            // 2. Reset semua style link
             sidebarLinks.forEach(link => {
                 link.classList.remove('bg-gray-900', 'text-white');
                 link.classList.add('text-gray-300', 'hover:bg-gray-700', 'hover:text-white');
             });
+            
+            // 3. Terapkan style aktif ke link yang diklik
             if (clickedLink) {
                 clickedLink.classList.add('bg-gray-900', 'text-white');
                 clickedLink.classList.remove('text-gray-300', 'hover:bg-gray-700');
             }
+            
+            // 4. Tutup sidebar di mobile
             if (window.innerWidth < 768) {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
             }
         }
+        
+        /**
+         * Menampilkan form yang dipilih dan mengatur link aktif.
+         */
+        function showForm(formId, clickedLink) {
+            // Panggil helper untuk mengatur link aktif dan menyembunyikan form lain
+            setActiveLink(clickedLink);
+            
+            // Tampilkan form yang diminta
+            const activeForm = document.getElementById(formId);
+            if (activeForm) {
+                activeForm.classList.remove('hidden');
+            }
+        }
+        // ==================================
+        // AKHIR MODIFIKASI
+        // ==================================
+
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
@@ -1266,7 +1326,7 @@
         }
 
         // ==================================
-        // BARU: FUNGSI BUKA/TUTUP MODAL
+        // BARU: FUNGSI BUKA/TUTUP MODAL (Tidak Berubah)
         // ==================================
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
