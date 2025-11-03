@@ -36,6 +36,7 @@
     <div class="flex h-screen">
         <!-- Sidebar -->
         <aside id="sidebar" class="w-64 bg-gray-800 text-white p-4 flex-shrink-0 fixed md:relative h-full z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+            <!-- ... existing sidebar code ... -->
             <div class="h-16 flex items-center justify-center mb-4">
                 <i class="fas fa-clipboard-list text-2xl mr-3"></i>
                 <h1 class="text-2xl font-bold text-white">Pendampingan</h1>
@@ -119,16 +120,14 @@
                         <!-- Bagian I: Data Petugas & Sekolah -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- DIUBAH: Menambahkan 'data-sekolah-grid' untuk target auto-fill -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
                                 <!-- Dropdown Petugas 1 -->
                                 <div>
                                     <label for="petugas1" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
                                     <select id="petugas1" name="petugas1" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 
@@ -137,39 +136,37 @@
                                     <label for="petugas2" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
                                     <select id="petugas2" name="petugas2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 
                                 <!-- NPSN -->
                                 <div>
                                     <label for="npsn" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
-                                    <input type="text" name="npsn" id="npsn" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="npsn" id="npsn" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Nama Sekolah -->
                                 <div>
                                     <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
-                                    <input type="text" name="nama_sekolah" id="nama_sekolah" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="nama_sekolah" id="nama_sekolah" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Provinsi -->
                                 <div>
                                     <label for="provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                                    <input type="text" name="provinsi" id="provinsi" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="provinsi" id="provinsi" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Kab/Kota -->
                                 <div>
                                     <label for="kab_kota" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
-                                    <input type="text" name="kab_kota" id="kab_kota" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="kab_kota" id="kab_kota" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- ... sisa Form Wawancara Guru ... -->
                         <!-- Bagian II: Data Guru -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Guru</h2>
@@ -297,16 +294,14 @@
                         <!-- Bagian I: Data Petugas & Sekolah (FGD) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- DIUBAH: Menambahkan 'data-sekolah-grid' untuk target auto-fill -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
                                 <!-- Dropdown Petugas 1 -->
                                 <div>
                                     <label for="petugas1_fgd" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
                                     <select id="petugas1_fgd" name="petugas1_fgd" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 
@@ -315,39 +310,37 @@
                                     <label for="petugas2_fgd" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
                                     <select id="petugas2_fgd" name="petugas2_fgd" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 
                                 <!-- NPSN -->
                                 <div>
                                     <label for="npsn_fgd" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
-                                    <input type="text" name="npsn_fgd" id="npsn_fgd" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="npsn_fgd" id="npsn_fgd" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Nama Sekolah -->
                                 <div>
                                     <label for="nama_sekolah_fgd" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
-                                    <input type="text" name="nama_sekolah_fgd" id="nama_sekolah_fgd" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="nama_sekolah_fgd" id="nama_sekolah_fgd" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Provinsi -->
                                 <div>
                                     <label for="provinsi_fgd" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                                    <input type="text" name="provinsi_fgd" id="provinsi_fgd" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="provinsi_fgd" id="provinsi_fgd" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Kab/Kota -->
                                 <div>
                                     <label for="kab_kota_fgd" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
-                                    <input type="text" name="kab_kota_fgd" id="kab_kota_fgd" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="kab_kota_fgd" id="kab_kota_fgd" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- ... sisa Form FGD ... -->
                         <!-- Bagian II: Data Peserta FGD -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Peserta FGD</h2>
@@ -537,16 +530,14 @@
                         <!-- Bagian I: Data Petugas & Sekolah (Salinan dari Form Guru) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- DIUBAH: Menambahkan 'data-sekolah-grid' untuk target auto-fill -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
                                 <!-- Dropdown Petugas 1 -->
                                 <div>
                                     <label for="petugas1_murid" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
                                     <select id="petugas1_murid" name="petugas1_murid" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 
@@ -555,39 +546,37 @@
                                     <label for="petugas2_murid" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
                                     <select id="petugas2_murid" name="petugas2_murid" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 
                                 <!-- NPSN -->
                                 <div>
                                     <label for="npsn_murid" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
-                                    <input type="text" name="npsn_murid" id="npsn_murid" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="npsn_murid" id="npsn_murid" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Nama Sekolah -->
                                 <div>
                                     <label for="nama_sekolah_murid" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
-                                    <input type="text" name="nama_sekolah_murid" id="nama_sekolah_murid" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="nama_sekolah_murid" id="nama_sekolah_murid" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Provinsi -->
                                 <div>
                                     <label for="provinsi_murid" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                                    <input type="text" name="provinsi_murid" id="provinsi_murid" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="provinsi_murid" id="provinsi_murid" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 
                                 <!-- Kab/Kota -->
                                 <div>
                                     <label for="kab_kota_murid" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
-                                    <input type="text" name="kab_kota_murid" id="kab_kota_murid" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="kab_kota_murid" id="kab_kota_murid" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- ... sisa Form Wawancara Murid ... -->
                         <!-- Bagian II: Data Murid -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Murid</h2>
@@ -746,16 +735,14 @@
                         <!-- Bagian I: Data Petugas & Sekolah (Observasi) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- DIUBAH: Menambahkan 'data-sekolah-grid' untuk target auto-fill -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
                                 <!-- Petugas 1 -->
                                 <div>
                                     <label for="petugas1_obs" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
                                     <select id="petugas1_obs" name="petugas1_obs" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 <!-- Petugas 2 -->
@@ -763,35 +750,33 @@
                                     <label for="petugas2_obs" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
                                     <select id="petugas2_obs" name="petugas2_obs" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Pilih Petugas</option>
-                                        <option value="Ahmad">Ahmad</option>
-                                        <option value="Budi">Budi</option>
-                                        <option value="Chandra">Chandra</option>
-                                        <option value="Dewi">Dewi</option>
+                                        <!-- Opsi akan diisi oleh Firebase -->
                                     </select>
                                 </div>
                                 <!-- NPSN -->
                                 <div>
                                     <label for="npsn_obs" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
-                                    <input type="text" name="npsn_obs" id="npsn_obs" placeholder="Masukkan NPSN" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="npsn_obs" id="npsn_obs" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 <!-- Nama Sekolah -->
                                 <div>
                                     <label for="nama_sekolah_obs" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
-                                    <input type="text" name="nama_sekolah_obs" id="nama_sekolah_obs" placeholder="Masukkan Nama Sekolah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="nama_sekolah_obs" id="nama_sekolah_obs" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 <!-- Provinsi -->
                                 <div>
                                     <label for="provinsi_obs" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                                    <input type="text" name="provinsi_obs" id="provinsi_obs" placeholder="Masukkan Provinsi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="provinsi_obs" id="provinsi_obs" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                                 <!-- Kab/Kota -->
                                 <div>
                                     <label for="kab_kota_obs" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
-                                    <input type="text" name="kab_kota_obs" id="kab_kota_obs" placeholder="Masukkan Kab/Kota" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <input type="text" name="kab_kota_obs" id="kab_kota_obs" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- ... sisa Form Observasi ... -->
                         <!-- Bagian II: Data Guru (Observasi) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Guru (Observasi)</h2>
@@ -973,7 +958,7 @@
                                             <td class="border border-gray-300 p-3 align-top text-sm">Pojok Baca / Sudut Literasi<br><span class="text-xs text-gray-600">Kelas memiliki area khusus untuk membaca atau menulis.</span></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="ya" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td classs="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b3" value="na" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b3" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
                                         </tr>
 
@@ -983,7 +968,7 @@
                                             <td class="border border-gray-300 p-3 align-top text-sm">Paparan Karya Murid<br><span class="text-xs text-gray-600">Karya tulis, hasil proyek, atau refleksi murid ditampilkan di ruang kelas atau koridor sekolah.</span></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="ya" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td classs="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b4" value="na" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b4" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
                                         </tr>
 
@@ -993,7 +978,7 @@
                                             <td class="border border-gray-300 p-3 align-top text-sm">Kebersihan dan Kerapian Ruang Belajar<br><span class="text-xs text-gray-600">Ruang kelas tertata dengan baik, ventilasi cukup, dan suasana mendukung konsentrasi belajar.</span></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="ya" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td classs="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b5" value="na" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b5" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
                                         </tr>
 
@@ -1023,7 +1008,7 @@
                                             <td class="border border-gray-300 p-3 align-top text-sm">Kegiatan Numerasi Sekolah<br><span class="text-xs text-gray-600">Ada aktivitas numerasi di luar kelas seperti permainan edukatif, proyek data, atau lomba numerasi.</span></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="ya" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td classs="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b8" value="na" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b8" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
                                         </tr>
 
@@ -1033,7 +1018,7 @@
                                             <td class="border border-gray-300 p-3 align-top text-sm">Keterlibatan Kepala Sekolah dan Guru<br><span class="text-xs text-gray-600">Kepala sekolah dan guru aktif memantau serta memberi dukungan terhadap kegiatan literasi dan numerasi.</span></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="ya" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td classs="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b9" value="na" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b9" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
                                         </tr>
 
@@ -1043,7 +1028,7 @@
                                             <td class="border border-gray-300 p-3 align-top text-sm">Suasana Sekolah yang Mendorong Belajar<br><span class="text-xs text-gray-600">Lingkungan sekolah menampilkan poster edukatif, slogan motivasi, atau simbol yang mendorong semangat belajar.</span></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="ya" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                                            <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="na" class="h-4 w-4 text-blue-600"></td>
+                                            <td classs="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="obs_b10" value="na" class="h-4 w-4 text-blue-600"></td>
                                             <td class="border border-gray-300 p-3 align-top"><textarea name="catatan_b10" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea></td>
                                         </tr>
                                         
@@ -1124,8 +1109,181 @@
         // (Ini sudah diatur oleh class 'hidden' di form lain dan tidak di form guru)
     </script>
 
+    <!-- ===== SKRIP FIREBASE BARU ===== -->
+    <script type="module">
+        // 1. Impor modul Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 2. Konfigurasi Firebase (diambil dari SetDatabase.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxH9Do9ecrEHW8sNxfpGjLUQ3qP14ONGM",
+            authDomain: "litnum2025.firebaseapp.com",
+            projectId: "litnum2025",
+            storageBucket: "litnum2025.firebasestorage.app",
+            messagingSenderId: "233586560867",
+            appId: "1:233586560867:web:2800372b3a62dde68a8d56"
+        };
+
+        // 3. Inisialisasi Firebase
+        let db;
+        let allSekolahData = []; // Cache untuk menyimpan data sekolah
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            setLogLevel('debug');
+            console.log("Firebase berhasil diinisialisasi.");
+        } catch (e) {
+            console.error("Error inisialisasi Firebase:", e);
+        }
+
+        // 4. Fungsi untuk mengambil data dari Firestore
+        async function fetchData() {
+            if (!db) {
+                console.error("Firestore DB tidak terinisialisasi.");
+                return;
+            }
+            try {
+                console.log("Mulai mengambil data dari koleksi 'sekolah'...");
+                const querySnapshot = await getDocs(collection(db, "sekolah"));
+                querySnapshot.forEach((doc) => {
+                    allSekolahData.push(doc.data());
+                });
+                console.log(`Berhasil mengambil ${allSekolahData.length} data sekolah.`);
+            } catch (error) {
+                console.error("Error mengambil data sekolah:", error);
+            }
+        }
+
+        // 5. Fungsi untuk mengisi dropdown Petugas
+        function populatePetugasDropdowns() {
+            const petugasSet = new Set();
+            allSekolahData.forEach(s => {
+                if (s.petugas1) petugasSet.add(s.petugas1);
+                if (s.petugas2) petugasSet.add(s.petugas2);
+            });
+            const petugasList = [...petugasSet].sort();
+            
+            const allPetugasSelects = document.querySelectorAll('select[id^="petugas"]');
+            allPetugasSelects.forEach(select => {
+                // Kosongkan opsi lama (kecuali "Pilih Petugas")
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                // Tambahkan opsi baru
+                petugasList.forEach(nama => {
+                    const option = document.createElement('option');
+                    option.value = nama;
+                    option.textContent = nama;
+                    select.appendChild(option);
+                });
+            });
+            console.log(`Dropdown petugas diisi dengan ${petugasList.length} nama unik.`);
+        }
+
+        // 6. Fungsi untuk membuat Dropdown Pemilih Sekolah (BARU)
+        function createSchoolSelectors() {
+            const allGrids = document.querySelectorAll('.data-sekolah-grid');
+            
+            allGrids.forEach((grid, index) => {
+                const formId = grid.closest('.form-section').id;
+                const selectorId = `schoolSelector_${formId}`;
+
+                // Buat elemen
+                const wrapperDiv = document.createElement('div');
+                wrapperDiv.className = 'md:col-span-2'; // Buat span penuh
+
+                const label = document.createElement('label');
+                label.htmlFor = selectorId;
+                label.className = 'block text-sm font-medium text-gray-700 mb-1';
+                label.textContent = 'Pilih Sekolah (Otomatis Isi Data)';
+
+                const select = document.createElement('select');
+                select.id = selectorId;
+                select.name = selectorId;
+                select.className = 'mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm';
+                
+                // Tambahkan opsi default
+                const defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.textContent = "--- Pilih NPSN dan Nama Sekolah ---";
+                select.appendChild(defaultOption);
+
+                // Isi select dengan data sekolah
+                allSekolahData.sort((a, b) => a.npsn.localeCompare(b.npsn)).forEach(sekolah => {
+                    const option = document.createElement('option');
+                    option.value = sekolah.npsn; // Gunakan NPSN sebagai value unik
+                    option.textContent = `${sekolah.npsn} - ${sekolah.sekolah}`;
+                    select.appendChild(option);
+                });
+
+                // Tambahkan event listener
+                select.addEventListener('change', handleSchoolSelect);
+
+                // Masukkan ke wrapper
+                wrapperDiv.appendChild(label);
+                wrapperDiv.appendChild(select);
+
+                // Masukkan wrapper ke paling atas grid
+                grid.prepend(wrapperDiv);
+            });
+            console.log(`Dropdown pemilih sekolah dibuat untuk ${allGrids.length} formulir.`);
+        }
+
+        // 7. Fungsi untuk auto-fill form saat sekolah dipilih
+        function handleSchoolSelect(event) {
+            const selectedNPSN = event.target.value;
+            const school = allSekolahData.find(s => s.npsn === selectedNPSN);
+            
+            // Temukan form-section terdekat
+            const form = event.target.closest('.form-section');
+            if (!form) return;
+
+            if (school) {
+                console.log(`Mengisi form ${form.id} dengan data NPSN ${selectedNPSN}`);
+                // Isi semua input dan select yang relevan DI DALAM form tersebut
+                // Menggunakan querySelector('...[id^="..."]') agar cocok (npsn, npsn_fgd, npsn_murid, dll)
+                const npsnInput = form.querySelector('input[id^="npsn"]');
+                const sekolahInput = form.querySelector('input[id^="nama_sekolah"]');
+                const provinsiInput = form.querySelector('input[id^="provinsi"]');
+                const kotaInput = form.querySelector('input[id^="kab_kota"]');
+                const petugas1Select = form.querySelector('select[id^="petugas1"]');
+                const petugas2Select = form.querySelector('select[id^="petugas2"]');
+
+                if (npsnInput) npsnInput.value = school.npsn || '';
+                if (sekolahInput) sekolahInput.value = school.sekolah || '';
+                if (provinsiInput) provinsiInput.value = school.provinsi || '';
+                if (kotaInput) kotaInput.value = school.kota || '';
+                if (petugas1Select) petugas1Select.value = school.petugas1 || '';
+                if (petugas2Select) petugas2Select.value = school.petugas2 || '';
+            } else {
+                // Jika memilih "Pilih Sekolah", kosongkan field
+                console.log(`Mengosongkan form ${form.id}`);
+                form.querySelector('input[id^="npsn"]').value = '';
+                form.querySelector('input[id^="nama_sekolah"]').value = '';
+                form.querySelector('input[id^="provinsi"]').value = '';
+                form.querySelector('input[id^="kab_kota"]').value = '';
+                form.querySelector('select[id^="petugas1"]').value = '';
+                form.querySelector('select[id^="petugas2"]').value = '';
+            }
+        }
+
+        // 8. Fungsi Inisialisasi Utama
+        async function initializeForms() {
+            await fetchData();
+            if (allSekolahData.length > 0) {
+                populatePetugasDropdowns();
+                createSchoolSelectors();
+            } else {
+                console.error("Tidak ada data sekolah, dropdown tidak dapat diisi.");
+            }
+        }
+
+        // 9. Jalankan setelah DOM dimuat
+        document.addEventListener('DOMContentLoaded', initializeForms);
+
+    </script>
+
 </body>
 </html>
-
-
-
