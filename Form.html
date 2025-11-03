@@ -30,6 +30,25 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+        /* Style untuk tabel laporan agar lebih rapi */
+        .laporan-table th, .laporan-table td {
+            @apply border border-gray-300 p-3 text-sm align-top;
+        }
+        .laporan-table th {
+            @apply bg-gray-50 text-left font-semibold;
+        }
+        .laporan-table .input-cell {
+            @apply p-1;
+        }
+        .laporan-table textarea, .laporan-table input[type="text"], .laporan-table select {
+            @apply w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2;
+        }
+        .laporan-table textarea {
+            @apply min-h-[60px];
+        }
+        .laporan-table input[type="checkbox"], .laporan-table input[type="radio"] {
+            @apply h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -80,7 +99,7 @@
     <!-- Kontainer aplikasi utama (Tidak Berubah) -->
     <div id="app-container" class="flex h-screen hidden">
         <aside id="sidebar" class="w-64 bg-gray-800 text-white p-4 flex-shrink-0 fixed md:relative h-full z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
-            <!-- Navigasi Sidebar (Tidak Berubah) -->
+            <!-- Navigasi Sidebar (MODIFIKASI) -->
             <div class="h-16 flex items-center justify-center mb-4">
                 <i class="fas fa-clipboard-list text-2xl mr-3"></i>
                 <h1 class="text-2xl font-bold text-white">Pendampingan</h1>
@@ -112,19 +131,20 @@
                     </li>
                     <li>
                         <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
-                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                            <i class="fas fa-tasks w-6 text-center mr-3"></i>
                             <span class="font-medium">Program</span>
                         </a>
                     </li>
+                    <!-- MODIFIKASI: Tautan Laporan diperbarui -->
                     <li>
-                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
-                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                        <a href="#" onclick="showForm('laporan-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                            <i class="fas fa-file-invoice w-6 text-center mr-3"></i>
                             <span class="font-medium">Laporan</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
-                            <i class="fas fa-eye w-6 text-center mr-3"></i>
+                            <i class="fas fa-comments w-6 text-center mr-3"></i>
                             <span class="font-medium">Panduan Diskusi</span>
                         </a>
                     </li>                   
@@ -151,91 +171,7 @@
             <main class="flex-1 overflow-y-auto p-6 md:p-8">
 
                 <!-- ================================== -->
-                <!-- FORM WAWANCARA GURU -->
-                <!-- ================================== -->
-                <div id="wawancara-guru-form" class="form-section hidden">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Wawancara Guru</h1>
-                    
-                    <form id="form-wawancara-guru" method="POST">
-                        <!-- Data Petugas & Sekolah (Tidak Berubah) -->
-                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
-                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
-                                <!-- Konten diisi oleh createSchoolSelectors() -->
-                                <div>
-                                    <label for="petugas1" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
-                                    <select id="petugas1" name="petugas1" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                        <option value="">Pilih Petugas</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="petugas2" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
-                                    <select id="petugas2" name="petugas2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                        <option value="">Pilih Petugas</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="npsn" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
-                                    <input type="text" name="npsn" id="npsn" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
-                                </div>
-                                <div>
-                                    <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
-                                    <input type="text" name="nama_sekolah" id="nama_sekolah" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
-                                </div>
-                                <div>
-                                    <label for="provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                                    <input type="text" name="provinsi" id="provinsi" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
-                                </div>
-                                <div>
-                                    <label for="kab_kota" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
-                                    <input type="text" name="kab_kota" id="kab_kota" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Data Guru (Tidak Berubah) -->
-                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
-                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Guru</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="nama_guru" class="block text-sm font-medium text-gray-700 mb-1">Nama Guru</label>
-                                    <input type="text" name="nama_guru" id="nama_guru" placeholder="Masukkan Nama Guru" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                </div>
-                                <div>
-                                    <label for="hp_guru" class="block text-sm font-medium text-gray-700 mb-1">HP Guru</label>
-                                    <input type="tel" name="hp_guru" id="hp_guru" placeholder="Mis: 08123456..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                </div>
-                                <div>
-                                    <label for="kelas_guru" class="block text-sm font-medium text-gray-700 mb-1">Mengajar Kelas</label>
-                                    <input type="text" name="kelas_guru" id="kelas_guru" placeholder="Mis: Kelas 1 dan 2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pertanyaan Wawancara (Kosong) -->
-                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
-                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan Wawancara</h2>
-                            <!-- Konten akan diisi oleh JS -->
-                            <div id="wawancara-guru-questions" class="space-y-8">
-                                <!-- Konten dinamis -->
-                            </div>
-                        </div>
-
-                        <!-- Tombol Submit -->
-                        <div class="mt-8 flex justify-end gap-4">
-                            <!-- MODIFIKASI: Tombol Cetak PDF -->
-                            <button type="button" onclick="generatePdf('form-wawancara-guru')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
-                                <i class="fas fa-print mr-2"></i> Cetak PDF
-                            </button>
-                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
-                                <i class="fas fa-save mr-2"></i> Simpan Wawancara
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- ================================== -->
-                <!-- FORM FGD -->
+                <!-- FORM FGD (Tidak Berubah) -->
                 <!-- ================================== -->
                 <div id="fgd-form" class="form-section">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Form FGD</h1>
@@ -307,7 +243,7 @@
                             </div>
                         </div>
 
-                        <!-- Pertanyaan FGD (Kosong) -->
+                        <!-- Pertanyaan FGD (Tidak Berubah) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan FGD</h2>
                             <!-- Konten akan diisi oleh JS -->
@@ -327,7 +263,7 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit -->
+                        <!-- Tombol Submit (Tidak Berubah) -->
                         <div class="mt-8 flex justify-end gap-4">
                             <!-- MODIFIKASI: Tombol Cetak PDF -->
                             <button type="button" onclick="generatePdf('form-fgd')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
@@ -341,7 +277,91 @@
                 </div>
 
                 <!-- ================================== -->
-                <!-- FORM WAWANCARA MURID -->
+                <!-- FORM WAWANCARA GURU (Tidak Berubah) -->
+                <!-- ================================== -->
+                <div id="wawancara-guru-form" class="form-section hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Wawancara Guru</h1>
+                    
+                    <form id="form-wawancara-guru" method="POST">
+                        <!-- Data Petugas & Sekolah (Tidak Berubah) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">I. Data Petugas & Sekolah</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
+                                <!-- Konten diisi oleh createSchoolSelectors() -->
+                                <div>
+                                    <label for="petugas1" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1</label>
+                                    <select id="petugas1" name="petugas1" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="petugas2" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2</label>
+                                    <select id="petugas2" name="petugas2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="npsn" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="npsn" id="npsn" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="nama_sekolah" id="nama_sekolah" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                                    <input type="text" name="provinsi" id="provinsi" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="kab_kota" class="block text-sm font-medium text-gray-700 mb-1">Kab/Kota</label>
+                                    <input type="text" name="kab_kota" id="kab_kota" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Guru (Tidak Berubah) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">II. Data Guru</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="nama_guru" class="block text-sm font-medium text-gray-700 mb-1">Nama Guru</label>
+                                    <input type="text" name="nama_guru" id="nama_guru" placeholder="Masukkan Nama Guru" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="hp_guru" class="block text-sm font-medium text-gray-700 mb-1">HP Guru</label>
+                                    <input type="tel" name="hp_guru" id="hp_guru" placeholder="Mis: 08123456..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kelas_guru" class="block text-sm font-medium text-gray-700 mb-1">Mengajar Kelas</label>
+                                    <input type="text" name="kelas_guru" id="kelas_guru" placeholder="Mis: Kelas 1 dan 2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pertanyaan Wawancara (Tidak Berubah) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan Wawancara</h2>
+                            <!-- Konten akan diisi oleh JS -->
+                            <div id="wawancara-guru-questions" class="space-y-8">
+                                <!-- Konten dinamis -->
+                            </div>
+                        </div>
+
+                        <!-- Tombol Submit (Tidak Berubah) -->
+                        <div class="mt-8 flex justify-end gap-4">
+                            <!-- MODIFIKASI: Tombol Cetak PDF -->
+                            <button type="button" onclick="generatePdf('form-wawancara-guru')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-print mr-2"></i> Cetak PDF
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
+                                <i class="fas fa-save mr-2"></i> Simpan Wawancara
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ================================== -->
+                <!-- FORM WAWANCARA MURID (Tidak Berubah) -->
                 <!-- ================================== -->
                 <div id="wawancara-murid-form" class="form-section hidden">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Wawancara Murid</h1>
@@ -437,7 +457,7 @@
                             </div>
                         </div>
 
-                        <!-- Pertanyaan Wawancara (Kosong) -->
+                        <!-- Pertanyaan Wawancara (Tidak Berubah) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Pertanyaan Wawancara</h2>
                             <!-- Konten akan diisi oleh JS -->
@@ -446,7 +466,7 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit -->
+                        <!-- Tombol Submit (Tidak Berubah) -->
                         <div class="mt-8 flex justify-end gap-4">
                             <!-- MODIFIKASI: Tombol Cetak PDF -->
                             <button type="button" onclick="generatePdf('form-wawancara-murid')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
@@ -460,7 +480,7 @@
                 </div>
 
                 <!-- ================================== -->
-                <!-- FORM OBSERVASI -->
+                <!-- FORM OBSERVASI (Tidak Berubah) -->
                 <!-- ================================== -->
                 <div id="observasi-form" class="form-section hidden">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Form Observasi</h1>
@@ -520,7 +540,7 @@
                             </div>
                         </div>
 
-                        <!-- Observasi (Struktur Tabel) -->
+                        <!-- Observasi (Tidak Berubah) -->
                         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
                             <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">III. Observasi</h2>
                             
@@ -541,7 +561,7 @@
                                         </tr>
                                     </thead>
                                     
-                                    <!-- tbody (Kosong) -->
+                                    <!-- tbody (Tidak Berubah) -->
                                     <tbody id="observasi-tbody">
                                         <!-- Konten dinamis -->
                                     </tbody>
@@ -549,7 +569,7 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Submit -->
+                        <!-- Tombol Submit (Tidak Berubah) -->
                         <div class="mt-8 flex justify-end gap-4">
                             <!-- MODIFIKASI: Tombol Cetak PDF -->
                             <button type="button" onclick="generatePdf('form-observasi')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
@@ -557,6 +577,522 @@
                             </button>
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
                                 <i class="fas fa-save mr-2"></i> Simpan Observasi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- ================================== -->
+                <!-- BARU: FORM LAPORAN -->
+                <!-- ================================== -->
+                <div id="laporan-form" class="form-section hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Laporan Pendampingan</h1>
+                    
+                    <form id="form-laporan" method="POST">
+                        <!-- Data Petugas & Sekolah (Disesuaikan untuk Laporan) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Data Umum</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 data-sekolah-grid">
+                                <!-- Konten diisi oleh createSchoolSelectors() -->
+                                <div>
+                                    <label for="petugas1_lpr" class="block text-sm font-medium text-gray-700 mb-1">Petugas 1 (Pewawancara)</label>
+                                    <select id="petugas1_lpr" name="petugas1_lpr" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="petugas2_lpr" class="block text-sm font-medium text-gray-700 mb-1">Petugas 2 (Observer)</label>
+                                    <select id="petugas2_lpr" name="petugas2_lpr" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Pilih Petugas</option>
+                                    </select>
+                                </div>
+                                <!-- Field NPSN dan Nama Sekolah (read-only) yang akan diisi oleh dropdown -->
+                                <div>
+                                    <label for="npsn_lpr" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="npsn_lpr" id="npsn_lpr" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="nama_sekolah_lpr" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="nama_sekolah_lpr" id="nama_sekolah_lpr" placeholder="Pilih sekolah dari dropdown..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1. Identitas Kegiatan -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">1. Identitas Kegiatan</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="nama_sekolah_lpr_section1" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                                    <input type="text" name="lpr_s1_nama_sekolah" id="nama_sekolah_lpr_section1" placeholder="Akan terisi otomatis..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="npsn_lpr_section1" class="block text-sm font-medium text-gray-700 mb-1">NPSN</label>
+                                    <input type="text" name="lpr_s1_npsn" id="npsn_lpr_section1" placeholder="Akan terisi otomatis..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="alamat_lpr_section1" class="block text-sm font-medium text-gray-700 mb-1">Alamat Sekolah</label>
+                                    <input type="text" name="lpr_s1_alamat" id="alamat_lpr_section1" placeholder="Masukkan alamat lengkap sekolah..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="kab_kota_lpr_section1" class="block text-sm font-medium text-gray-700 mb-1">Kabupaten/Kota</label>
+                                    <input type="text" name="lpr_s1_kab_kota" id="kab_kota_lpr_section1" placeholder="Akan terisi otomatis..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="provinsi_lpr_section1" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                                    <input type="text" name="lpr_s1_provinsi" id="provinsi_lpr_section1" placeholder="Akan terisi otomatis..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="lpr_s1_tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Pendampingan</label>
+                                    <input type="date" name="lpr_s1_tanggal" id="lpr_s1_tanggal" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="lpr_s1_durasi" class="block text-sm font-medium text-gray-700 mb-1">Durasi Kegiatan (Jam)</label>
+                                    <input type="text" name="lpr_s1_durasi" id="lpr_s1_durasi" placeholder="Mis: 4 Jam" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="lpr_s1_kegiatan" class="block text-sm font-medium text-gray-700 mb-1">Kegiatan Pendampingan</label>
+                                    <input type="text" name="lpr_s1_kegiatan" id="lpr_s1_kegiatan" value="Verifikasi dan Finalisasi Rencana Program Literasi dan Numerasi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="lpr_s1_jml_ks" class="block text-sm font-medium text-gray-700 mb-1">Jumlah Peserta (Kepala Sekolah)</label>
+                                    <input type="number" name="lpr_s1_jml_ks" id="lpr_s1_jml_ks" value="1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="lpr_s1_jml_guru" class="block text-sm font-medium text-gray-700 mb-1">Jumlah Peserta (Guru)</label>
+                                    <input type="number" name="lpr_s1_jml_guru" id="lpr_s1_jml_guru" value="2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 2. Identitas Petugas Pendamping -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">2. Identitas Petugas Pendamping</h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full laporan-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Pendamping</th>
+                                            <th>Instansi / Lembaga</th>
+                                            <th>Kontak</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="input-cell"><input type="text" name="lpr_s2_nama_1" placeholder="Petugas 1"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s2_instansi_1" placeholder="Instansi Petugas 1"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s2_kontak_1" placeholder="Kontak Petugas 1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="input-cell"><input type="text" name="lpr_s2_nama_2" placeholder="Petugas 2"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s2_instansi_2" placeholder="Instansi Petugas 2"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s2_kontak_2" placeholder="Kontak Petugas 2"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 3. Ringkasan Proses Pendampingan -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">3. Ringkasan Proses Pendampingan</h2>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="lpr_s3_tahapan" class="block text-sm font-medium text-gray-700 mb-1">Tahapan kegiatan (pembukaan, pemaparan temuan, analisis bersama, finalisasi, refleksi).</label>
+                                    <textarea id="lpr_s3_tahapan" name="lpr_s3_tahapan" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s3_tahapan">0 kata</div>
+                                </div>
+                                <div>
+                                    <label for="lpr_s3_metode" class="block text-sm font-medium text-gray-700 mb-1">Metode yang digunakan (diskusi kelompok, studi dokumen, analisis temuan observasi).</label>
+                                    <textarea id="lpr_s3_metode" name="lpr_s3_metode" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s3_metode">0 kata</div>
+                                </div>
+                                <div>
+                                    <label for="lpr_s3_suasana" class="block text-sm font-medium text-gray-700 mb-1">Suasana dan partisipasi peserta.</label>
+                                    <textarea id="lpr_s3_suasana" name="lpr_s3_suasana" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s3_suasana">0 kata</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Hasil Analisis dan Temuan Lapangan -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">4. Hasil Analisis dan Temuan Lapangan</h2>
+                            
+                            <!-- 4.A Berdasarkan Wawancara -->
+                            <h3 class="text-xl font-semibold text-gray-700 mb-4 mt-4">A. Berdasarkan Wawancara</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="lpr_s4a_ks" class="block text-sm font-medium text-gray-700 mb-1">Kepala Sekolah menunjukkan komitmen terhadap penguatan budaya baca dan integrasi numerasi dalam kegiatan harian.</label>
+                                    <textarea id="lpr_s4a_ks" name="lpr_s4a_ks" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s4a_ks">0 kata</div>
+                                </div>
+                                <div>
+                                    <label for="lpr_s4a_guru" class="block text-sm font-medium text-gray-700 mb-1">Guru memahami konsep SSA dan CPA namun membutuhkan contoh praktis di kelas rendah.</label>
+                                    <textarea id="lpr_s4a_guru" name="lpr_s4a_guru" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s4a_guru">0 kata</div>
+                                </div>
+                                <div>
+                                    <label for="lpr_s4a_murid" class="block text-sm font-medium text-gray-700 mb-1">Murid antusias mengikuti kegiatan membaca 15 menit, namun sebagian belum terbiasa menulis refleksi sederhana.</label>
+                                    <textarea id="lpr_s4a_murid" name="lpr_s4a_murid" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s4a_murid">0 kata</div>
+                                </div>
+                            </div>
+
+                            <!-- 4.B Berdasarkan Observasi -->
+                            <h3 class="text-xl font-semibold text-gray-700 mb-4 mt-8">B. Berdasarkan Observasi</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full laporan-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Aspek yang Diamati</th>
+                                            <th>Kondisi Faktual</th>
+                                            <th>Catatan Pendamping</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="font-medium">Proses Pembelajaran</td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s4b_proses_faktual" name="lpr_s4b_proses_faktual" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s4b_proses_faktual">0 kata</div>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s4b_proses_catatan" name="lpr_s4b_proses_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s4b_proses_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Aktivitas Murid</td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s4b_aktivitas_faktual" name="lpr_s4b_aktivitas_faktual" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s4b_aktivitas_faktual">0 kata</div>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s4b_aktivitas_catatan" name="lpr_s4b_aktivitas_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s4b_aktivitas_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Lingkungan Sekolah</td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s4b_lingkungan_faktual" name="lpr_s4b_lingkungan_faktual" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s4b_lingkungan_faktual">0 kata</div>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s4b_lingkungan_catatan" name="lpr_s4b_lingkungan_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s4b_lingkungan_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 4.C Konsistensi -->
+                            <h3 class="text-xl font-semibold text-gray-700 mb-4 mt-8">C. Konsistensi dengan Rencana Program</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Pendamping menilai bahwa dokumen Rencana Program Penguatan Literasi dan Numerasi...</label>
+                                    <fieldset class="mt-2">
+                                        <div class="flex flex-wrap gap-x-6 gap-y-2">
+                                            <div class="flex items-center">
+                                                <input id="lpr_s4c_sudah" name="lpr_s4c_konsistensi" type="radio" value="sudah" class="laporan-table">
+                                                <label for="lpr_s4c_sudah" class="ml-2 block text-sm text-gray-900">Sudah menggambarkan kondisi riil</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="lpr_s4c_belum" name="lpr_s4c_konsistensi" type="radio" value="belum" class="laporan-table">
+                                                <label for="lpr_s4c_belum" class="ml-2 block text-sm text-gray-900">Belum menggambarkan kondisi riil</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="lpr_s4c_tidak" name="lpr_s4c_konsistensi" type="radio" value="tidak" class="laporan-table">
+                                                <label for="lpr_s4c_tidak" class="ml-2 block text-sm text-gray-900">Tidak menggambarkan kondisi riil</label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div>
+                                    <label for="lpr_s4c_catatan" class="block text-sm font-medium text-gray-700 mb-1">Catatan (dengan penyesuaian fokus pada implementasi 14 hari):</label>
+                                    <textarea id="lpr_s4c_catatan" name="lpr_s4c_catatan" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Min. 100 kata..."></textarea>
+                                    <div class="text-sm text-gray-600 text-right mt-1" id="counter_lpr_s4c_catatan">0 kata</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Penilaian terhadap Dokumen Rencana Program (Sebelum Revisi) -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">5. Penilaian terhadap Dokumen Rencana Program (Sebelum Revisi)</h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full laporan-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Komponen</th>
+                                            <th>Kriteria</th>
+                                            <th>Penilaian</th>
+                                            <th>Catatan Pendamping</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="font-medium">Tujuan Program</td>
+                                            <td>Spesifik, realistis, sesuai kebutuhan sekolah</td>
+                                            <td class="input-cell">
+                                                <select name="lpr_s5_tujuan_nilai">
+                                                    <option value="">Pilih</option>
+                                                    <option value="Kurang">Kurang</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Baik">Baik</option>
+                                                </select>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s5_tujuan_catatan" name="lpr_s5_tujuan_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s5_tujuan_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Strategi Pelaksanaan</td>
+                                            <td>Implementatif untuk periode 14 hari</td>
+                                            <td class="input-cell">
+                                                <select name="lpr_s5_strategi_nilai">
+                                                    <option value="">Pilih</option>
+                                                    <option value="Kurang">Kurang</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Baik">Baik</option>
+                                                </select>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s5_strategi_catatan" name="lpr_s5_strategi_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s5_strategi_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Indikator Keberhasilan</td>
+                                            <td>Terukur dan sederhana</td>
+                                            <td class="input-cell">
+                                                <select name="lpr_s5_indikator_nilai">
+                                                    <option value="">Pilih</option>
+                                                    <option value="Kurang">Kurang</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Baik">Baik</option>
+                                                </select>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s5_indikator_catatan" name="lpr_s5_indikator_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s5_indikator_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Keterlibatan Guru dan Murid</td>
+                                            <td>Partisipatif dan sesuai kapasitas</td>
+                                            <td class="input-cell">
+                                                <select name="lpr_s5_keterlibatan_nilai">
+                                                    <option value="">Pilih</option>
+                                                    <option value="Kurang">Kurang</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Baik">Baik</option>
+                                                </select>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s5_keterlibatan_catatan" name="lpr_s5_keterlibatan_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s5_keterlibatan_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Dukungan Sumber Daya</td>
+                                            <td>Relevan dan dapat diakses</td>
+                                            <td class="input-cell">
+                                                <select name="lpr_s5_sumberdaya_nilai">
+                                                    <option value="">Pilih</option>
+                                                    <option value="Kurang">Kurang</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Baik">Baik</option>
+                                                </select>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s5_sumberdaya_catatan" name="lpr_s5_sumberdaya_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s5_sumberdaya_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-medium">Komitmen Kepala Sekolah</td>
+                                            <td>Konsisten dan terbukti dalam praktik</td>
+                                            <td class="input-cell">
+                                                <select name="lpr_s5_komitmen_nilai">
+                                                    <option value="">Pilih</option>
+                                                    <option value="Kurang">Kurang</option>
+                                                    <option value="Cukup">Cukup</option>
+                                                    <option value="Baik">Baik</option>
+                                                </select>
+                                            </td>
+                                            <td class="input-cell">
+                                                <textarea id="lpr_s5_komitmen_catatan" name="lpr_s5_komitmen_catatan" placeholder="Min. 100 kata..."></textarea>
+                                                <div class="text-xs text-gray-600 text-right mt-1" id="counter_lpr_s5_komitmen_catatan">0 kata</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 6. Rekomendasi Pendamping -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">6. Rekomendasi Pendamping</h2>
+                            <p class="text-sm text-gray-600 mb-4">Tuliskan rekomendasi praktis bagi sekolah untuk penyempurnaan dan implementasi program:</p>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="lpr_s6_rek_1" class="block text-sm font-medium text-gray-700 mb-1">1.</label>
+                                    <textarea id="lpr_s6_rek_1" name="lpr_s6_rek_1" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Rekomendasi 1..."></textarea>
+                                </div>
+                                <div>
+                                    <label for="lpr_s6_rek_2" class="block text-sm font-medium text-gray-700 mb-1">2.</label>
+                                    <textarea id="lpr_s6_rek_2" name="lpr_s6_rek_2" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Rekomendasi 2..."></textarea>
+                                </div>
+                                <div>
+                                    <label for="lpr_s6_rek_3" class="block text-sm font-medium text-gray-700 mb-1">3.</label>
+                                    <textarea id="lpr_s6_rek_3" name="lpr_s6_rek_3" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Rekomendasi 3..."></textarea>
+                                </div>
+                                <div>
+                                    <label for="lpr_s6_rek_4" class="block text-sm font-medium text-gray-700 mb-1">4.</label>
+                                    <textarea id="lpr_s6_rek_4" name="lpr_s6_rek_4" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Rekomendasi 4..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. Kesimpulan -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">7. Kesimpulan</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Sekolah telah menyelesaikan finalisasi dokumen rencana program dengan melibatkan kepala sekolah, guru, dan tim literasi:</label>
+                                    <fieldset class="mt-2">
+                                        <div class="flex flex-wrap gap-x-6 gap-y-2">
+                                            <div class="flex items-center">
+                                                <input id="lpr_s7_final_ya" name="lpr_s7_final" type="radio" value="Ya" class="laporan-table">
+                                                <label for="lpr_s7_final_ya" class="ml-2 block text-sm text-gray-900">Ya</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="lpr_s7_final_belum" name="lpr_s7_final" type="radio" value="Belum" class="laporan-table">
+                                                <label for="lpr_s7_final_belum" class="ml-2 block text-sm text-gray-900">Belum</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input id="lpr_s7_final_tidak" name="lpr_s7_final" type="radio" value="Tidak" class="laporan-table">
+                                                <label for="lpr_s7_final_tidak" class="ml-2 block text-sm text-gray-900">Tidak</label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div>
+                                    <label for="lpr_s7_final_catatan" class="block text-sm font-medium text-gray-700 mb-1">Dengan catatan:</label>
+                                    <textarea id="lpr_s7_final_catatan" name="lpr_s7_final_catatan" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Catatan..."></textarea>
+                                </div>
+                                <div>
+                                    <label for="lpr_s7_rencana_catatan" class="block text-sm font-medium text-gray-700 mb-1">Rencana 14 hari implementasi:</label>
+                                    <textarea id="lpr_s7_rencana_catatan" name="lpr_s7_rencana_catatan" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Mis: Siap dijalankan dengan dukungan penuh warga sekolah.">Rencana 14 hari implementasi siap dijalankan dengan dukungan penuh warga sekolah.</textarea>
+                                </div>
+                                <div>
+                                    <label for="lpr_s7_tindak_lanjut" class="block text-sm font-medium text-gray-700 mb-1">Rekomendasi tindak lanjut:</label>
+                                    <textarea id="lpr_s7_tindak_lanjut" name="lpr_s7_tindak_lanjut" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Mis: Supervisi pasca-pelaksanaan...">Pendamping merekomendasikan tindak lanjut berupa supervisi pasca-pelaksanaan dan forum berbagi praktik baik antar sekolah dasar.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. Dokumentasi dan Lampiran -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">8. Dokumentasi dan Lampiran</h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full laporan-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Jenis Dokumen</th>
+                                            <th>Ada / Tidak</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Hasil Wawancara Kepala Sekolah</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_wawancara_ks_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_wawancara_ks_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Hasil Wawancara Guru</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_wawancara_guru_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_wawancara_guru_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Hasil Wawancara Murid</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_wawancara_murid_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_wawancara_murid_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lembar Observasi Kelas</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_obs_kelas_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_obs_kelas_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lembar Observasi Lingkungan Sekolah</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_obs_lingkungan_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_obs_lingkungan_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rencana Program Penguatan Literasi dan Numerasi (final)</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_rencana_final_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_rencana_final_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Foto Kegiatan Pendampingan</td>
+                                            <td class="text-center"><input type="checkbox" name="lpr_s8_doc_foto_ada" value="ada"></td>
+                                            <td class="input-cell"><input type="text" name="lpr_s8_doc_foto_ket" placeholder="Keterangan..."></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 9. Penutup -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">9. Penutup</h2>
+                            <p class="text-sm text-gray-700 italic mb-6">
+                                "Kami yang bertanda tangan di bawah ini menyatakan bahwa pendampingan telah dilaksanakan dengan mengikuti panduan resmi Direktorat Sekolah Dasar dan hasilnya telah diverifikasi bersama pihak sekolah."
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="lpr_s9_lokasi" class="block text-sm font-medium text-gray-700 mb-1">Disusun di</label>
+                                    <input type="text" name="lpr_s9_lokasi" id="lpr_s9_lokasi" placeholder="Mis: Jakarta" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="lpr_s9_tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                    <input type="date" name="lpr_s9_tanggal" id="lpr_s9_tanggal" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Petugas 1</p>
+                                    <div class="mt-16 border-t border-gray-300 w-3/4 mx-auto">
+                                        <p class="text-sm text-gray-700 pt-2">(Nama Jelas)</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Petugas 2</p>
+                                    <div class="mt-16 border-t border-gray-300 w-3/4 mx-auto">
+                                        <p class="text-sm text-gray-700 pt-2">(Nama Jelas)</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Kepala Sekolah</p>
+                                    <div class="mt-16 border-t border-gray-300 w-3/4 mx-auto">
+                                        <p class="text-sm text-gray-700 pt-2">(Nama Jelas & Stempel)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Submit -->
+                        <div class="mt-8 flex justify-end gap-4">
+                            <button type="button" onclick="generatePdf('form-laporan')" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150">
+                                <i class="fas fa-print mr-2"></i> Cetak PDF
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 disabled:bg-gray-400">
+                                <i class="fas fa-save mr-2"></i> Simpan Laporan
                             </button>
                         </div>
                     </form>
@@ -638,7 +1174,7 @@
         }
     </script>
 
-    <!-- MODIFIKASI: Skrip untuk Cetak PDF (ditempatkan di global scope) -->
+    <!-- MODIFIKASI: Skrip untuk Cetak PDF (Tidak Berubah) -->
     <script>
         function generatePdf(formId) {
             // 1. Dapatkan elemen form
@@ -705,6 +1241,21 @@
                     ta.parentNode.replaceChild(div, ta);
                 }
             });
+            
+            // Ubah select menjadi teks
+            const selects = elementToPrint.querySelectorAll('select');
+            selects.forEach(sel => {
+                const div = document.createElement('div');
+                div.textContent = sel.value || ' (Tidak Dipilih) ';
+                div.style.border = '1px solid #eee';
+                div.style.padding = '8px';
+                div.style.backgroundColor = '#f9f9f9';
+                div.style.fontSize = '12px';
+                div.style.color = '#000';
+                if (sel.parentNode) {
+                    sel.parentNode.replaceChild(div, sel);
+                }
+            });
 
             // Ubah radio button yang ter-check menjadi icon
             const radios = elementToPrint.querySelectorAll('input[type="radio"]');
@@ -724,6 +1275,27 @@
                 
                 if (radio.parentNode) {
                     radio.parentNode.replaceChild(icon, radio);
+                }
+            });
+            
+            // Ubah checkbox yang ter-check menjadi icon
+            const checkboxes = elementToPrint.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(check => {
+                const icon = document.createElement('span');
+                icon.style.fontFamily = "'Font Awesome 5 Free'";
+                icon.style.fontWeight = '900';
+                icon.style.fontSize = '14px';
+
+                if (check.checked) {
+                    icon.innerHTML = '&#xf14a;'; // Ikon check-square
+                    icon.style.color = 'green';
+                } else {
+                    icon.innerHTML = '&#xf0c8;'; // Ikon square (kosong)
+                    icon.style.color = '#ccc';
+                }
+                
+                if (check.parentNode) {
+                    check.parentNode.replaceChild(icon, check);
                 }
             });
 
@@ -757,7 +1329,7 @@
 
     <script type="module">
         // ==================================
-        // IMPOR MODUL
+        // IMPOR MODUL (Tidak Berubah)
         // ==================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { 
@@ -773,7 +1345,7 @@
         
         // ==================================
         // DATA PERTANYAAN (STATIS)
-        // (Data dari Pertanyaan.js)
+        // (Data dari Pertanyaan.js - Tidak Berubah)
         // ==================================
         
         // 1. WAWANCARA GURU
@@ -843,7 +1415,7 @@
             }
         ];
 
-        // 2. WAWANCARA MURID
+        // 2. WAWANCARA MURID (Tidak Berubah)
         const muridQuestions = [
             {
                 id: 'mq1',
@@ -901,7 +1473,7 @@
             }
         ];
 
-        // 3. FGD (KEPALA SEKOLAH & GURU)
+        // 3. FGD (KEPALA SEKOLAH & GURU) (Tidak Berubah)
         const fgdQuestions = [
             {
                 label: '1. Bagaimana Bapak/Ibu memahami penguatan literasi dan numerasi dalam konteks pembelajaran mendalam di sekolah? [Pemahaman Umum]',
@@ -990,7 +1562,7 @@
             }
         ];
 
-        // 4. OBSERVASI KELAS
+        // 4. OBSERVASI KELAS (Tidak Berubah)
         const observasiItems = {
             prosesPembelajaran: [
                 { id: 'obs_a1', no: 1, indicator: 'Kegiatan Pembuka', description: 'Guru menjelaskan tujuan pembelajaran dan mengaitkannya dengan pengalaman nyata murid.', notesId: 'catatan_a1' },
@@ -1020,7 +1592,7 @@
 
 
         // ==================================
-        // KONFIGURASI FIREBASE
+        // KONFIGURASI FIREBASE (Tidak Berubah)
         // ==================================
         const firebaseConfig = {
             apiKey: "AIzaSyDxH9Do9ecrEHW8sNxfpGjLUQ3qP14ONGM",
@@ -1032,7 +1604,7 @@
         };
 
         // ==================================
-        // INISIALISASI
+        // INISIALISASI (Tidak Berubah)
         // ==================================
         let db;
         let allSekolahData = [];
@@ -1045,7 +1617,7 @@
         }
 
         // ==================================
-        // FUNGSI HELPER BARU: Penghitung Kata
+        // FUNGSI HELPER BARU: Penghitung Kata (Tidak Berubah)
         // ==================================
         /**
          * Menghitung jumlah kata dalam sebuah string.
@@ -1062,7 +1634,7 @@
 
 
         // ==================================
-        // FUNGSI GENERATOR HTML (MODIFIKASI)
+        // FUNGSI GENERATOR HTML (Tidak Berubah)
         // ==================================
 
         function generateStandardQuestions(questions) {
@@ -1127,7 +1699,7 @@
                         </td>
                         <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="${item.id}" value="ya" class="h-4 w-4 text-blue-600"></td>
                         <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="${item.id}" value="tidak" class="h-4 w-4 text-blue-600"></td>
-                        <td classm="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="${item.id}" value="na" class="h-4 w-4 text-blue-600"></td>
+                        <td class="border border-gray-300 p-3 align-middle text-center"><input type="radio" name="${item.id}" value="na" class="h-4 w-4 text-blue-600"></td>
                         <td class="border border-gray-300 p-3 align-top">
                             <textarea name="${item.notesId}" rows="3" class="w-full text-sm p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Catatan..."></textarea>
                         </td>
@@ -1185,16 +1757,16 @@
         }
         
         // ==================================
-        // FUNGSI BARU: Setup Penghitung Kata
+        // FUNGSI BARU: Setup Penghitung Kata (MODIFIKASI)
         // ==================================
         /**
-         * Menambahkan event listener ke textarea FGD dan Wawancara Guru
+         * Menambahkan event listener ke textarea FGD, Wawancara Guru, dan Laporan
          * untuk menghitung kata secara real-time.
          */
         function setupWordCounters() {
-            // Hanya targetkan textarea di dalam form FGD dan Wawancara Guru
+            // MODIFIKASI: Targetkan juga textarea di laporan-form yang id-nya mulai dengan 'lpr_s'
             const textareas = document.querySelectorAll(
-                '#wawancara-guru-questions textarea, #fgd-questions textarea'
+                '#wawancara-guru-questions textarea, #fgd-questions textarea, #laporan-form textarea[id^="lpr_s"]'
             );
             const MIN_WORDS = 100;
 
@@ -1228,7 +1800,7 @@
 
 
         // ==================================
-        // LOGIKA APLIKASI (Tidak Berubah)
+        // LOGIKA APLIKASI (MODIFIKASI)
         // ==================================
 
         async function fetchData() {
@@ -1308,12 +1880,14 @@
             });
         }
 
+        // MODIFIKASI: handleSchoolSelect diperbarui untuk mengisi Form Laporan
         function handleSchoolSelect(event) {
             const selectedNPSN = event.target.value;
             const school = allSekolahData.find(s => s.npsn === selectedNPSN);
             const form = event.target.closest('.form-section');
             if (!form) return;
 
+            // Selektor untuk blok Data Petugas & Sekolah (Generik)
             const npsnInput = form.querySelector('input[id^="npsn"]');
             const sekolahInput = form.querySelector('input[id^="nama_sekolah"]');
             const provinsiInput = form.querySelector('input[id^="provinsi"]');
@@ -1321,20 +1895,43 @@
             const petugas1Select = form.querySelector('select[id^="petugas1"]');
             const petugas2Select = form.querySelector('select[id^="petugas2"]');
 
+            // --- BARU: Selektor spesifik untuk Form Laporan (Section 1) ---
+            const npsnInputLpr1 = form.querySelector('input[id="npsn_lpr_section1"]');
+            const sekolahInputLpr1 = form.querySelector('input[id="nama_sekolah_lpr_section1"]');
+            // const alamatInputLpr1 = form.querySelector('input[id="alamat_lpr_section1"]'); // Data alamat tidak ada di 'sekolah'
+            const kotaInputLpr1 = form.querySelector('input[id="kab_kota_lpr_section1"]');
+            const provInputLpr1 = form.querySelector('input[id="provinsi_lpr_section1"]');
+
+
             if (school) {
+                // Isi blok data umum
                 if (npsnInput) npsnInput.value = school.npsn || '';
                 if (sekolahInput) sekolahInput.value = school.sekolah || '';
                 if (provinsiInput) provinsiInput.value = school.provinsi || '';
                 if (kotaInput) kotaInput.value = school.kota || '';
                 if (petugas1Select) petugas1Select.value = school.petugas1 || '';
                 if (petugas2Select) petugas2Select.value = school.petugas2 || '';
+                
+                // --- BARU: Isi Form Laporan (Section 1) ---
+                if (npsnInputLpr1) npsnInputLpr1.value = school.npsn || '';
+                if (sekolahInputLpr1) sekolahInputLpr1.value = school.sekolah || '';
+                if (kotaInputLpr1) kotaInputLpr1.value = school.kota || '';
+                if (provInputLpr1) provInputLpr1.value = school.provinsi || '';
+
             } else {
+                // Reset blok data umum
                 if (npsnInput) npsnInput.value = '';
                 if (sekolahInput) sekolahInput.value = '';
                 if (provinsiInput) provinsiInput.value = '';
                 if (kotaInput) kotaInput.value = '';
                 if (petugas1Select) petugas1Select.value = '';
                 if (petugas2Select) petugas2Select.value = '';
+                
+                // --- BARU: Reset Form Laporan (Section 1) ---
+                if (npsnInputLpr1) npsnInputLpr1.value = '';
+                if (sekolahInputLpr1) sekolahInputLpr1.value = '';
+                if (kotaInputLpr1) kotaInputLpr1.value = '';
+                if (provInputLpr1) provInputLpr1.value = '';
             }
         }
 
@@ -1384,34 +1981,44 @@
             const submitButtons = form.querySelectorAll('button[type="submit"]');
             
             // ==================================
-            // MODIFIKASI: Blok Validasi 300 Kata
+            // MODIFIKASI: Blok Validasi 100 Kata (diperbarui untuk Laporan)
             // ==================================
             const MIN_WORDS = 100;
-            if (collectionName === 'wawancara_guru' || collectionName === 'fgd') {
+            // Validasi berlaku untuk wawancara_guru, fgd, dan laporan
+            if (collectionName === 'wawancara_guru' || collectionName === 'fgd' || collectionName === 'laporan') {
                 let isValid = true;
                 let firstInvalidField = null;
                 
-                // Tentukan kontainer textarea berdasarkan nama koleksi
-                const containerId = (collectionName === 'wawancara_guru') ? 'wawancara-guru-questions' : 'fgd-questions';
-                const textareas = form.querySelectorAll(`#${containerId} textarea`);
+                // Tentukan selector textarea yang akan divalidasi
+                let textareas;
+                if (collectionName === 'wawancara_guru') {
+                    textareas = form.querySelectorAll('#wawancara-guru-questions textarea');
+                } else if (collectionName === 'fgd') {
+                    textareas = form.querySelectorAll('#fgd-questions textarea');
+                } else if (collectionName === 'laporan') {
+                    // Hanya validasi textarea di form laporan yang ID-nya mulai dengan 'lpr_s'
+                    textareas = form.querySelectorAll('textarea[id^="lpr_s"]');
+                }
                 
-                textareas.forEach(textarea => {
-                    const words = countWords(textarea.value);
-                    if (words < MIN_WORDS) {
-                        isValid = false;
-                        // Tandai sebagai tidak valid (merah)
-                        textarea.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
-                        textarea.classList.remove('border-gray-300', 'focus:border-blue-500', 'focus:ring-blue-500', 'border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+                if (textareas) {
+                    textareas.forEach(textarea => {
+                        const words = countWords(textarea.value);
+                        if (words < MIN_WORDS) {
+                            isValid = false;
+                            // Tandai sebagai tidak valid (merah)
+                            textarea.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                            textarea.classList.remove('border-gray-300', 'focus:border-blue-500', 'focus:ring-blue-500', 'border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
 
-                        if (!firstInvalidField) {
-                            firstInvalidField = textarea;
+                            if (!firstInvalidField) {
+                                firstInvalidField = textarea;
+                            }
+                        } else {
+                            // Tandai sebagai valid (hijau)
+                            textarea.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                            textarea.classList.add('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
                         }
-                    } else {
-                        // Tandai sebagai valid (hijau)
-                        textarea.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
-                        textarea.classList.add('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
-                    }
-                });
+                    });
+                }
 
                 if (!isValid) {
                     showErrorModal(`Validasi Gagal. Harap pastikan semua jawaban diisi minimal ${MIN_WORDS} kata. Bidang yang ditandai merah belum memenuhi syarat.`);
@@ -1440,24 +2047,33 @@
                 showSuccessModal();
                 form.reset(); 
                 
-                // MODIFIKASI: Reset manual counter dan border setelah sukses
-                if (collectionName === 'wawancara_guru' || collectionName === 'fgd') {
-                    const containerId = (collectionName === 'wawancara_guru') ? 'wawancara-guru-questions' : 'fgd-questions';
-                    const textareas = form.querySelectorAll(`#${containerId} textarea`);
+                // MODIFIKASI: Reset manual counter dan border setelah sukses (diperbarui untuk Laporan)
+                if (collectionName === 'wawancara_guru' || collectionName === 'fgd' || collectionName === 'laporan') {
                     
-                    textareas.forEach(textarea => {
-                        // Reset border
-                        textarea.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500', 'border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
-                        textarea.classList.add('border-gray-300', 'focus:border-blue-500', 'focus:ring-blue-500');
-                        
-                        // Reset counter
-                        const counterId = 'counter_' + textarea.id;
-                        const counterEl = document.getElementById(counterId);
-                        if (counterEl) {
-                            counterEl.textContent = '0 kata';
-                            counterEl.classList.remove('text-red-600', 'text-green-600');
-                        }
-                    });
+                    let textareas;
+                    if (collectionName === 'wawancara_guru') {
+                        textareas = form.querySelectorAll('#wawancara-guru-questions textarea');
+                    } else if (collectionName === 'fgd') {
+                        textareas = form.querySelectorAll('#fgd-questions textarea');
+                    } else if (collectionName === 'laporan') {
+                        textareas = form.querySelectorAll('textarea[id^="lpr_s"]');
+                    }
+
+                    if (textareas) {
+                        textareas.forEach(textarea => {
+                            // Reset border
+                            textarea.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500', 'border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+                            textarea.classList.add('border-gray-300', 'focus:border-blue-500', 'focus:ring-blue-500');
+                            
+                            // Reset counter
+                            const counterId = 'counter_' + textarea.id;
+                            const counterEl = document.getElementById(counterId);
+                            if (counterEl) {
+                                counterEl.textContent = '0 kata';
+                                counterEl.classList.remove('text-red-600', 'text-green-600');
+                            }
+                        });
+                    }
                 }
                 
                 const schoolSelector = form.querySelector('select[id^="schoolSelector_"]');
@@ -1566,11 +2182,13 @@
             });
         }
 
+        // MODIFIKASI: Menambahkan listener untuk form laporan
         function setupMainFormSubmitListeners() {
             const formWawancaraGuru = document.getElementById('form-wawancara-guru');
             const formFGD = document.getElementById('form-fgd');
             const formWawancaraMurid = document.getElementById('form-wawancara-murid');
             const formObservasi = document.getElementById('form-observasi');
+            const formLaporan = document.getElementById('form-laporan'); // BARU
 
             if (formWawancaraGuru) {
                 formWawancaraGuru.addEventListener('submit', (e) => handleFormSubmit(e, 'wawancara_guru'));
@@ -1583,6 +2201,10 @@
             }
             if (formObservasi) {
                 formObservasi.addEventListener('submit', (e) => handleFormSubmit(e, 'observasi'));
+            }
+            // BARU: Tambahkan listener untuk form laporan
+            if (formLaporan) {
+                formLaporan.addEventListener('submit', (e) => handleFormSubmit(e, 'laporan'));
             }
         }
 
