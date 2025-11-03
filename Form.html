@@ -129,13 +129,18 @@
                             <span class="font-medium">Observasi</span>
                         </a>
                     </li>
+                    <!-- ================================== -->
+                    <!-- MODIFIKASI: Tautan Program diperbarui -->
+                    <!-- ================================== -->
                     <li>
-                        <a href="#" onclick="showForm('observasi-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                        <a href="#" onclick="showForm('program-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
                             <i class="fas fa-tasks w-6 text-center mr-3"></i>
                             <span class="font-medium">Program</span>
                         </a>
                     </li>
-                    <!-- MODIFIKASI: Tautan Laporan diperbarui -->
+                    <!-- ================================== -->
+                    <!-- AKHIR MODIFIKASI -->
+                    <!-- ================================== -->
                     <li>
                         <a href="#" onclick="showForm('laporan-form', this)" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
                             <i class="fas fa-file-invoice w-6 text-center mr-3"></i>
@@ -583,7 +588,7 @@
                 </div>
                 
                 <!-- ================================== -->
-                <!-- BARU: FORM LAPORAN -->
+                <!-- BARU: FORM LAPORAN (Tidak Berubah) -->
                 <!-- ================================== -->
                 <div id="laporan-form" class="form-section hidden">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Laporan Pendampingan</h1>
@@ -1098,6 +1103,35 @@
                     </form>
                 </div>
 
+                <!-- ================================== -->
+                <!-- BARU: FORM PROGRAM -->
+                <!-- ================================== -->
+                <div id="program-form" class="form-section hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Program</h1>
+                    
+                    <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
+                        <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Dokumen Program</h2>
+                        <p class="text-gray-600 mb-6">Silakan lihat format dan contoh program, kemudian unggah dokumen program yang telah final.</p>
+                        
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <!-- Tombol 1: Lihat Format Program -->
+                            <button type="button" onclick="openModal('preview-modal-1')" class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 text-center">
+                                <i class="fas fa-eye mr-2"></i> Lihat Format Program
+                            </button>
+                            
+                            <!-- Tombol 2: Lihat Contoh Program -->
+                            <button type="button" onclick="openModal('preview-modal-2')" class="flex-1 px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-150 text-center">
+                                <i class="fas fa-file-alt mr-2"></i> Lihat Contoh Program
+                            </button>
+                            
+                            <!-- Tombol 3: Upload Program -->
+                            <a href="Sekolah.html" class="flex-1 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150 text-center">
+                                <i class="fas fa-upload mr-2"></i> Upload Program
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
@@ -1121,6 +1155,64 @@
                 <h3 class="text-lg font-medium text-gray-800">Gagal Menyimpan</h3>
                 <p id="modal-error-message" class="text-sm text-gray-600">Terjadi kesalahan. Silakan coba lagi.</p>
                 <button id="modal-error-close-btn" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 w-full">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================== -->
+    <!-- BARU: MODAL PREVIEW 1 (FORMAT PROGRAM) -->
+    <!-- ================================== -->
+    <div id="preview-modal-1" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-4 md:p-6 rounded-xl shadow-2xl w-full max-w-5xl h-[90%] transform transition-all flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Preview: Format Program</h3>
+                <button onclick="closeModal('preview-modal-1')" class="text-gray-500 hover:text-gray-800 text-3xl focus:outline-none">
+                    &times;
+                </button>
+            </div>
+            
+            <!-- Konten Iframe -->
+            <div class="flex-1 overflow-hidden border border-gray-300 rounded-lg">
+                <iframe src="https://docs.google.com/document/d/e/2PACX-1vQ0IJizaB47FyIoVPJDtLr2s55e2QDSeplMJeGl9Z13Q6pUBrqqMaRlvUZDrgIAczx999s0APKwQ1gT/pub?embedded=true" class="w-full h-full">
+                    Memuat preview...
+                </iframe>
+            </div>
+            
+            <!-- Footer Modal (Tombol Download) -->
+            <div class="mt-4 text-center">
+                <a href="https://docs.google.com/document/d/1qASWUKMDyoK6a4JMgNK4TDpA9H70_nft05fR1SXAEs4/copy" target="_blank" class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150">
+                    <i class="fas fa-download mr-2"></i> Download Format
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================== -->
+    <!-- BARU: MODAL PREVIEW 2 (CONTOH PROGRAM) -->
+    <!-- ================================== -->
+    <div id="preview-modal-2" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-4 md:p-6 rounded-xl shadow-2xl w-full max-w-5xl h-[90%] transform transition-all flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Preview: Contoh Program</h3>
+                <button onclick="closeModal('preview-modal-2')" class="text-gray-500 hover:text-gray-800 text-3xl focus:outline-none">
+                    &times;
+                </button>
+            </div>
+            
+            <!-- Konten Iframe -->
+            <div class="flex-1 overflow-hidden border border-gray-300 rounded-lg">
+                <iframe src="https://docs.google.com/document/d/e/2PACX-1vRakBTFASwSq_wAQieQ_yC8iDjyo5oqKX4uNE92Htkax6aC8kwUNENzhdXuXrUjwVMuB4pF3fC5SqqQ/pub?embedded=true" class="w-full h-full">
+                    Memuat preview...
+                </iframe>
+            </div>
+            
+            <!-- Footer Modal (Tombol Download) -->
+            <div class="mt-4 text-center">
+                <a href="https://docs.google.com/document/d/1pqou9AYCBVpfYMj1iwEZ-9h_mUDIZM7eNrBmyqEKLw8/copy" target="_blank" class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150">
+                    <i class="fas fa-download mr-2"></i> Download Contoh
+                </a>
             </div>
         </div>
     </div>
@@ -1172,6 +1264,19 @@
             const defaultLink = document.querySelector('a[onclick*="fgd-form"]');
             showForm(defaultFormId, defaultLink);
         }
+
+        // ==================================
+        // BARU: FUNGSI BUKA/TUTUP MODAL
+        // ==================================
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('hidden');
+        }
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.add('hidden');
+        }
+
     </script>
 
     <!-- MODIFIKASI: Skrip untuk Cetak PDF (Tidak Berubah) -->
@@ -1216,6 +1321,14 @@
             // 5. Modifikasi klon untuk cetak (sembunyikan tombol, dll.)
             const buttons = elementToPrint.querySelectorAll('button');
             buttons.forEach(btn => btn.style.display = 'none'); // Sembunyikan semua tombol
+            // Sembunyikan tombol-link juga
+            const links = elementToPrint.querySelectorAll('a[href]');
+            links.forEach(link => {
+                if(link.href.endsWith('Sekolah.html')) {
+                    link.style.display = 'none';
+                }
+            });
+
 
             // Sembunyikan penghitung kata
             const counters = elementToPrint.querySelectorAll('div[id^="counter_"]');
