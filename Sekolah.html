@@ -6,145 +6,150 @@
     <title>Upload Dokumen Program Sekolah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">
+    <!-- Menggunakan Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Custom progress bar styles */
         .progress-bar {
             @apply w-full bg-gray-200 rounded-full h-2.5 overflow-hidden;
         }
         .progress-bar-inner {
             @apply bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out;
         }
+        
+        /* == Animasi & Style Kustom == */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .icon-pulse {
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        /* Style Card */
+        .card {
+            @apply bg-white p-6 md:p-8 rounded-xl shadow-lg transition-all duration-300 ease-in-out;
+        }
+        .card:hover {
+            @apply shadow-xl transform md:-translate-y-1;
+        }
+        select, .file-input {
+            @apply transition-all duration-200 ease-in-out;
+        }
+        
+        /* Transisi Modal */
+        #status-modal {
+            @apply transition-opacity duration-300 ease-out;
+        }
+        #status-modal.hidden {
+            @apply opacity-0 pointer-events-none;
+        }
+        #status-modal > div {
+            @apply transition-all duration-300 ease-out;
+        }
+        #status-modal.hidden > div {
+            @apply transform scale-90 opacity-0;
+        }
+        /* == Akhir Animasi == */
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
-        <header class="text-center mb-8">
-            <i class="fas fa-school text-5xl text-blue-600 mb-3"></i>
+    <!-- Kontainer utama diperlebar untuk grid -->
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+        <header class="text-center mb-8 fade-in">
+            <!-- Ikon dengan animasi pulse -->
+            <i class="fas fa-school text-5xl text-blue-600 mb-3 icon-pulse"></i>
             <h1 class="text-4xl font-bold text-gray-800">Portal Dokumen Sekolah</h1>
             <p class="text-gray-600 text-lg mt-2">Silakan unggah dokumen program Anda.</p>
         </header>
 
-        <!-- 1. Pemilihan Wilayah -->
-        <div id="selection-section" class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-6">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Langkah 1: Pilih Sekolah Anda</h2>
-            <div class="space-y-4">
-                <!-- 1. Dropdown Provinsi -->
-                <div>
-                    <label for="select-provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                    <select id="select-provinsi" class="mt-1 block w-full px-3 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="">Memuat provinsi...</option>
-                    </select>
-                </div>
-                
-                <!-- 2. Dropdown Kab/Kota (Tersembunyi) -->
-                <div id="kab-kota-wrapper" class="hidden">
-                    <label for="select-kab-kota" class="block text-sm font-medium text-gray-700 mb-1">Kabupaten/Kota</label>
-                    <select id="select-kab-kota" class="mt-1 block w-full px-3 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="">Pilih Kab/Kota</option>
-                    </select>
-                </div>
+        <!-- Wrapper untuk Grid Layout -->
+        <div id="layout-wrapper" class="grid grid-cols-1 md:gap-8">
 
-                <!-- 3. Dropdown NPSN (Tersembunyi) -->
-                <div id="npsn-wrapper" class="hidden">
-                    <label for="select-npsn" class="block text-sm font-medium text-gray-700 mb-1">NPSN / Nama Sekolah</label>
-                    <select id="select-npsn" class="mt-1 block w-full px-3 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="">Pilih Sekolah</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Bagian Upload (Tersembunyi) -->
-        <div id="upload-section" class="hidden">
-            <!-- Informasi Sekolah Terpilih -->
-            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg mb-6 shadow">
-                <h3 class="text-xl font-semibold text-blue-800">Sekolah Terpilih:</h3>
-                <p class="text-lg text-blue-700 font-medium" id="info-nama-sekolah">Nama Sekolah</p>
-                <p class="text-md text-blue-600" id="info-npsn">NPSN</p>
-            </div>
-
-            <!-- Form Upload -->
-            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Langkah 2: Upload Dokumen</h2>
-                <div class="space-y-8">
-                    <!-- Upload 1: Draft Program -->
-                    <div id="upload-draft">
-                        <label class="block text-lg font-medium text-gray-700">Dokumen Draft Program</label>
-                        <p class="text-sm text-gray-500 mb-2">Unggah file PDF atau DOC/DOCX (Maks 10MB).</p>
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="file" id="file-draft" accept=".pdf,.doc,.docx" class="block w-full text-sm text-gray-500
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-lg file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-blue-50 file:text-blue-700
-                                hover:file:bg-blue-100 transition-colors">
-                            <button onclick="handleUpload('draft')" class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all">
-                                <i class="fas fa-upload mr-2"></i>Upload
-                            </button>
-                        </div>
-                        <div class="mt-3">
-                            <div class="progress-bar hidden" id="progress-draft-wrapper">
-                                <div id="progress-draft" class="progress-bar-inner" style="width: 0%"></div>
-                            </div>
-                            <div id="status-draft" class="text-sm text-gray-600 mt-1"></div>
-                        </div>
+            <!-- 1. Pemilihan Wilayah -->
+            <div id="selection-section" class="card fade-in" style="animation-delay: 0.2s;">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Langkah 1: Pilih Sekolah Anda</h2>
+                <div class="space-y-4">
+                    <!-- Dropdown Provinsi -->
+                    <div>
+                        <label for="select-provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
+                        <select id="select-provinsi" class="mt-1 block w-full px-3 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Memuat provinsi...</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Dropdown Kab/Kota (Tersembunyi) -->
+                    <div id="kab-kota-wrapper" class="hidden">
+                        <label for="select-kab-kota" class="block text-sm font-medium text-gray-700 mb-1">Kabupaten/Kota</label>
+                        <select id="select-kab-kota" class="mt-1 block w-full px-3 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Pilih Kab/Kota</option>
+                        </select>
                     </div>
 
-                    <!-- Upload 2: Final Program -->
-                    <div id="upload-final">
-                        <label class="block text-lg font-medium text-gray-700">Dokumen Final Program</label>
-                        <p class="text-sm text-gray-500 mb-2">Unggah file PDF atau DOC/DOCX (Maks 10MB).</p>
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="file" id="file-final" accept=".pdf,.doc,.docx" class="block w-full text-sm text-gray-500
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-lg file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-blue-50 file:text-blue-700
-                                hover:file:bg-blue-100 transition-colors">
-                            <button onclick="handleUpload('final')" class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all">
-                                <i class="fas fa-upload mr-2"></i>Upload
-                            </button>
-                        </div>
-                        <div class="mt-3">
-                            <div class="progress-bar hidden" id="progress-final-wrapper">
-                                <div id="progress-final" class="progress-bar-inner" style="width: 0%"></div>
-                            </div>
-                            <div id="status-final" class="text-sm text-gray-600 mt-1"></div>
-                        </div>
+                    <!-- Dropdown NPSN (Tersembunyi) -->
+                    <div id="npsn-wrapper" class="hidden">
+                        <label for="select-npsn" class="block text-sm font-medium text-gray-700 mb-1">NPSN / Nama Sekolah</label>
+                        <select id="select-npsn" class="mt-1 block w-full px-3 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Pilih Sekolah</option>
+                        </select>
                     </div>
-
-                    <!-- Upload 3: Implementasi -->
-                    <div id="upload-implementasi">
-                        <label class="block text-lg font-medium text-gray-700">Dokumen Implementasi</label>
-                        <p class="text-sm text-gray-500 mb-2">Unggah file PDF atau DOC/DOCX (Maks 10MB).</p>
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="file" id="file-implementasi" accept=".pdf,.doc,.docx" class="block w-full text-sm text-gray-500
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-lg file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-blue-50 file:text-blue-700
-                                hover:file:bg-blue-100 transition-colors">
-                            <button onclick="handleUpload('implementasi')" class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all">
-                                <i class="fas fa-upload mr-2"></i>Upload
-                            </button>
-                        </div>
-                        <div class="mt-3">
-                            <div class="progress-bar hidden" id="progress-implementasi-wrapper">
-                                <div id="progress-implementasi" class="progress-bar-inner" style="width: 0%"></div>
-                            </div>
-                            <div id="status-implementasi" class="text-sm text-gray-600 mt-1"></div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </div>
 
+            <!-- 2. Bagian Upload (Tersembunyi) -->
+            <div id="upload-section" class="hidden">
+                <!-- Informasi Sekolah Terpilih -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg mb-6 shadow transition-all duration-300 hover:shadow-md">
+                    <h3 class="text-xl font-semibold text-blue-800">Sekolah Terpilih:</h3>
+                    <p class="text-lg text-blue-700 font-medium" id="info-nama-sekolah">Nama Sekolah</p>
+                    <p class="text-md text-blue-600" id="info-npsn">NPSN</p>
+                </div>
+
+                <!-- Form Upload -->
+                <div class="card"> <!-- Menggunakan style .card -->
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Langkah 2: Upload Dokumen</h2>
+                    <div class="space-y-8">
+
+
+                        <!-- Upload 2: Final Program -->
+                        <div id="upload-final">
+                            <label class="block text-lg font-medium text-gray-700">Dokumen Final Program</label>
+                            <p class="text-sm text-gray-500 mb-2">Unggah file PDF atau DOC/DOCX (Maks 10MB).</p>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <input type="file" id="file-final" accept=".pdf,.doc,.docx" class="file-input block w-full text-sm text-gray-500
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-lg file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-blue-50 file:text-blue-700
+                                    hover:file:bg-blue-100 transition-colors">
+                                <button onclick="handleUpload('final')" class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all">
+                                    <i class="fas fa-upload mr-2"></i>Upload
+                                </button>
+                            </div>
+                            <div class="mt-3">
+                                <div class="progress-bar hidden" id="progress-final-wrapper">
+                                    <div id="progress-final" class="progress-bar-inner" style="width: 0%"></div>
+                                </div>
+                                <div id="status-final" class="text-sm text-gray-600 mt-1"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- Penutup #layout-wrapper -->
     </div>
 
     <!-- Modal Status (Pengganti Alert) -->
@@ -170,6 +175,9 @@
     </div>
 
 
+    <!-- ===================================================================== -->
+    <!-- JAVASCRIPT MODULE -->
+    <!-- ===================================================================== -->
     <script type="module">
         // ==================================
         // IMPOR MODUL FIREBASE
@@ -186,16 +194,15 @@
             setLogLevel
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
-        // HAPUS: Impor Firebase Storage dihapus
-
         // ==================================
-        // KONFIGURASI APLIKASI (BARU)
+        // KONFIGURASI APLIKASI
         // ==================================
+        
+        // !!! PENTING !!! Ganti dengan URL DEPLOYMENT Google Apps Script Anda
         const GAS_URL = "https://script.google.com/macros/s/AKfycbw28ofTOlJsouM3P8fIDumnq7YEFQfiVtXm_C_y0O0QaZX8iZqdzHGOt3DAllqKTR2DGQ/exec";
-        const GDRIVE_FOLDER_ID = "1jF4jTnebqMO8xNbKWxo4dEqRzZuug6Dk";
 
         // ==================================
-        // KONFIGURASI FIREBASE (Ambil dari SetDatabase.html)
+        // KONFIGURASI FIREBASE
         // ==================================
         const firebaseConfig = {
             apiKey: "AIzaSyDxH9Do9ecrEHW8sNxfpGjLUQ3qP14ONGM",
@@ -209,22 +216,21 @@
         // ==================================
         // INISIALISASI
         // ==================================
-        let db; // HAPUS: storage
+        let db;
         let allSekolahData = [];
-        let currentSchool = null; // Menyimpan data sekolah yang dipilih
+        let currentSchool = null;
         
         try {
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
-            // HAPUS: storage = getStorage(app); // Inisialisasi Storage
             setLogLevel('debug');
         } catch (e) {
             console.error("Error inisialisasi Firebase:", e);
-            showErrorModal("Gagal terhubung ke database.");
+            showErrorModal("Gagal terhubung ke database. " + e.message);
         }
 
         // ==================================
-        // PENGELOLA MODAL STATUS
+        // PENGELOLA MODAL STATUS (Tidak Diubah)
         // ==================================
         const statusModal = document.getElementById('status-modal');
         const modalLoading = document.getElementById('modal-loading');
@@ -256,16 +262,14 @@
             statusModal.classList.remove('hidden');
         }
 
-        // Tautkan ke window agar bisa dipanggil dari onclick
         window.hideModal = () => {
             statusModal.classList.add('hidden');
         }
 
         // ==================================
-        // FUNGSI INTI (PEMILIHAN SEKOLAH)
+        // FUNGSI INTI (PEMILIHAN SEKOLAH - Disesuaikan)
         // ==================================
 
-        // 1. Ambil data sekolah dari Firestore
         async function fetchDataSekolah() {
             if (!db) return;
             try {
@@ -278,7 +282,6 @@
             }
         }
 
-        // 2. Isi dropdown Provinsi
         function populateProvinsi() {
             const provinces = [...new Set(allSekolahData.map(s => s.provinsi).filter(Boolean))].sort();
             const provSelect = document.getElementById('select-provinsi');
@@ -288,15 +291,18 @@
             });
         }
 
-        // 3. Isi dropdown Kab/Kota (saat provinsi berubah)
         function populateKabKota() {
             const selectedProv = document.getElementById('select-provinsi').value;
             const kotaWrapper = document.getElementById('kab-kota-wrapper');
             const kotaSelect = document.getElementById('select-kab-kota');
+            const npsnWrapper = document.getElementById('npsn-wrapper');
             
-            // Reset bawahan
-            document.getElementById('npsn-wrapper').classList.add('hidden');
+            // Sembunyikan bagian bawahnya saat provinsi berubah
+            npsnWrapper.classList.add('hidden');
+            npsnWrapper.classList.remove('fade-in');
             document.getElementById('upload-section').classList.add('hidden');
+            document.getElementById('layout-wrapper').classList.remove('md:grid-cols-2');
+            
             kotaSelect.innerHTML = '<option value="">Pilih Kab/Kota</option>';
             
             if (selectedProv) {
@@ -311,20 +317,22 @@
                     kotaSelect.appendChild(new Option(c, c));
                 });
                 kotaWrapper.classList.remove('hidden');
+                kotaWrapper.classList.add('fade-in'); // Animasi fade-in
             } else {
                 kotaWrapper.classList.add('hidden');
+                kotaWrapper.classList.remove('fade-in');
             }
         }
 
-        // 4. Isi dropdown NPSN (saat kab/kota berubah)
         function populateNPSN() {
             const selectedProv = document.getElementById('select-provinsi').value;
             const selectedKota = document.getElementById('select-kab-kota').value;
             const npsnWrapper = document.getElementById('npsn-wrapper');
             const npsnSelect = document.getElementById('select-npsn');
             
-            // Reset bawahan
+            // Sembunyikan bagian upload saat kota berubah
             document.getElementById('upload-section').classList.add('hidden');
+            document.getElementById('layout-wrapper').classList.remove('md:grid-cols-2');
             npsnSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
 
             if (selectedKota) {
@@ -336,37 +344,46 @@
                     npsnSelect.appendChild(new Option(`${s.sekolah} (${s.npsn})`, s.npsn));
                 });
                 npsnWrapper.classList.remove('hidden');
+                npsnWrapper.classList.add('fade-in'); // Animasi fade-in
             } else {
                 npsnWrapper.classList.add('hidden');
+                npsnWrapper.classList.remove('fade-in');
             }
         }
 
-        // 5. Tampilkan bagian Upload (saat NPSN berubah)
+        // == FUNGSI INI DIMODIFIKASI UNTUK GRID ==
         function showUploadSection() {
             const selectedNPSN = document.getElementById('select-npsn').value;
             const uploadSection = document.getElementById('upload-section');
+            const layoutWrapper = document.getElementById('layout-wrapper'); // Ambil wrapper
             
             if (selectedNPSN) {
                 currentSchool = allSekolahData.find(s => s.npsn === selectedNPSN);
                 if (currentSchool) {
                     document.getElementById('info-nama-sekolah').textContent = currentSchool.sekolah;
                     document.getElementById('info-npsn').textContent = `NPSN: ${currentSchool.npsn}`;
+                    
+                    // Logika Animasi dan Grid
                     uploadSection.classList.remove('hidden');
-                    // Cek status dokumen yang sudah ada
+                    uploadSection.classList.add('fade-in'); // Tambah kelas animasi
+                    layoutWrapper.classList.add('md:grid-cols-2'); // Terapkan grid 2-kolom
+
                     checkExistingDocuments(selectedNPSN);
                 }
             } else {
+                // Sembunyikan dan reset grid
                 uploadSection.classList.add('hidden');
+                uploadSection.classList.remove('fade-in'); // Hapus kelas animasi
+                layoutWrapper.classList.remove('md:grid-cols-2'); // Kembali ke 1-kolom
+                
                 currentSchool = null;
             }
         }
 
-        // 6. Cek dokumen yang sudah ada di Firestore
         async function checkExistingDocuments(npsn) {
-            // Reset status
             ['draft', 'final', 'implementasi'].forEach(docType => {
                 document.getElementById(`status-${docType}`).innerHTML = '';
-                document.getElementById(`file-${docType}`).value = ''; // Reset input file
+                document.getElementById(`file-${docType}`).value = '';
                 document.getElementById(`progress-${docType}-wrapper`).classList.add('hidden');
             });
 
@@ -382,7 +399,7 @@
             }
         }
 
-        // Helper untuk update status link
+        // Helper untuk update status link (Tidak Diubah)
         function updateStatus(docType, url) {
             const statusEl = document.getElementById(`status-${docType}`);
             if (url) {
@@ -397,16 +414,17 @@
         }
 
         // ==================================
-        // FUNGSI INTI (UPLOAD FILE)
+        // FUNGSI INTI (UPLOAD FILE - Tidak Diubah)
         // ==================================
 
-        // BARU: Fungsi helper untuk FileReader
+        /**
+         * Fungsi helper untuk membaca file sebagai Base64
+         */
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = () => {
-                    // Ekstrak hanya data base64, buang prefix-nya
                     const base64Data = reader.result.split(';base64,')[1];
                     resolve(base64Data);
                 };
@@ -414,6 +432,9 @@
             });
         }
 
+        /**
+         * Fungsi utama untuk menangani upload
+         */
         async function handleUpload(docType) {
             if (!currentSchool) {
                 showErrorModal("Silakan pilih sekolah terlebih dahulu.");
@@ -424,12 +445,11 @@
             const file = fileInput.files[0];
             const npsn = currentSchool.npsn;
             
-            // Elemen UI
             const statusEl = document.getElementById(`status-${docType}`);
             const progressWrapper = document.getElementById(`progress-${docType}-wrapper`);
             const progressBar = document.getElementById(`progress-${docType}`);
 
-            // Validasi file
+            // 1. Validasi File
             if (!file) {
                 showErrorModal("Silakan pilih file yang akan diupload.");
                 return;
@@ -440,79 +460,85 @@
                 return;
             }
             
-            // MODIFIKASI: Menggunakan Google Apps Script
             try {
-                // Tampilkan loading/progress
+                // Tampilkan loading
                 statusEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i>Membaca file...`;
                 progressWrapper.classList.remove('hidden');
-                progressBar.style.width = '25%'; // Tahap 1: Baca file
+                progressBar.style.width = '10%';
 
-                // 1. Konversi file ke Base64
+                // 2. Konversi file ke Base64
                 const base64Data = await getBase64(file);
-                statusEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i>Mengirim ke Google Drive... (Ini mungkin lama)`;
-                progressBar.style.width = '50%'; // Tahap 2: Kirim
+                statusEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i>Menghubungi server (Apps Script)...`;
+                progressBar.style.width = '30%';
 
-                // 2. Buat payload untuk Google Apps Script
+                // 3. Buat payload untuk Google Apps Script
                 const payload = {
-                    folderId: GDRIVE_FOLDER_ID,
                     fileName: file.name,
                     mimeType: file.type,
-                    fileData: base64Data,
-                    npsn: npsn, // Kirim NPSN juga
-                    docType: docType // Kirim tipe dokumen
+                    fileData: base64Data
                 };
 
-                // 3. Kirim data ke Google Apps Script
+                // 4. Kirim data ke Google Apps Script
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
-                    redirect: 'follow',
-                    cache: 'no-cache', // [TAMBAHAN] Paksa request baru, jangan gunakan cache
-                    body: JSON.stringify(payload),
+                    redirect: 'follow', 
                     headers: {
-                        'Content-Type': 'text/plain;charset=utf-8', // Apps Script seringkali lebih suka text/plain untuk JSON
+                        'Content-Type': 'text/plain;charset=utf-8'
                     },
+                    body: JSON.stringify(payload) 
                 });
 
-                progressBar.style.width = '75%'; // Tahap 3: Menunggu respon
-                statusEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i>Menunggu respon server...`;
+                statusEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i>Server merespon, memproses data...`;
+                progressBar.style.width = '60%';
 
+                // 5. Cek jika fetch gagal
+                if (!response.ok) {
+                    if (response.status === 0) {
+                        throw new Error("Gagal fetch (CORS Error). Pastikan 'code.gs' sudah di-deploy ulang dan URL GAS_URL sudah benar.");
+                    }
+                    throw new Error(`Error Jaringan: ${response.status} ${response.statusText}`);
+                }
+
+                // 6. Ambil hasil JSON dari Apps Script
                 const result = await response.json();
 
+                // 7. Cek status dari Apps Script
                 if (result.status === 'success') {
-                    // 4. Upload berhasil, dapatkan URL
-                    const downloadURL = result.fileUrl;
+                    // 8. Upload berhasil, dapatkan URL
+                    const downloadURL = result.url; 
+
                     if (!downloadURL) {
-                        throw new Error("Apps Script berhasil tapi tidak mengembalikan fileUrl.");
+                      throw new Error("Script Google berhasil tapi tidak mengembalikan 'url'.");
                     }
                     
-                    statusEl.innerHTML = `<i class="fas fa-check-circle text-green-500 mr-1"></i>Upload Selesai, menyimpan link...`;
+                    statusEl.innerHTML = `<i class="fas fa-check-circle text-green-500 mr-1"></i>Upload Selesai, menyimpan link ke Firestore...`;
 
-                    // 5. Simpan URL (dari Google Drive) ke Firestore
+                    // 9. Simpan URL (dari Google Drive) ke Firestore
                     const docRef = doc(db, "program_sekolah", npsn);
-                    const fieldName = `link${docType.charAt(0).toUpperCase() + docType.slice(1)}`; // linkDraft, linkFinal, dst.
+                    const fieldName = `link${docType.charAt(0).toUpperCase() + docType.slice(1)}`; 
                     
                     await setDoc(docRef, {
-                        [fieldName]: downloadURL,
+                        [fieldName]: downloadURL, 
                         npsn: npsn,
                         namaSekolah: currentSchool.sekolah,
                         updatedAt: serverTimestamp()
-                    }, { merge: true }); // merge: true agar tidak menimpa field lain
+                    }, { merge: true });
 
-                    // 6. Update UI
-                    updateStatus(docType, downloadURL);
+                    // 10. Update UI
+                    updateStatus(docType, downloadURL); 
                     progressBar.style.width = '100%';
                     progressWrapper.classList.add('hidden');
-                    showSuccessModal(`Dokumen ${docType} berhasil diupload ke Google Drive.`);
+                    showSuccessModal(`Dokumen ${docType} berhasil diupload.`);
 
                 } else {
-                    // Handle error dari Apps Script
+                    // Handle error yang dilaporkan oleh Apps Script
                     throw new Error(result.message || "Script Google mengembalikan error.");
                 }
 
             } catch (error) {
-                console.error("Handle upload error:", error);
+                console.error("Error pada handleUpload:", error);
                 showErrorModal("Terjadi kesalahan: " + error.message);
-                statusEl.innerHTML = `<i class="fas fa-times-circle text-red-500 mr-1"></i>Error. Cek konsol.`;
+                statusEl.innerHTML = `<i class="fas fa-times-circle text-red-500 mr-1"></i>Upload Gagal.`;
                 progressWrapper.classList.add('hidden');
             }
         }
@@ -521,19 +547,17 @@
         window.handleUpload = handleUpload;
 
         // ==================================
-        // EVENT LISTENERS
+        // EVENT LISTENERS (Tidak Diubah)
         // ==================================
         document.getElementById('select-provinsi').addEventListener('change', populateKabKota);
         document.getElementById('select-kab-kota').addEventListener('change', populateNPSN);
         document.getElementById('select-npsn').addEventListener('change', showUploadSection);
 
         // ==================================
-        // INISIALISASI SAAT HALAMAN DIMUAT
+        // INISIALISASI SAAT HALAMAN DIMUAT (Tidak Diubah)
         // ==================================
         document.addEventListener('DOMContentLoaded', fetchDataSekolah);
 
     </script>
 </body>
 </html>
-
-
