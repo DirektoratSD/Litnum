@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
     <title>Pendampingan Litnum</title>
+    <!-- PERBAIKAN: Mengganti xintegrity menjadi integrity -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Pengaturan Dasar Halaman */
@@ -152,6 +153,13 @@
 
         .data-table tr:nth-child(even) {
             background-color: #f9f9f9;
+        }
+        
+        /* Gaya untuk sel tabel progres */
+        .data-table .progres-count {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
         }
 
         /* STYLING UNTUK FORM (di dalam Modal dan Filter) */
@@ -450,12 +458,15 @@
         <aside class="sidebar">
             <h2 id="sidebar-title">LITNUM (ADMIN)</h2>
             <ul class="sidebar-menu">
-                <li><a data-target="content-lokus" class="active">Data Lokus</a></li>
+                <!-- PENYESUAIAN: Progres menjadi default, Lokus tidak lagi default -->
+                <li><a data-target="content-progres" class="active">Progres</a></li>      
+                <li><a data-target="content-lokus">Data Lokus</a></li>
                 <li><a data-target="content-sekolah">Data Sekolah</a></li>
-                <!-- MODIFIKASI: Menu Manajemen User -->
                 <li><a data-target="content-manajemen-user">Manajemen User</a></li>
                 
-                <li><a data-target="content-input">Progres</a></li>      
+                <!-- BARU: Menu Database -->
+                <li><a data-target="content-database">Database</a></li>
+                
                 <li><a href="#" class="show-modal">Laporan</a></li>
                 
                 <li class="menu-separator">ROLE LAIN</li>
@@ -475,9 +486,43 @@
         <main class="main-content">
 
             <!-- ================================== -->
-            <!--   HALAMAN 1: DATA LOKUS (DEFAULT)  -->
+            <!--   HALAMAN 1: PROGRES (Implementasi Baru) -->
             <!-- ================================== -->
-            <div id="content-lokus" class="content-section active">
+            <div id="content-progres" class="content-section active">
+                <h1>Progres Pekerjaan (per Kab/Kota)</h1>
+                <p>Menampilkan jumlah form yang telah di-submit oleh petugas di setiap lokus (Kab/Kota).</p>
+                <p>Data diperbarui secara real-time.</p>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kab/Kota</th>
+                                <th>Provinsi</th>
+                                <th>FGD</th>
+                                <th>Wawancara Guru</th>
+                                <th>Observasi</th>
+                                <th>Wawancara Murid</th>
+                                <th>Laporan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progres-tbody">
+                            <tr>
+                                <td colspan="8" class="loading-placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i> Memuat data progres...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- Penutup #content-progres -->
+
+            <!-- ================================== -->
+            <!--   HALAMAN 2: DATA LOKUS -->
+            <!-- ================================== -->
+            <!-- PENYESUAIAN: class="active" dihapus -->
+            <div id="content-lokus" class="content-section">
                 <h1>Data Lokus Monitoring</h1>
                 <p>Data lokus sekolah yang akan di-monev oleh petugas. Gunakan filter di bawah untuk mencari data lokus.</p>
 
@@ -535,7 +580,7 @@
             </div> <!-- Penutup #content-lokus -->
 
             <!-- ================================== -->
-            <!--      HALAMAN 2: TABEL SEKOLAH      -->
+            <!--      HALAMAN 3: TABEL SEKOLAH      -->
             <!-- ================================== -->
             <div id="content-sekolah" class="content-section">
                 <h1>Data Master Sekolah</h1>
@@ -589,7 +634,7 @@
             </div> <!-- Penutup #content-sekolah -->
 
             <!-- ================================== -->
-            <!--   PENAMBAHAN: HALAMAN 3: MANAJEMEN USER -->
+            <!--   HALAMAN 4: MANAJEMEN USER -->
             <!-- ================================== -->
             <div id="content-manajemen-user" class="content-section">
                 <div class="header-actions">
@@ -622,14 +667,36 @@
                     </table>
                 </div>
             </div> <!-- Penutup #content-manajemen-user -->
-
-
-            <!-- Placeholder untuk menu lain -->
-            <div id="content-input" class="content-section">
-                <h1>Input Monev</h1>
-                <p>Konten untuk Input Monev akan ada di sini.</p>
-            </div>
             
+            <!-- ================================== -->
+            <!--   BARU: HALAMAN 5: DATABASE -->
+            <!-- ================================== -->
+            <div id="content-database" class="content-section">
+                <h1>Manajemen Database</h1>
+                <p>Fungsi untuk mengelola data master dan mereset progres. Gunakan dengan hati-hati.</p>
+
+                <!-- Reset Data Input -->
+                <div class="data-form" style="border-left: 4px solid #e74c3c; margin-top: 20px;">
+                    <h3>Reset Data Input</h3>
+                    <p>Ini akan <strong>MENGHAPUS SEMUA</strong> data input (FGD, Wawancara, Observasi, Laporan) dari database. Data 'sekolah' dan 'users' akan tetap ada.</p>
+                    <button id="btn-reset-data" class="form-submit-button" style="background-color: #e74c3c;">Reset Data Input Sekarang</button>
+                </div>
+
+                <!-- Restore Data Default -->
+                <div class="data-form" style="margin-top: 20px; border-left: 4px solid #f39c12;">
+                    <h3>Restore Data Default</h3>
+                    <p>Ini akan <strong>MENGHAPUS SEMUA</strong> data 'sekolah' dan 'users' yang ada, lalu mengisinya kembali dengan data default (sama seperti SetDatabase.html). Data input (FGD, Laporan, dll) TIDAK akan terhapus.</p>
+                    <button id="btn-restore-default" class="form-submit-button" style="background-color: #f39c12;">Restore Data Default 'Sekolah' & 'Users'</button>
+                </div>
+                
+                <!-- Info Backup Manual -->
+                <div class="data-form" style="margin-top: 20px; border-left: 4px solid #3498db;">
+                    <h3>Backup & Restore Manual</h3>
+                    <p>Fitur Backup (Export) dan Restore (Import) penuh tidak dapat dilakukan dari sisi klien (browser). Harap gunakan konsol Google Cloud Firebase untuk melakukan ekspor/impor data penuh.</p>
+                </div>
+            </div> <!-- Penutup #content-database -->
+            
+
         </main>
     </div>
 
@@ -759,7 +826,7 @@
         import { 
             getFirestore, collection, setLogLevel,
             onSnapshot, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs,
-            addDoc // Penambahan
+            addDoc 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // 2. Konfigurasi Firebase
@@ -771,6 +838,105 @@
             messagingSenderId: "233586560867",
             appId: "1:233586560867:web:2800372b3a62dde68a8d56"
         };
+        
+        // ========================================================
+        // BARU: DATA DEFAULT UNTUK FUNGSI RESTORE
+        // (Diambil dari SetDatabase.html)
+        // ========================================================
+        const dataSekolah = [
+            // Prov. Sumatera Utara
+            { npsn: '10210587', sekolah: 'UPT SD NEGERI 060804', provinsi: 'Prov. Sumatera Utara', kota: 'Kota Medan', petugas1: 'Asmaniar Sinaga', petugas2: 'Faujiah Marlina' },
+            { npsn: '10210176', sekolah: 'UPT SD NEGERI 066655', provinsi: 'Prov. Sumatera Utara', kota: 'Kota Medan', petugas1: 'Asmaniar Sinaga', petugas2: 'Faujiah Marlina' },
+            // Prov. Sumatera Barat
+            { npsn: '10304135', sekolah: 'SD NEGERI 38 SEBERANG PD. SELATAN', provinsi: 'Prov. Sumatera Barat', kota: 'Kota Padang', petugas1: 'Rahmat Hidayat', petugas2: 'Fakhriza Akbar' },
+            { npsn: '10304454', sekolah: 'SD NEGERI 06 PIAI TENGAH', provinsi: 'Prov. Sumatera Barat', kota: 'Kota Padang', petugas1: 'Rahmat Hidayat', petugas2: 'Fakhriza Akbar' },
+            // Prov. Lampung
+            { npsn: '10810488', sekolah: 'SDN 2 BANDAR DALAM', provinsi: 'Prov. Lampung', kota: 'Kab. Lampung Selatan', petugas1: 'Heri Fitriono', petugas2: 'Yanto Musthofa' },
+            { npsn: '10800301', sekolah: 'SDN 2 SUKAMARGA', provinsi: 'Prov. Lampung', kota: 'Kab. Lampung Selatan', petugas1: 'Heri Fitriono', petugas2: 'Yanto Musthofa' },
+            // Prov. Banten
+            { npsn: '20602929', sekolah: 'SD NEGERI KEDAUNG I', provinsi: 'Prov. Banten', kota: 'Kab. Tangerang', petugas1: 'Muhammad Noor Ginanjar Jaelani', petugas2: 'Billy Antoro' },
+            { npsn: '20603480', sekolah: 'SD NEGERI SETIA BHAKTI', provinsi: 'Prov. Banten', kota: 'Kab. Tangerang', petugas1: 'Muhammad Noor Ginanjar Jaelani', petugas2: 'Billy Antoro' },
+            // Prov. Jawa Barat - Kota Bogor
+            { npsn: '20238443', sekolah: 'SD NEGERI CILENDEK TIMUR 2', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bogor', petugas1: 'Lanny Anggraini', petugas2: 'Rossi Marinjani' },
+            { npsn: '20220537', sekolah: 'SD NEGERI SITU GEDE 1', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bogor', petugas1: 'Lanny Anggraini', petugas2: 'Rossi Marinjani' },
+            // Prov. Jawa Barat - Kota Bandung
+            { npsn: '20245797', sekolah: 'SDN 160 SUKALAKSANA', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bandung', petugas1: 'Ine Rahmawati', petugas2: 'Sofie Dewayani' },
+            { npsn: '20245731', sekolah: 'SDN 253 PANGGUNGSARI', provinsi: 'Prov. Jawa Barat', kota: 'Kota Bandung', petugas1: 'Ine Rahmawati', petugas2: 'Sofie Dewayani' },
+            // Prov. Jawa Barat - Kab. Bekasi
+            { npsn: '20245341', sekolah: 'SD NEGERI KARANG REJA 01', provinsi: 'Prov. Jawa Barat', kota: 'Kab. Bekasi', petugas1: 'Dwi Nurani', petugas2: 'Roosie Setiawan' },
+            { npsn: '20218584', sekolah: 'SD NEGERI SUKAMURNI 02', provinsi: 'Prov. Jawa Barat', kota: 'Kab. Bekasi', petugas1: 'Dwi Nurani', petugas2: 'Roosie Setiawan' },
+            // Prov. Jawa Tengah - Kab. Sukoharjo
+            { npsn: '20330782', sekolah: 'SD NEGERI WIRONANGGAN 02', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Sukoharjo', petugas1: 'Auwalia Ramadhani', petugas2: 'Riski' },
+            { npsn: '20310486', sekolah: 'SD NEGERI PUCANGAN 06', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Sukoharjo', petugas1: 'Auwalia Ramadhani', petugas2: 'Riski' },
+            // Prov. Jawa Tengah - Kab. Karanganyar
+            { npsn: '20312197', sekolah: 'SDN 06 TAWANGMANGU', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Karanganyar', petugas1: 'Anggia Sabrina', petugas2: 'Dewi Liyana Katili (081289933075)' },
+            { npsn: '20311911', sekolah: 'SDN 03 JATISUKO', provinsi: 'Prov. Jawa Tengah', kota: 'Kab. Karanganyar', petugas1: 'Anggia Sabrina', petugas2: 'Dewi Liyana Katili (081289933075)' },
+            // Prov. D.I. Yogyakarta
+            { npsn: '20402548', sekolah: 'SD GETAS II', provinsi: 'Prov. D.I. Yogyakarta', kota: 'Kab. Gunung Kidul', petugas1: 'Amala Sholiha', petugas2: 'Andry Novi' },
+            { npsn: '20401741', sekolah: 'SD SEMIN III SEMIN', provinsi: 'Prov. D.I. Yogyakarta', kota: 'Kab. Gunung Kidul', petugas1: 'Amala Sholiha', petugas2: 'Andry Novi' },
+            // Prov. Jawa Timur - Kota Surabaya
+            { npsn: '20533175', sekolah: 'SDN PEGIRIAN I / 47', provinsi: 'Prov. Jawa Timur', kota: 'Kota Surabaya', petugas1: 'R. Mitra Irianarya', petugas2: 'Dicky Susanto' },
+            { npsn: '20533538', sekolah: 'SDN KREMBANGAN SELATAN IX NO. 20', provinsi: 'Prov. Jawa Timur', kota: 'Kota Surabaya', petugas1: 'R. Mitra Irianarya', petugas2: 'Dicky Susanto' },
+            // Prov. Jawa Timur - Kab. Banyuwangi
+            { npsn: '20525398', sekolah: 'SDN 2 TEGALREJO', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Banyuwangi', petugas1: 'Enfira Yanuaristi', petugas2: 'Mita Hidayati (085921430783)' },
+            { npsn: '20525883', sekolah: 'SDN 8 SUMBERBERAS', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Banyuwangi', petugas1: 'Enfira Yanuaristi', petugas2: 'Mita Hidayati (085921430783)' },
+            // Prov. Nusa Tenggara Barat
+            { npsn: '50204433', sekolah: 'SD NEGERI 36 AMPENAN', provinsi: 'Prov. Nusa Tenggara Barat', kota: 'Kota Mataram', petugas1: 'Waluyo', petugas2: 'Bintang Permana (081310051985)' },
+            { npsn: '50204622', sekolah: 'SD NEGERI 23 MATARAM', provinsi: 'Prov. Nusa Tenggara Barat', kota: 'Kota Mataram', petugas1: 'Waluyo', petugas2: 'Bintang Permana (081310051985)' },
+            // Prov. Nusa Tenggara Timur
+            { npsn: '50306417', sekolah: 'SD NEGERI TO\'BATAN', provinsi: 'Prov. Nusa Tenggara Timur', kota: 'Kab. Kupang', petugas1: 'Citra Adi Pratiwi', petugas2: 'Namira Syahda' },
+            { npsn: '50300419', sekolah: 'SD INPRES FATUKNUTU', provinsi: 'Prov. Nusa Tenggara Timur', kota: 'Kab. Kupang', petugas1: 'Citra Adi Pratiwi', petugas2: 'Namira Syahda' },
+            // Prov. Kalimantan Barat
+            { npsn: '30101481', sekolah: 'SD NEGERI 9 SUNGAI AMBAWANG', provinsi: 'Prov. Kalimantan Barat', kota: 'Kab. Kuburaya', petugas1: 'Supriyatin', petugas2: 'Dewi Puji Lestari (081212509903)' },
+            { npsn: '30100783', sekolah: 'SD NEGERI 34 SUNGAI AMBAWANG', provinsi: 'Prov. Kalimantan Barat', kota: 'Kab. Kuburaya', petugas1: 'Supriyatin', petugas2: 'Dewi Puji Lestari (081212509903)' },
+            // Prov. Kalimantan Tengah
+            { npsn: '30203527', sekolah: 'SDN - 1 BANTURUNG', provinsi: 'Prov. Kalimantan Tengah', kota: 'Kota Palangka Raya', petugas1: 'Andi Havyana', petugas2: 'Astri Oktina Budianti (089663364467)' },
+            { npsn: '30203411', sekolah: 'SDN - 3 TANGKILING', provinsi: 'Prov. Kalimantan Tengah', kota: 'Kota Palangka Raya', petugas1: 'Andi Havyana', petugas2: 'Astri Oktina Budianti (089663364467)' },
+            // Prov. Sulawesi Selatan
+            { npsn: '40300273', sekolah: 'SDN 37 PANAIKANG', provinsi: 'Prov. Sulawesi Selatan', kota: 'Kab. Maros', petugas1: 'Abdul Halim Muharram', petugas2: 'Yohan Rubiyantoro' },
+            { npsn: '69858811', sekolah: 'SDN 245 CABBELLA', provinsi: 'Prov. Sulawesi Selatan', kota: 'Kab. Maros', petugas1: 'Abdul Halim Muharram', petugas2: 'Yohan Rubiyantoro' },
+            // Prov. Gorontalo
+            { npsn: '40501379', sekolah: 'SD NEGERI NO. 45 DUMBO RAYA', provinsi: 'Prov. Gorontalo', kota: 'Kota Gorontalo', petugas1: 'Noor Cahyo Kiki', petugas2: 'Irfandha Fatan (‪081311031067‬)' },
+            { npsn: '40501362', sekolah: 'SD NEGERI NO. 44 HULONTALANGI', provinsi: 'Prov. Gorontalo', kota: 'Kota Gorontalo', petugas1: 'Noor Cahyo Kiki', petugas2: 'Irfandha Fatan (‪081311031067‬)' },
+            // Prov. Papua
+            { npsn: '60301127', sekolah: 'SD NEGERI INPRES ARDIPURA I', provinsi: 'Prov. Papua', kota: 'Kota Jayapura', petugas1: 'Deni Komarudin (082126011609)', petugas2: 'Ronald Stevanus (081281225788)' },
+            { npsn: '60301130', sekolah: 'SD NEGERI INPRES BHAYANGKARA', provinsi: 'Prov. Papua', kota: 'Kota Jayapura', petugas1: 'Deni Komarudin (082126011609)', petugas2: 'Ronald Stevanus (081281225788)' },
+            // Prov. Jawa Timur - Kab. Malang
+            { npsn: '20518538', sekolah: 'SDN 2 LANDUNGSARI', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Malang', petugas1: 'Sri Widyowati Kinasih', petugas2: 'Wily Ariwiguna' },
+            { npsn: '20576079', sekolah: 'SD NEGERI 3 BANJAREJO', provinsi: 'Prov. Jawa Timur', kota: 'Kab. Malang', petugas1: 'Sri Widyowati Kinasih', petugas2: 'Wily Ariwiguna' },
+        ];
+        
+        // Buat daftar user dari data sekolah
+        const uniqueRegions = new Map();
+        dataSekolah.forEach(sekolah => {
+            const username = sekolah.kota.replace(/ /g, ''); // "Kota Medan" -> "KotaMedan"
+            if (!uniqueRegions.has(username)) {
+                uniqueRegions.set(username, {
+                    kota: sekolah.kota,
+                    provinsi: sekolah.provinsi
+                });
+            }
+        });
+        const dataUsers = [];
+        uniqueRegions.forEach((region, username) => {
+            dataUsers.push({
+                username: username,
+                password: "1234",
+                kota: region.kota,
+                provinsi: region.provinsi,
+                role: "petugas" // Tambahkan role default
+            });
+        });
+        dataUsers.push({
+            username: "Admin",
+            password: "Admin123",
+            kota: "ADMINISTRATOR",
+            provinsi: "ADMINISTRATOR",
+            role: "admin"
+        });
+        // ========================================================
+        // AKHIR DARI DATA DEFAULT
+        // ========================================================
 
         // 3. Inisialisasi Firebase
         let db;
@@ -786,6 +952,8 @@
         // --- Variabel Global untuk menyimpan data ---
         let allSekolahList = [];
         let allUsersList = [];
+        // BARU: Daftar koleksi data input
+        const dataCollections = ['fgd', 'wawancara_guru', 'observasi', 'wawancara_murid', 'laporan'];
 
         // --- Variabel Global untuk Modal ---
         const editSekolahModal = document.getElementById('modal-edit-sekolah');
@@ -845,6 +1013,19 @@
                 console.error("Error listening to users collection:", error);
             });
         }
+        
+        // BARU: Listener untuk semua koleksi data (FGD, Laporan, dll)
+        function setupDataListeners() {
+            dataCollections.forEach(colName => {
+                onSnapshot(collection(db, colName), (snapshot) => {
+                    console.log(`Data ${colName} diperbarui... Muat ulang progres.`);
+                    // Cukup panggil loadProgressData, tidak perlu panggil handleDataUpdate penuh
+                    loadProgressData();
+                }, (error) => {
+                    console.error(`Error listening to ${colName}:`, error);
+                });
+            });
+        }
 
         function handleDataUpdate() {
             // Cek jika filter-provinsi ada (mungkin belum di-load jika user belum login)
@@ -875,10 +1056,110 @@
             filterLokusTabel();
             filterSekolahTabel();
             renderUserTable(allUsersList); // Render tabel user
+            
+            // BARU: Muat ulang progres karena data user (lokus) mungkin berubah
+            loadProgressData();
         }
 
 
         // --- FUNGSI UNTUK MERENDER TABEL ---
+
+        // BARU: Fungsi untuk memuat dan merender tabel progres
+        async function loadProgressData() {
+            const progresTbody = document.getElementById('progres-tbody');
+            if (!progresTbody) return;
+
+            progresTbody.innerHTML = `<tr><td colspan="8" class="loading-placeholder"><i class="fas fa-spinner fa-spin"></i> Menghitung progres...</td></tr>`;
+
+            try {
+                // 1. Buat PETA NPSN -> KOTA (Ini adalah KUNCI perbaikan)
+                // Kita asumsikan allSekolahList sudah terisi dari onSnapshot
+                const npsnToKotaMap = new Map();
+                allSekolahList.forEach(sekolah => {
+                    if (sekolah.npsn) {
+                        npsnToKotaMap.set(sekolah.npsn, sekolah.kota);
+                    }
+                });
+
+                // 2. Dapatkan daftar lokus (Kab/Kota & Provinsi) dari data 'users' (petugas)
+                const lokusList = allUsersList
+                    .filter(u => u.role === 'petugas' || (u.kota && u.kota !== 'ADMINISTRATOR'))
+                    .map(u => ({ 
+                        kota: u.kota, 
+                        provinsi: u.provinsi || '-', 
+                        // Inisialisasi hitungan
+                        ...dataCollections.reduce((acc, col) => ({...acc, [col]: 0}), {}) 
+                    }));
+                
+                // Gunakan Map untuk pencarian cepat berdasarkan NAMA KOTA
+                const lokusMap = new Map(lokusList.map(l => [l.kota, l])); // Key: "Kota Medan"
+
+                // 3. Fetch semua data input dan hitung
+                const fetchPromises = dataCollections.map(async (colName) => {
+                    const colRef = collection(db, colName);
+                    const snapshot = await getDocs(colRef);
+                    snapshot.docs.forEach(doc => {
+                        const data = doc.data();
+                        
+                        // --- PERBAIKAN LOGIKA ---
+                        // A. Cari NPSN di dalam data. Nama fieldnya berbeda-beda di tiap form.
+                        const npsn = data.npsn || data.npsn_fgd || data.npsn_murid || data.npsn_obs || data.npsn_lpr;
+
+                        if (npsn) {
+                            // B. Cari 'kota' berdasarkan NPSN dari peta kita
+                            const kota = npsnToKotaMap.get(npsn); // Misal: "Kota Medan"
+                            
+                            // C. Jika 'kota' ditemukan di peta NPSN DAN ada di lokusMap, hitung
+                            if (kota && lokusMap.has(kota)) {
+                                lokusMap.get(kota)[colName]++;
+                            } else {
+                                // Log ini jika data NPSN ada tapi tidak ter-map ke lokus (misal: data lama)
+                                console.warn(`Data ${colName} (NPSN: ${npsn}, Kota: ${kota}) tidak ter-map ke lokus yg ada.`);
+                            }
+                        } else {
+                            // Log ini jika data tidak punya NPSN sama sekali (seharusnya tidak terjadi)
+                            console.warn(`Data ${colName} (doc ID: ${doc.id}) tidak memiliki field NPSN.`);
+                        }
+                        // --- AKHIR PERBAIKAN LOGIKA ---
+                    });
+                });
+
+                // Tunggu semua proses hitung selesai
+                await Promise.all(fetchPromises);
+
+                // 4. Render tabel
+                progresTbody.innerHTML = '';
+                let counter = 1;
+                
+                // Urutkan berdasarkan nama kota
+                const sortedLokus = [...lokusMap.values()].sort((a, b) => a.kota.localeCompare(b.kota));
+
+                sortedLokus.forEach((lokus) => {
+                    const row = `
+                        <tr>
+                            <td style="text-align: center;">${counter++}</td>
+                            <td>${lokus.kota}</td>
+                            <td>${lokus.provinsi}</td>
+                            <td class="progres-count">${lokus.fgd}</td>
+                            <td class="progres-count">${lokus.wawancara_guru}</td>
+                            <td class="progres-count">${lokus.observasi}</td>
+                            <td class="progres-count">${lokus.wawancara_murid}</td>
+                            <td class="progres-count">${lokus.laporan}</td>
+                        </tr>
+                    `;
+                    progresTbody.innerHTML += row;
+                });
+
+                if (lokusMap.size === 0) {
+                    progresTbody.innerHTML = `<tr><td colspan="8" class="loading-placeholder">Tidak ada data lokus petugas ditemukan.</td></tr>`;
+                }
+
+            } catch (error) {
+                console.error("Gagal memuat data progres:", error);
+                progresTbody.innerHTML = `<tr><td colspan="8" class="loading-placeholder" style="color: #e74c3c;">Gagal memuat progres: ${error.message}</td></tr>`;
+            }
+        }
+
 
         function renderMasterSekolah(sekolahList) {
             const tbody = document.getElementById('sekolah-tbody');
@@ -1148,6 +1429,91 @@
             });
         }
 
+        // --- BARU: FUNGSI UNTUK MANAJEMEN DATABASE ---
+
+        /**
+         * Menampilkan modal konfirmasi untuk mereset data input.
+         */
+        function showResetDataConfirm() {
+            deleteConfirmTitle.textContent = "Konfirmasi Reset Data Input";
+            deleteConfirmMessage.innerHTML = "YAKIN ingin menghapus <strong>SEMUA</strong> data input (FGD, Laporan, Observasi, Wawancara)?<br>Tindakan ini tidak bisa dibatalkan.";
+            activeDeleteFunction = resetAllInputData; // Fungsi yang akan dijalankan jika dikonfirmasi
+            deleteConfirmModal.classList.add('active');
+        }
+
+        /**
+         * Menampilkan modal konfirmasi untuk me-restore data default.
+         */
+        function showRestoreDefaultConfirm() {
+            deleteConfirmTitle.textContent = "Konfirmasi Restore Default";
+            deleteConfirmMessage.innerHTML = "YAKIN ingin me-restore data 'sekolah' dan 'users'?<br>Ini akan <strong>MENGHAPUS</strong> data 'sekolah' dan 'users' yang ada sekarang dan menggantinya dengan data default.";
+            activeDeleteFunction = restoreDefaultData; // Fungsi yang akan dijalankan jika dikonfirmasi
+            deleteConfirmModal.classList.add('active');
+        }
+        
+        /**
+         * Menghapus semua dokumen dari koleksi data input.
+         */
+        async function resetAllInputData() {
+            console.log("Mulai mereset data input...");
+            
+            for (const colName of dataCollections) {
+                const batch = writeBatch(db);
+                const q = query(collection(db, colName));
+                const snapshot = await getDocs(q);
+                if(snapshot.empty) {
+                    console.log(`Koleksi ${colName} sudah kosong.`);
+                    continue;
+                }
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+                console.log(`Koleksi ${colName} berhasil direset.`);
+            }
+            console.log("Semua data input telah direset.");
+        }
+
+        /**
+         * Menghapus koleksi 'sekolah' dan 'users' lalu mengisinya dengan data default.
+         */
+        async function restoreDefaultData() {
+            console.log("Mulai restore data default...");
+            const collectionsToWipe = ['sekolah', 'users'];
+            
+            // 1. Hapus data lama
+            for (const colName of collectionsToWipe) {
+                const batch = writeBatch(db);
+                const q = query(collection(db, colName));
+                const snapshot = await getDocs(q);
+                if(!snapshot.empty) {
+                     snapshot.docs.forEach(doc => {
+                        batch.delete(doc.ref);
+                    });
+                    await batch.commit();
+                    console.log(`Koleksi ${colName} lama berhasil dihapus.`);
+                }
+            }
+            
+            // 2. Tulis data baru (logic from SetDatabase.html)
+            const batch = writeBatch(db);
+
+            // Add 'sekolah' data
+            dataSekolah.forEach(sekolah => {
+                const sekolahDocRef = doc(db, "sekolah", sekolah.npsn);
+                batch.set(sekolahDocRef, sekolah);
+            });
+
+            // Add 'users' data
+            dataUsers.forEach(user => {
+                const userDocRef = doc(db, "users", user.username);
+                batch.set(userDocRef, user);
+            });
+
+            await batch.commit();
+            console.log("Data default 'sekolah' dan 'users' berhasil direstore.");
+        }
+
 
         // --- FUNGSI INISIALISASI UTAMA (Dipanggil setelah login) ---
         async function initializeAdminPanel() {
@@ -1198,6 +1564,7 @@
             // Setup listener real-time dan filter
             setupSekolahListener();
             setupUsersListener();
+            setupDataListeners(); // BARU: untuk progres
             setupLokusFilterListeners();
             setupSekolahFilterListeners();
 
@@ -1362,11 +1729,18 @@
                         await updateDoc(doc(db, "users", docId), data);
                     } else {
                         // Mode Tambah
+                        // Cek dulu apakah username sudah ada
+                        const q = query(collection(db, "users"), where("username", "==", data.username));
+                        const snapshot = await getDocs(q);
+                        if (!snapshot.empty) {
+                            throw new Error(`Username '${data.username}' sudah digunakan.`);
+                        }
                         await addDoc(collection(db, "users"), data);
                     }
                     userModal.classList.remove('active');
                 } catch (error) {
                     console.error("Error saving user:", error);
+                    alert("Gagal menyimpan: " + error.message); // Gunakan alert di sini karena ini error modal
                 } finally {
                     btnSaveUser.disabled = false;
                     btnSaveUser.textContent = "Simpan";
@@ -1383,6 +1757,14 @@
                 passwordInput.value = '';
                 loginError.style.display = 'none';
             });
+            
+            // 8. BARU: Event listener untuk tombol DATABASE
+            document.getElementById('btn-reset-data').addEventListener('click', showResetDataConfirm);
+            document.getElementById('btn-restore-default').addEventListener('click', showRestoreDefaultConfirm);
+            
+            // BARU: Panggil pemuat progres saat inisialisasi
+            // Pemuatan progres dipanggil di dalam handleDataUpdate() jadi tidak perlu dipanggil di sini lagi
+            // loadProgressData(); 
         }
 
         // --- LOGIKA UTAMA SCRIPT (Fokus pada Login) ---
