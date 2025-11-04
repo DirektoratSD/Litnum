@@ -12,6 +12,9 @@
     
     <!-- Memuat font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- PERUBAHAN: Menambahkan library QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <!-- Konfigurasi kustom Tailwind untuk font Inter -->
     <script>
@@ -48,6 +51,10 @@
         }
         .table-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #64748b;
+        }
+        /* Style tambahan untuk QR Code di modal */
+        #qrcode > img {
+            margin: auto; /* Memastikan gambar QR code ter-center */
         }
     </style>
 </head>
@@ -150,7 +157,7 @@
                     </h3>
                 </a>
 
-                <!-- PERUBAHAN: Link Petugas diubah untuk membuka modal password -->
+                <!-- Link Petugas diubah untuk membuka modal password -->
                 <a href="javascript:void(0)" id="openPetugasPasswordBtn" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-teal-100 text-teal-600 mb-2 transition-all duration-300 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-110">
@@ -164,8 +171,8 @@
                     </h3>
                 </a>
 
-                <!-- ===== CARD BARU DITAMBAHKAN DI SINI ===== -->
-                <a href="Sekolah.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                <!-- PERUBAHAN: Link Sekolah diubah untuk membuka modal link -->
+                <a href="javascript:void(0)" id="openSekolahModalBtn" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 text-blue-600 mb-2 transition-all duration-300 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110">
                         <!-- Ikon Gedung Sekolah (disesuaikan w-10 h-10) -->
@@ -494,6 +501,48 @@
         </div>
     </div>
 
+    <!-- ===== MODAL UNTUK LINK SEKOLAH (BARU) ===== -->
+    <div id="sekolahModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <!-- Kotak Modal -->
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto overflow-hidden">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">Bagikan Tautan Sekolah</h3>
+                <button id="closeSekolahModalBtn" class="text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Body Modal (Konten) -->
+            <div class="p-6 space-y-4 text-center">
+                <p class="text-slate-600">Bagikan tautan ini kepada sekolah untuk akses langsung.</p>
+                
+                <!-- QR Code -->
+                <div id="qrcode" class="flex justify-center items-center p-4 bg-white border rounded-lg w-56 h-56 mx-auto overflow-hidden">
+                    <!-- QR Code akan digenerate di sini oleh JS -->
+                </div>
+                
+                <!-- Link Input -->
+                <div class="flex">
+                    <input type="text" id="sekolahLink" value="Memuat..." readonly class="w-full p-2 border rounded-l-lg bg-slate-100 text-slate-700 text-sm truncate">
+                    <button id="copyLinkBtn" title="Salin Tautan" class="flex-shrink-0 px-4 py-2 bg-blue-600 text-white rounded-r-lg font-semibold transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        <!-- Ikon Salin/Copy -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5-.124m7.5 10.375h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.436-3.41-8.16-7.8-8.6C7.688 2.088 4.5 4.799 4.5 8.25v10.5A2.25 2.25 0 0 0 6.75 21h6.75c.621 0 1.125-.504 1.125-1.125V17.25Z" />
+                        </svg>
+                    </button>
+                </div>
+                <p id="copyMessage" class="text-green-500 text-sm !-mt-0 h-4 hidden">Tautan disalin!</p>
+                
+                <!-- Tombol Aksi -->
+                <a href="Sekolah.html" class="block w-full px-4 py-3 bg-teal-600 text-white rounded-lg font-semibold text-center transition-colors duration-200 hover:bg-teal-700">
+                    Lanjut ke Halaman Sekolah
+                </a>
+            </div>
+        </div>
+    </div>
+
 
     <!-- ===== JAVASCRIPT ===== -->
     
@@ -576,13 +625,22 @@
             const closeSoonModalBtn = document.getElementById('closeSoonModalBtn');
             const openSoonModalBtns = document.querySelectorAll('.open-soon-modal-btn');
 
-            // --- Elemen Modal Password Petugas (BARU) ---
+            // --- Elemen Modal Password Petugas ---
             const openPetugasPasswordBtn = document.getElementById('openPetugasPasswordBtn');
             const petugasPasswordModal = document.getElementById('petugasPasswordModal');
             const closePetugasPasswordModalBtn = document.getElementById('closePetugasPasswordModalBtn');
             const petugasPasswordForm = document.getElementById('petugasPasswordForm');
             const petugasPasswordInput = document.getElementById('petugasPasswordInput');
             const petugasPasswordError = document.getElementById('petugasPasswordError');
+
+            // --- Elemen Modal Link Sekolah (BARU) ---
+            const openSekolahModalBtn = document.getElementById('openSekolahModalBtn');
+            const sekolahModal = document.getElementById('sekolahModal');
+            const closeSekolahModalBtn = document.getElementById('closeSekolahModalBtn');
+            const qrcodeDiv = document.getElementById('qrcode');
+            const copyLinkBtn = document.getElementById('copyLinkBtn');
+            const sekolahLinkInput = document.getElementById('sekolahLink');
+            const copyMessage = document.getElementById('copyMessage');
 
             // --- Elemen Filter dan Tabel ---
             const provinsiFilter = document.getElementById('provinsiFilter');
@@ -629,8 +687,6 @@
             // Event Listener Modal Data
             openDataModalBtn.addEventListener('click', () => {
                 openModal(dataModal);
-                // Tidak perlu panggil initializeFilters() di sini, 
-                // karena onSnapshot akan memanggilnya saat data siap
             });
             closeDataModalBtn.addEventListener('click', () => closeModal(dataModal));
             dataModal.addEventListener('click', (e) => {
@@ -688,7 +744,7 @@
                 if (e.target === soonModal) closeModal(soonModal); 
             });
 
-            // --- Event Listener Modal Password Petugas (BARU) ---
+            // --- Event Listener Modal Password Petugas ---
             const resetPetugasModal = () => {
                 petugasPasswordInput.value = ''; // Selalu kosongkan password
                 petugasPasswordError.classList.add('hidden'); // Sembunyikan error
@@ -708,20 +764,92 @@
                 }
             });
 
-            // Event listener untuk form submit
             petugasPasswordForm.addEventListener('submit', (e) => {
-                e.preventDefault(); // Mencegah halaman reload saat submit form
+                e.preventDefault(); 
                 const password = petugasPasswordInput.value;
 
                 if (password === '1234') {
-                    // Jika password benar
-                    resetPetugasModal(); // Reset dan tutup modal
-                    window.location.href = 'Form.html'; // Arahkan ke halaman Petugas
+                    resetPetugasModal(); 
+                    window.location.href = 'Form.html'; 
                 } else {
-                    // Jika password salah
-                    petugasPasswordError.classList.remove('hidden'); // Tampilkan pesan error
-                    petugasPasswordInput.value = ''; // Kosongkan input
-                    petugasPasswordInput.focus(); // Fokus kembali ke input
+                    petugasPasswordError.classList.remove('hidden'); 
+                    petugasPasswordInput.value = ''; 
+                    petugasPasswordInput.focus(); 
+                }
+            });
+
+
+            // --- Event Listener Modal Link Sekolah (BARU) ---
+            const resetSekolahModal = () => {
+                closeModal(sekolahModal);
+                setTimeout(() => { // Tunda pembersihan agar tidak berkedip
+                    qrcodeDiv.innerHTML = ''; 
+                    copyMessage.classList.add('hidden');
+                    copyMessage.classList.remove('text-red-500');
+                    copyMessage.classList.add('text-green-500');
+                }, 300);
+            };
+
+            openSekolahModalBtn.addEventListener('click', () => {
+                // Buat URL absolut ke Sekolah.html
+                const linkToSekolah = new URL('Sekolah.html', window.location.href).href;
+                sekolahLinkInput.value = linkToSekolah;
+                
+                openModal(sekolahModal);
+                
+                // Generate QR Code
+                qrcodeDiv.innerHTML = ''; // Bersihkan QR code sebelumnya
+                if (typeof QRCode !== 'undefined') {
+                    try {
+                        new QRCode(qrcodeDiv, {
+                            text: linkToSekolah,
+                            width: 224, // 14rem (w-56)
+                            height: 224, // 14rem (h-56)
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    } catch(e) {
+                        console.error("Gagal membuat QR Code:", e);
+                        qrcodeDiv.innerHTML = "<p class='text-red-500 text-sm'>Gagal memuat QR Code.</p>";
+                    }
+                } else {
+                    console.warn("QRCode library (qrcode.min.js) belum dimuat.");
+                    qrcodeDiv.innerHTML = "<p class='text-sm text-slate-500'>Memuat QR Code...</p>";
+                }
+            });
+
+            closeSekolahModalBtn.addEventListener('click', resetSekolahModal);
+
+            sekolahModal.addEventListener('click', (e) => {
+                if (e.target === sekolahModal) {
+                    resetSekolahModal();
+                }
+            });
+
+            copyLinkBtn.addEventListener('click', () => {
+                sekolahLinkInput.select(); // Pilih teks di input
+                sekolahLinkInput.setSelectionRange(0, 99999); // Untuk perangkat mobile
+                
+                try {
+                    // Gunakan document.execCommand untuk kompatibilitas
+                    document.execCommand('copy'); 
+                    
+                    copyMessage.textContent = 'Tautan disalin!';
+                    copyMessage.classList.remove('hidden');
+                    copyMessage.classList.remove('text-red-500');
+                    copyMessage.classList.add('text-green-500');
+                    
+                    setTimeout(() => {
+                        copyMessage.classList.add('hidden');
+                    }, 2000); // Sembunyikan pesan setelah 2 detik
+                        
+                } catch (err) {
+                    console.error('Gagal menyalin tautan:', err);
+                    copyMessage.textContent = 'Gagal menyalin.';
+                    copyMessage.classList.remove('hidden');
+                    copyMessage.classList.remove('text-green-500');
+                    copyMessage.classList.add('text-red-500');
                 }
             });
 
@@ -863,3 +991,4 @@
 
 </body>
 </html>
+
