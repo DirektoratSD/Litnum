@@ -8,6 +8,7 @@
     <!-- PERBAIKAN: Mengganti xintegrity menjadi integrity -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* ... (CSS tidak berubah) ... */
         /* Pengaturan Dasar Halaman */
         body, html {
             margin: 0;
@@ -208,6 +209,7 @@
         .form-group input[type="email"],
         .form-group input[type="tel"],
         .form-group input[type="password"],
+        .form-group input[type="file"],
         .form-group textarea,
         .form-group select {
             width: 100%;
@@ -216,6 +218,11 @@
             border-radius: 5px;
             box-sizing: border-box;
             background-color: #fff;
+        }
+        /* BARU: Styling untuk input file */
+        .form-group input[type="file"] {
+            padding: 5px;
+            background-color: #f9f9f9;
         }
         .form-group textarea {
             height: 100px;
@@ -669,31 +676,46 @@
             </div> <!-- Penutup #content-manajemen-user -->
             
             <!-- ================================== -->
-            <!--   BARU: HALAMAN 5: DATABASE -->
+            <!--   BARU: HALAMAN 5: DATABASE (REVISI) -->
             <!-- ================================== -->
             <div id="content-database" class="content-section">
                 <h1>Manajemen Database</h1>
-                <p>Fungsi untuk mengelola data master dan mereset progres. Gunakan dengan hati-hati.</p>
+                <p>Fungsi untuk backup, restore, dan reset data. Gunakan dengan hati-hati.</p>
 
-                <!-- Reset Data Input -->
+                <!-- BARU: Backup (Export) ke JSON -->
+                <div class="data-form" style="border-left: 4px solid #3498db; margin-top: 20px;">
+                    <h3>1. Backup (Export) ke JSON</h3>
+                    <p>Klik tombol ini untuk mengunduh <strong>SEMUA</strong> data (Sekolah, Users, FGD, Laporan, dll.) sebagai satu file JSON.</p>
+                    <button id="btn-backup-json" class="form-submit-button" style="background-color: #3498db;">
+                        <i class="fas fa-download"></i> Export Semua Data ke JSON
+                    </button>
+                </div>
+
+                <!-- BARU: Restore (Import) dari JSON -->
                 <div class="data-form" style="border-left: 4px solid #e74c3c; margin-top: 20px;">
-                    <h3>Reset Data Input</h3>
-                    <p>Ini akan <strong>MENGHAPUS SEMUA</strong> data input (FGD, Wawancara, Observasi, Laporan) dari database. Data 'sekolah' dan 'users' akan tetap ada.</p>
-                    <button id="btn-reset-data" class="form-submit-button" style="background-color: #e74c3c;">Reset Data Input Sekarang</button>
+                    <h3>2. Restore (Import) dari JSON</h3>
+                    <p><strong>PERINGATAN:</strong> Tindakan ini akan <strong>MENGHAPUS SEMUA DATA</strong> di database dan menggantinya dengan data dari file backup JSON.</p>
+                    <div class="form-group">
+                        <label for="restore-file-input">Pilih file backup (.json)</label>
+                        <input type="file" id="restore-file-input" accept=".json">
+                    </div>
+                    <button id="btn-restore-json" class="form-submit-button" style="background-color: #e74c3c;" disabled>
+                        <i class="fas fa-upload"></i> Restore dari JSON
+                    </button>
                 </div>
 
-                <!-- Restore Data Default -->
+                <!-- Fungsi Reset (Sebelumnya) -->
                 <div class="data-form" style="margin-top: 20px; border-left: 4px solid #f39c12;">
-                    <h3>Restore Data Default</h3>
-                    <p>Ini akan <strong>MENGHAPUS SEMUA</strong> data 'sekolah' dan 'users' yang ada, lalu mengisinya kembali dengan data default (sama seperti SetDatabase.html). Data input (FGD, Laporan, dll) TIDAK akan terhapus.</p>
-                    <button id="btn-restore-default" class="form-submit-button" style="background-color: #f39c12;">Restore Data Default 'Sekolah' & 'Users'</button>
+                    <h3>3. Fungsi Reset (Tindakan Destruktif)</h3>
+                    <p>Gunakan tombol ini untuk reset cepat tanpa file backup.</p>
+                    <button id="btn-reset-data" class="form-submit-button" style="background-color: #e67e22; margin-right: 10px;">
+                        <i class="fas fa-eraser"></i> Reset Data Input Saja
+                    </button>
+                    <button id="btn-restore-default" class="form-submit-button" style="background-color: #f1c40f; color: #333;">
+                        <i class="fas fa-sync-alt"></i> Restore Default 'Sekolah' & 'Users'
+                    </button>
                 </div>
-                
-                <!-- Info Backup Manual -->
-                <div class="data-form" style="margin-top: 20px; border-left: 4px solid #3498db;">
-                    <h3>Backup & Restore Manual</h3>
-                    <p>Fitur Backup (Export) dan Restore (Import) penuh tidak dapat dilakukan dari sisi klien (browser). Harap gunakan konsol Google Cloud Firebase untuk melakukan ekspor/impor data penuh.</p>
-                </div>
+
             </div> <!-- Penutup #content-database -->
             
 
@@ -814,6 +836,20 @@
             </div>
         </div>
     </div>
+    
+    <!-- ==================
+         BARU: MODAL ALERT
+    =================== -->
+    <div id="modal-alert" class="modal-overlay">
+        <div class="modal-content modal-sm">
+            <button class="modal-close">&times;</button>
+            <h3 id="alert-title">Informasi</h3>
+            <p id="alert-message">Operasi berhasil.</p>
+            <div class="form-action-buttons" style="justify-content: center;">
+                <button type="button" class="form-submit-button modal-close">Tutup</button>
+            </div>
+        </div>
+    </div>
 
 
     <!-- ==================
@@ -840,8 +876,7 @@
         };
         
         // ========================================================
-        // BARU: DATA DEFAULT UNTUK FUNGSI RESTORE
-        // (Diambil dari SetDatabase.html)
+        // DATA DEFAULT UNTUK FUNGSI RESTORE
         // ========================================================
         const dataSekolah = [
             // Prov. Sumatera Utara
@@ -952,7 +987,10 @@
         // --- Variabel Global untuk menyimpan data ---
         let allSekolahList = [];
         let allUsersList = [];
-        // BARU: Daftar koleksi data input
+        
+        // BARU: Daftar SEMUA koleksi yang akan di-backup/restore
+        const allCollections = ['sekolah', 'users', 'fgd', 'wawancara_guru', 'observasi', 'wawancara_murid', 'laporan'];
+        // Daftar koleksi data input saja (untuk reset)
         const dataCollections = ['fgd', 'wawancara_guru', 'observasi', 'wawancara_murid', 'laporan'];
 
         // --- Variabel Global untuk Modal ---
@@ -964,6 +1002,11 @@
         const deleteConfirmTitle = document.getElementById('delete-confirm-title');
         const deleteConfirmMessage = document.getElementById('delete-confirm-message');
         const deleteConfirmButton = document.getElementById('delete-confirm-button');
+        
+        // BARU: Modal Alert Sederhana
+        const alertModal = document.getElementById('modal-alert');
+        const alertTitle = document.getElementById('alert-title');
+        const alertMessage = document.getElementById('alert-message');
         
         const userModal = document.getElementById('modal-user');
         const userForm = document.getElementById('form-user');
@@ -989,7 +1032,7 @@
             onSnapshot(sekolahCol, (snapshot) => {
                 console.log("Data sekolah diperbarui (onSnapshot)...");
                 allSekolahList = snapshot.docs.map(doc => ({ 
-                    id: doc.id,
+                    id: doc.id, // Simpan ID dokumen
                     ...doc.data() 
                 }));
                 allSekolahList.sort((a, b) => (a.provinsi || "").localeCompare(b.provinsi || "") || (a.kota || "").localeCompare(b.kota || ""));
@@ -1004,7 +1047,7 @@
             onSnapshot(usersCol, (snapshot) => {
                 console.log("Data users diperbarui (onSnapshot)...");
                 allUsersList = snapshot.docs.map(doc => ({ 
-                    id: doc.id,
+                    id: doc.id, // Simpan ID dokumen
                     ...doc.data() 
                 }));
                 allUsersList.sort((a, b) => (a.username || "").localeCompare(b.username || ""));
@@ -1014,7 +1057,7 @@
             });
         }
         
-        // BARU: Listener untuk semua koleksi data (FGD, Laporan, dll)
+        // Listener untuk semua koleksi data (FGD, Laporan, dll)
         function setupDataListeners() {
             dataCollections.forEach(colName => {
                 onSnapshot(collection(db, colName), (snapshot) => {
@@ -1057,14 +1100,14 @@
             filterSekolahTabel();
             renderUserTable(allUsersList); // Render tabel user
             
-            // BARU: Muat ulang progres karena data user (lokus) mungkin berubah
+            // Muat ulang progres karena data user (lokus) mungkin berubah
             loadProgressData();
         }
 
 
         // --- FUNGSI UNTUK MERENDER TABEL ---
 
-        // BARU: Fungsi untuk memuat dan merender tabel progres
+        // Fungsi untuk memuat dan merender tabel progres
         async function loadProgressData() {
             const progresTbody = document.getElementById('progres-tbody');
             if (!progresTbody) return;
@@ -1073,7 +1116,6 @@
 
             try {
                 // 1. Buat PETA NPSN -> KOTA (Ini adalah KUNCI perbaikan)
-                // Kita asumsikan allSekolahList sudah terisi dari onSnapshot
                 const npsnToKotaMap = new Map();
                 allSekolahList.forEach(sekolah => {
                     if (sekolah.npsn) {
@@ -1087,12 +1129,10 @@
                     .map(u => ({ 
                         kota: u.kota, 
                         provinsi: u.provinsi || '-', 
-                        // Inisialisasi hitungan
                         ...dataCollections.reduce((acc, col) => ({...acc, [col]: 0}), {}) 
                     }));
                 
-                // Gunakan Map untuk pencarian cepat berdasarkan NAMA KOTA
-                const lokusMap = new Map(lokusList.map(l => [l.kota, l])); // Key: "Kota Medan"
+                const lokusMap = new Map(lokusList.map(l => [l.kota, l])); 
 
                 // 3. Fetch semua data input dan hitung
                 const fetchPromises = dataCollections.map(async (colName) => {
@@ -1101,37 +1141,56 @@
                     snapshot.docs.forEach(doc => {
                         const data = doc.data();
                         
-                        // --- PERBAIKAN LOGIKA ---
-                        // A. Cari NPSN di dalam data. Nama fieldnya berbeda-beda di tiap form.
-                        const npsn = data.npsn || data.npsn_fgd || data.npsn_murid || data.npsn_obs || data.npsn_lpr;
+                        // --- PERBAIKAN LOGIKA v4 (Lebih Robust/Tangguh) ---
+                        // Kita akan mencari NPSN. Kita prioritaskan field yang benar,
+                        // tapi kita juga cek field NPSN lain (npsn, npsn_fgd)
+                        // untuk menangani data yang mungkin salah tersimpan dari versi form sebelumnya.
+                        let npsn = null;
+                        
+                        switch(colName) {
+                            case 'fgd':
+                                // Prioritas: npsn_fgd. Fallback: npsn.
+                                npsn = data.npsn_fgd || data.npsn;
+                                break;
+                            case 'wawancara_guru':
+                                // Prioritas: npsn. Fallback: npsn_fgd.
+                                npsn = data.npsn || data.npsn_fgd;
+                                break;
+                            case 'observasi':
+                                // Prioritas: npsn_obs. Fallback: npsn, npsn_fgd.
+                                npsn = data.npsn_obs || data.npsn || data.npsn_fgd;
+                                break;
+                            case 'wawancara_murid':
+                                // Prioritas: npsn_murid. Fallback: npsn, npsn_fgd.
+                                npsn = data.npsn_murid || data.npsn || data.npsn_fgd;
+                                break;
+                            case 'laporan':
+                                // Prioritas: npsn_lpr. Fallback: npsn, npsn_fgd.
+                                npsn = data.npsn_lpr || data.npsn || data.npsn_fgd;
+                                break;
+                        }
+                        // --- AKHIR PERBAIKAN LOGIKA v4 ---
 
                         if (npsn) {
-                            // B. Cari 'kota' berdasarkan NPSN dari peta kita
-                            const kota = npsnToKotaMap.get(npsn); // Misal: "Kota Medan"
+                            const kota = npsnToKotaMap.get(npsn); 
                             
-                            // C. Jika 'kota' ditemukan di peta NPSN DAN ada di lokusMap, hitung
                             if (kota && lokusMap.has(kota)) {
                                 lokusMap.get(kota)[colName]++;
                             } else {
-                                // Log ini jika data NPSN ada tapi tidak ter-map ke lokus (misal: data lama)
                                 console.warn(`Data ${colName} (NPSN: ${npsn}, Kota: ${kota}) tidak ter-map ke lokus yg ada.`);
                             }
                         } else {
-                            // Log ini jika data tidak punya NPSN sama sekali (seharusnya tidak terjadi)
-                            console.warn(`Data ${colName} (doc ID: ${doc.id}) tidak memiliki field NPSN.`);
+                            console.warn(`Data ${colName} (doc ID: ${doc.id}) tidak memiliki field NPSN yang sesuai.`);
                         }
-                        // --- AKHIR PERBAIKAN LOGIKA ---
                     });
                 });
 
-                // Tunggu semua proses hitung selesai
                 await Promise.all(fetchPromises);
 
                 // 4. Render tabel
                 progresTbody.innerHTML = '';
                 let counter = 1;
                 
-                // Urutkan berdasarkan nama kota
                 const sortedLokus = [...lokusMap.values()].sort((a, b) => a.kota.localeCompare(b.kota));
 
                 sortedLokus.forEach((lokus) => {
@@ -1429,14 +1488,189 @@
             });
         }
 
-        // --- BARU: FUNGSI UNTUK MANAJEMEN DATABASE ---
+        // --- BARU: FUNGSI MODAL ALERT ---
+        function showAlertModal(message, isError = false) {
+            alertTitle.textContent = isError ? "Error" : "Informasi";
+            alertMessage.textContent = message;
+            alertModal.classList.add('active');
+        }
+
+        // --- BARU: FUNGSI UNTUK MANAJEMEN DATABASE (BACKUP/RESTORE) ---
+
+        /**
+         * Helper untuk menghapus semua dokumen dari koleksi.
+         */
+        async function deleteAllFromCollection(colName, batch) {
+            const q = query(collection(db, colName));
+            const snapshot = await getDocs(q);
+            if(snapshot.empty) {
+                console.log(`Koleksi ${colName} sudah kosong (saat delete).`);
+                return batch; // Kembalikan batch yang sama
+            }
+            snapshot.docs.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+            console.log(`Menyiapkan penghapusan ${snapshot.size} dokumen dari ${colName}.`);
+            return batch;
+        }
+
+
+        /**
+         * Menjalankan Backup (Export) ke JSON.
+         */
+        async function handleBackupJson() {
+            const btn = document.getElementById('btn-backup-json');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengekspor...';
+
+            try {
+                const backupData = {};
+                
+                for (const colName of allCollections) {
+                    const snapshot = await getDocs(collection(db, colName));
+                    const docsArray = snapshot.docs.map(doc => ({ 
+                        id: doc.id, // Simpan ID asli dokumen
+                        ...doc.data() 
+                    }));
+                    backupData[colName] = docsArray;
+                    console.log(`Berhasil backup ${docsArray.length} dokumen dari ${colName}.`);
+                }
+
+                const jsonString = JSON.stringify(backupData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup-litnum-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showAlertModal("Backup data JSON berhasil diunduh.");
+
+            } catch (error) {
+                console.error("Gagal melakukan backup:", error);
+                showAlertModal(`Gagal melakukan backup: ${error.message}`, true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-download"></i> Export Semua Data ke JSON';
+            }
+        }
+        
+        /**
+         * Menjalankan Restore (Import) dari JSON.
+         */
+        function handleRestoreJson() {
+            const fileInput = document.getElementById('restore-file-input');
+            const file = fileInput.files[0];
+            if (!file) {
+                showAlertModal("Silakan pilih file backup JSON terlebih dahulu.", true);
+                return;
+            }
+
+            // Tampilkan konfirmasi
+            deleteConfirmTitle.textContent = "Konfirmasi Restore";
+            deleteConfirmMessage.innerHTML = `YAKIN ingin me-restore dari file <strong>${file.name}</strong>?<br><strong>SEMUA DATA SAAT INI</strong> (Sekolah, Users, FGD, Laporan, dll.) akan <strong>DIHAPUS</strong> dan diganti.`;
+            
+            // Atur fungsi yang akan dijalankan saat dikonfirmasi
+            activeDeleteFunction = async () => {
+                const btn = document.getElementById('btn-restore-json');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Merestore...';
+
+                try {
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        let backupData;
+                        try {
+                            backupData = JSON.parse(e.target.result);
+                        } catch (parseError) {
+                            throw new Error(`File JSON tidak valid: ${parseError.message}`);
+                        }
+
+                        // 1. Hapus semua data lama
+                        console.log("Menghapus data lama...");
+                        let deleteBatch = writeBatch(db);
+                        for (const colName of allCollections) {
+                            deleteBatch = await deleteAllFromCollection(colName, deleteBatch);
+                        }
+                        await deleteBatch.commit();
+                        console.log("Semua data lama berhasil dihapus.");
+
+                        // 2. Tulis data baru dari JSON
+                        console.log("Menulis data baru dari backup...");
+                        const collectionsInJson = Object.keys(backupData);
+                        
+                        for (const colName of collectionsInJson) {
+                            if (!allCollections.includes(colName)) {
+                                console.warn(`Koleksi "${colName}" di JSON tidak dikenali, akan dilewati.`);
+                                continue;
+                            }
+
+                            const documents = backupData[colName];
+                            if (!Array.isArray(documents)) {
+                                console.warn(`Data untuk "${colName}" bukan array, akan dilewati.`);
+                                continue;
+                            }
+
+                            let writeBatch = writeBatch(db);
+                            let count = 0;
+                            
+                            for (const docData of documents) {
+                                if (!docData.id) {
+                                    console.warn(`Dokumen di ${colName} tidak memiliki ID, akan dilewati:`, docData);
+                                    continue;
+                                }
+                                
+                                const docId = docData.id;
+                                delete docData.id; // Hapus ID dari data yg akan ditulis
+                                
+                                const docRef = doc(db, colName, docId); // Gunakan ID asli
+                                writeBatch.set(docRef, docData);
+                                
+                                count++;
+                                // Firestore batch limit adalah 500 operasi
+                                if (count % 499 === 0) {
+                                    await writeBatch.commit();
+                                    writeBatch = writeBatch(db); // Mulai batch baru
+                                }
+                            }
+                            await writeBatch.commit(); // Commit sisa batch
+                            console.log(`Berhasil merestore ${documents.length} dokumen ke ${colName}.`);
+                        }
+                        
+                        showAlertModal("Restore data dari JSON berhasil.");
+                        fileInput.value = ""; // Reset input file
+                    };
+                    
+                    reader.onerror = () => {
+                        throw new Error("Gagal membaca file.");
+                    };
+                    
+                    reader.readAsText(file);
+
+                } catch (error) {
+                    console.error("Gagal melakukan restore:", error);
+                    showAlertModal(`Gagal melakukan restore: ${error.message}`, true);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-upload"></i> Restore dari JSON';
+                }
+            };
+            
+            // Tampilkan modal konfirmasi
+            deleteConfirmModal.classList.add('active');
+        }
+
 
         /**
          * Menampilkan modal konfirmasi untuk mereset data input.
          */
         function showResetDataConfirm() {
             deleteConfirmTitle.textContent = "Konfirmasi Reset Data Input";
-            deleteConfirmMessage.innerHTML = "YAKIN ingin menghapus <strong>SEMUA</strong> data input (FGD, Laporan, Observasi, Wawancara)?<br>Tindakan ini tidak bisa dibatalkan.";
+            deleteConfirmMessage.innerHTML = "YAKIN ingin menghapus <strong>SEMUA</strong> data input (FGD, Laporan, Observasi, Wawancara)?<br>Data 'sekolah' dan 'users' TIDAK akan terhapus.";
             activeDeleteFunction = resetAllInputData; // Fungsi yang akan dijalankan jika dikonfirmasi
             deleteConfirmModal.classList.add('active');
         }
@@ -1458,20 +1692,13 @@
             console.log("Mulai mereset data input...");
             
             for (const colName of dataCollections) {
-                const batch = writeBatch(db);
-                const q = query(collection(db, colName));
-                const snapshot = await getDocs(q);
-                if(snapshot.empty) {
-                    console.log(`Koleksi ${colName} sudah kosong.`);
-                    continue;
-                }
-                snapshot.docs.forEach(doc => {
-                    batch.delete(doc.ref);
-                });
+                let batch = writeBatch(db);
+                batch = await deleteAllFromCollection(colName, batch);
                 await batch.commit();
                 console.log(`Koleksi ${colName} berhasil direset.`);
             }
             console.log("Semua data input telah direset.");
+            showAlertModal("Semua data input (FGD, Laporan, dll) berhasil direset.");
         }
 
         /**
@@ -1483,16 +1710,10 @@
             
             // 1. Hapus data lama
             for (const colName of collectionsToWipe) {
-                const batch = writeBatch(db);
-                const q = query(collection(db, colName));
-                const snapshot = await getDocs(q);
-                if(!snapshot.empty) {
-                     snapshot.docs.forEach(doc => {
-                        batch.delete(doc.ref);
-                    });
-                    await batch.commit();
-                    console.log(`Koleksi ${colName} lama berhasil dihapus.`);
-                }
+                let batch = writeBatch(db);
+                batch = await deleteAllFromCollection(colName, batch);
+                await batch.commit();
+                console.log(`Koleksi ${colName} lama berhasil dihapus.`);
             }
             
             // 2. Tulis data baru (logic from SetDatabase.html)
@@ -1512,6 +1733,7 @@
 
             await batch.commit();
             console.log("Data default 'sekolah' dan 'users' berhasil direstore.");
+            showAlertModal("Data 'sekolah' dan 'users' berhasil dikembalikan ke default.");
         }
 
 
@@ -1522,6 +1744,8 @@
             const menuLinks = document.querySelectorAll('.sidebar-menu a');
             const contentSections = document.querySelectorAll('.content-section');
             const soonModal = document.getElementById('soon-modal');
+            
+            // BARU: Tambahkan modal alert ke daftar
             const allModalCloseButtons = document.querySelectorAll('.modal-close, .modal-overlay'); 
             
             // Listener untuk link menu
@@ -1549,14 +1773,15 @@
             // Listener untuk menutup SEMUA modal
             allModalCloseButtons.forEach(button => {
                 button.addEventListener('click', function(event) {
-                    if (event.target === this || event.target.classList.contains('modal-close')) {
+                    // Hanya tutup jika mengklik overlay atau tombol close
+                    if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close')) {
                         document.querySelectorAll('.modal-overlay').forEach(modal => {
                             // Jangan tutup modal login
                             if (modal.id !== 'modal-login') {
                                 modal.classList.remove('active');
                             }
                         });
-                        activeDeleteFunction = null;
+                        activeDeleteFunction = null; // Batalkan aksi hapus jika modal ditutup
                     }
                 });
             });
@@ -1564,7 +1789,7 @@
             // Setup listener real-time dan filter
             setupSekolahListener();
             setupUsersListener();
-            setupDataListeners(); // BARU: untuk progres
+            setupDataListeners(); // untuk progres
             setupLokusFilterListeners();
             setupSekolahFilterListeners();
 
@@ -1600,14 +1825,16 @@
             deleteConfirmButton.addEventListener('click', async () => {
                 if (typeof activeDeleteFunction === 'function') {
                     deleteConfirmButton.disabled = true;
-                    deleteConfirmButton.textContent = "Menghapus...";
+                    deleteConfirmButton.textContent = "Memproses...";
                     try {
                         await activeDeleteFunction();
                     } catch (error) {
-                        console.error("Error saat menjalankan aksi hapus: ", error);
+                        console.error("Error saat menjalankan aksi: ", error);
+                        // Tampilkan error di modal alert baru
+                        showAlertModal(`Aksi gagal: ${error.message}`, true);
                     } finally {
                         deleteConfirmButton.disabled = false;
-                        deleteConfirmButton.textContent = "Ya, Hapus";
+                        deleteConfirmButton.textContent = "Ya, Hapus"; // Reset teks
                         deleteConfirmModal.classList.remove('active');
                         activeDeleteFunction = null;
                     }
@@ -1640,6 +1867,7 @@
                         deleteConfirmMessage.textContent = `Apakah Anda yakin ingin menghapus sekolah: ${school.sekolah} (${school.npsn})?`;
                         activeDeleteFunction = async () => {
                             await deleteDoc(doc(db, "sekolah", docId));
+                            showAlertModal("Sekolah berhasil dihapus.");
                         };
                         deleteConfirmModal.classList.add('active');
                     }
@@ -1664,6 +1892,7 @@
                             batch.delete(doc(db, "users", userInLokus.id));
                         }
                         await batch.commit();
+                        showAlertModal("Lokus berhasil dihapus.");
                     };
                     deleteConfirmModal.classList.add('active');
                 }
@@ -1703,6 +1932,7 @@
                         deleteConfirmMessage.textContent = `Apakah Anda yakin ingin menghapus user: ${user.username}?`;
                         activeDeleteFunction = async () => {
                             await deleteDoc(doc(db, "users", docId));
+                            showAlertModal("User berhasil dihapus.");
                         };
                         deleteConfirmModal.classList.add('active');
                     }
@@ -1740,7 +1970,7 @@
                     userModal.classList.remove('active');
                 } catch (error) {
                     console.error("Error saving user:", error);
-                    alert("Gagal menyimpan: " + error.message); // Gunakan alert di sini karena ini error modal
+                    showAlertModal(error.message, true); // Tampilkan error di modal
                 } finally {
                     btnSaveUser.disabled = false;
                     btnSaveUser.textContent = "Simpan";
@@ -1762,9 +1992,18 @@
             document.getElementById('btn-reset-data').addEventListener('click', showResetDataConfirm);
             document.getElementById('btn-restore-default').addEventListener('click', showRestoreDefaultConfirm);
             
-            // BARU: Panggil pemuat progres saat inisialisasi
-            // Pemuatan progres dipanggil di dalam handleDataUpdate() jadi tidak perlu dipanggil di sini lagi
-            // loadProgressData(); 
+            // BARU: Listener untuk Backup/Restore JSON
+            document.getElementById('btn-backup-json').addEventListener('click', handleBackupJson);
+            document.getElementById('btn-restore-json').addEventListener('click', handleRestoreJson);
+            document.getElementById('restore-file-input').addEventListener('change', (e) => {
+                const btn = document.getElementById('btn-restore-json');
+                if (e.target.files.length > 0) {
+                    btn.disabled = false;
+                } else {
+                    btn.disabled = true;
+                }
+            });
+
         }
 
         // --- LOGIKA UTAMA SCRIPT (Fokus pada Login) ---
@@ -1841,4 +2080,3 @@
 
 </body>
 </html>
-
