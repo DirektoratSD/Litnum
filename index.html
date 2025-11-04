@@ -150,7 +150,8 @@
                     </h3>
                 </a>
 
-                <a href="Form.html" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                <!-- PERUBAHAN: Link Petugas diubah untuk membuka modal password -->
+                <a href="javascript:void(0)" id="openPetugasPasswordBtn" class="group relative flex flex-col items-center justify-center w-56 h-56 rounded-full bg-white shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
                     <!-- Ikon Bulat -->
                     <div class="flex items-center justify-center w-20 h-20 rounded-full bg-teal-100 text-teal-600 mb-2 transition-all duration-300 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
@@ -468,10 +469,30 @@
         </div>
     </div>
 
-    <!-- 
-      PERUBAHAN 3:
-      - Modal Password telah dihapus seluruhnya dari HTML.
-    -->
+    <!-- ===== MODAL UNTUK PASSWORD PETUGAS (BARU) ===== -->
+    <div id="petugasPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <!-- Kotak Modal -->
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-auto overflow-hidden">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">Password Petugas</h3>
+                <button id="closePetugasPasswordModalBtn" class="text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Body Modal (Form) -->
+            <form id="petugasPasswordForm" class="p-6">
+                <label for="petugasPasswordInput" class="block text-sm font-medium text-slate-700 mb-2">Masukkan Password:</label>
+                <input type="password" id="petugasPasswordInput" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" autocomplete="current-password">
+                <p id="petugasPasswordError" class="text-red-500 text-sm mt-2 hidden">Password salah. Silakan coba lagi.</p>
+                <button type="submit" class="mt-6 w-full px-4 py-2 bg-teal-600 text-white rounded-lg font-semibold transition-colors duration-200 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                    Masuk
+                </button>
+            </form>
+        </div>
+    </div>
 
 
     <!-- ===== JAVASCRIPT ===== -->
@@ -555,10 +576,13 @@
             const closeSoonModalBtn = document.getElementById('closeSoonModalBtn');
             const openSoonModalBtns = document.querySelectorAll('.open-soon-modal-btn');
 
-            // --- PERUBAHAN 7: Menghapus semua elemen modal password ---
-            // const passwordModal = ... // Dihapus
-            // const closePasswordModalBtn = ... // Dihapus
-            // ...dan seterusnya...
+            // --- Elemen Modal Password Petugas (BARU) ---
+            const openPetugasPasswordBtn = document.getElementById('openPetugasPasswordBtn');
+            const petugasPasswordModal = document.getElementById('petugasPasswordModal');
+            const closePetugasPasswordModalBtn = document.getElementById('closePetugasPasswordModalBtn');
+            const petugasPasswordForm = document.getElementById('petugasPasswordForm');
+            const petugasPasswordInput = document.getElementById('petugasPasswordInput');
+            const petugasPasswordError = document.getElementById('petugasPasswordError');
 
             // --- Elemen Filter dan Tabel ---
             const provinsiFilter = document.getElementById('provinsiFilter');
@@ -664,15 +688,47 @@
                 if (e.target === soonModal) closeModal(soonModal); 
             });
 
-            // --- PERUBAHAN 8: Menghapus semua event listener modal password ---
-            // openAdminPasswordBtn.addEventListener(...) // Dihapus
-            // ...dan seterusnya...
+            // --- Event Listener Modal Password Petugas (BARU) ---
+            const resetPetugasModal = () => {
+                petugasPasswordInput.value = ''; // Selalu kosongkan password
+                petugasPasswordError.classList.add('hidden'); // Sembunyikan error
+                closeModal(petugasPasswordModal); // Tutup modal
+            };
+
+            openPetugasPasswordBtn.addEventListener('click', () => {
+                openModal(petugasPasswordModal);
+                petugasPasswordInput.focus(); // Langsung fokus ke input
+            });
+            
+            closePetugasPasswordModalBtn.addEventListener('click', resetPetugasModal);
+            
+            petugasPasswordModal.addEventListener('click', (e) => {
+                if (e.target === petugasPasswordModal) {
+                    resetPetugasModal();
+                }
+            });
+
+            // Event listener untuk form submit
+            petugasPasswordForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Mencegah halaman reload saat submit form
+                const password = petugasPasswordInput.value;
+
+                if (password === '1234') {
+                    // Jika password benar
+                    resetPetugasModal(); // Reset dan tutup modal
+                    window.location.href = 'Form.html'; // Arahkan ke halaman Petugas
+                } else {
+                    // Jika password salah
+                    petugasPasswordError.classList.remove('hidden'); // Tampilkan pesan error
+                    petugasPasswordInput.value = ''; // Kosongkan input
+                    petugasPasswordInput.focus(); // Fokus kembali ke input
+                }
+            });
 
 
             // --- FUNGSI TABEL DAN FILTER ---
 
             // Fungsi untuk mengisi tabel dengan data
-            // PERUBAHAN 9: Mengganti parameter 'data' menjadi 'allSekolahList'
             function populateTable(data) {
                 tableBody.innerHTML = ''; 
                 
@@ -707,7 +763,6 @@
             let currentSekolah = 'semua';
 
             // 1. Isi Dropdown Provinsi
-            // PERUBAHAN 10: Menggunakan 'allSekolahList'
             function populateProvinsiFilter() {
                 const provinsi = ['semua', ...new Set(allSekolahList.map(item => item.provinsi).sort())];
                 provinsiFilter.innerHTML = '';
@@ -722,7 +777,6 @@
             }
 
             // 2. Isi Dropdown Sekolah (berdasarkan provinsi)
-            // PERUBAHAN 11: Menggunakan 'allSekolahList'
             function populateSekolahFilter(provinsi) {
                 sekolahFilter.innerHTML = '';
                 let sekolahList = [];
@@ -745,7 +799,6 @@
             }
 
             // 3. Terapkan Filter ke Tabel
-            // PERUBAHAN 12: Menggunakan 'allSekolahList'
             function applyFilters() {
                 let filteredData = allSekolahList;
 
