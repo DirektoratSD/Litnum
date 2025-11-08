@@ -1072,6 +1072,7 @@
                     case 'program':
                         return data.npsn_program || data.npsn; 
                     default:
+                        // Menangani 'program_sekolah' dan default
                         return data.npsn;
                 }
             }
@@ -1464,8 +1465,15 @@
                 createSubmissionListener('observasi', observasiSubmissions);
                 createSubmissionListener('wawancara_murid', muridSubmissions);
                 createSubmissionListener('laporan', laporanSubmissions);
-                createSubmissionListener('program', programSubmissions); // BARU
+                
                 // =============================================
+                // === PERBAIKAN DI SINI ===
+                // =============================================
+                // Sebelumnya: createSubmissionListener('program', programSubmissions);
+                // Diperbaiki menjadi:
+                createSubmissionListener('program_sekolah', programSubmissions); // DISESUAIKAN
+                // =============================================
+
 
             } else {
                  console.error("Koneksi database (db) tidak tersedia.");
