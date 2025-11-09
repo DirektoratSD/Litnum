@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
+    <title>Halaman Supervisi - Pendampingan Litnum</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Pengaturan Dasar Halaman */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100%;
+            background-color: #f4f7f6;
+        }
+
+        /* Kontainer Utama (Flexbox) */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sembunyikan app container by default */
+        #app-container {
+            display: none;
+        }
+
+        /* Sidebar (Menu Samping) */
+        .sidebar {
+            width: 240px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+
+        .sidebar-menu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #bdc3c7;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+
+        /* Konten Utama */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .main-content h1 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        /* Kontainer untuk setiap halaman/konten */
+        .content-section {
+            display: none; /* Semua disembunyikan by default */
+        }
+        .content-section.active {
+            display: block; /* Yang aktif akan ditampilkan */
+        }
+
+        /* Filter Kontainer */
+        .filter-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+        .filter-container .form-group {
+            margin-bottom: 0;
+        }
+        .filter-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+            font-size: 0.875rem;
+        }
+        .filter-container select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        .filter-container select:disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        /* Card Hasil Input */
+        .result-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .result-card-header {
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+        }
+        .result-card-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .result-card-header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .result-card-body {
+            padding: 24px;
+            space-y: 16px;
+        }
+        .result-question {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        .result-answer {
+            font-size: 0.875rem;
+            color: #4b5563;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            white-space: pre-wrap; /* Jaga format newline */
+            word-wrap: break-word;
+        }
+        .result-answer.empty {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Tabel Observasi */
+        .observasi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        .observasi-table th, .observasi-table td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.875rem;
+            vertical-align: top;
+        }
+        .observasi-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        .observasi-table .check-icon {
+            text-align: center;
+            font-size: 1.25rem;
+        }
+        .observasi-table .check-icon .fa-check-circle {
+            color: #10b981; /* green-500 */
+        }
+        .observasi-table .check-icon .fa-times-circle {
+            color: #ef4444; /* red-500 */
+        }
+        .observasi-table .check-icon .fa-circle-question {
+            color: #a1a1aa; /* zinc-400 */
+        }
+        .observasi-table .foto-preview {
+            width: 100px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+
+        /* GAYA MODAL (Copy dari Admin.html) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-content.modal-lg {
+            max-width: 700px;
+        }
+        .modal-content.modal-xl {
+            max-width: 1100px; /* 6xl */
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .modal-content p {
+            color: #34495e;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .modal-content .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 15px;
+            display: none;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            font-weight: bold;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .modal-close:hover {
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        .form-submit-button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .form-submit-button:hover {
+            background-color: #34495e;
+        }
+        .form-submit-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .form-action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .btn-cancel {
+            background-color: #7f8c8d;
+        }
+        .btn-cancel:hover {
+            background-color: #95a5a6;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- ==================
+         MODAL LOGIN (ADMIN/SUPERVISOR)
+    =================== -->
+    <div id="modal-login" class="modal-overlay active">
+        <div class="modal-content modal-lg">
+            <h3>Login Supervisor</h3>
+            <p>Halaman ini memerlukan hak akses Admin/Supervisor.</p>
+            
+            <form id="login-form" class="data-form">
+                <div class="form-group">
+                    <label for="username-input">Username</label>
+                    <input type="text" id="username-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-input">Password</label>
+                    <input type="password" id="password-input" required>
+                </div>
+                <button type="submit" id="login-button" class="form-submit-button" style="width: 100%;">Login</button>
+                <p id="login-error" class="error-message">Username atau password salah.</p>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="app-container" id="app-container">
+        
+        <!-- ==================
+             SIDEBAR (MENU)
+        =================== -->
+        <aside class="sidebar">
+            <h2 id="sidebar-title">SUPERVISI</h2>
+            <ul class="sidebar-menu">
+                <li><a data-target="content-fgd" class="active"><i class="fas fa-users fa-fw mr-2"></i>FGD</a></li>      
+                <li><a data-target="content-observasi"><i class="fas fa-search fa-fw mr-2"></i>Observasi</a></li>
+                <li><a data-target="content-wawancara-guru"><i class="fas fa-chalkboard-user fa-fw mr-2"></i>Wawancara Guru</a></li>
+                <li><a data-target="content-wawancara-murid"><i class="fas fa-children fa-fw mr-2"></i>Wawancara Murid</a></li>
+                <li><a data-target="content-laporan"><i class="fas fa-file-invoice fa-fw mr-2"></i>Laporan</a></li>
+                
+                <li class="menu-separator" style="margin-top: 20px; padding-left: 15px; font-size: 0.9em; color: #7f8c8d; font-weight: bold;">SEKOLAH</li>
+                <!-- Link ini akan mentrigger modal, bukan pindah section -->
+                <li><a id="show-program-modal" class="cursor-pointer"><i class="fas fa-tasks fa-fw mr-2"></i>Program</a></li>
+
+                <li class="menu-separator" style="margin-top: 30px;">
+                    <a href="#" id="logout-button" style="background-color: #c0392b; color: white;">
+                        <i class="fas fa-sign-out-alt fa-fw mr-2"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- ==================
+             KONTEN UTAMA
+        =================== -->
+        <main class="main-content">
+
+            <!-- ================================== -->
+            <!--   HALAMAN 1: FGD -->
+            <!-- ================================== -->
+            <div id="content-fgd" class="content-section active">
+                <h1>Hasil Input: FGD</h1>
+                <p>Pilih sekolah untuk melihat hasil input FGD yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-fgd">Provinsi</label>
+                        <select id="filter-provinsi-fgd" data-target-kab="filter-kabkota-fgd" data-target-npsn="filter-npsn-fgd" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-fgd">Kab/Kota</label>
+                        <select id="filter-kabkota-fgd" data-target-npsn="filter-npsn-fgd" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-fgd">NPSN / Sekolah</label>
+                        <select id="filter-npsn-fgd" data-collection="fgd" data-container="fgd-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="fgd-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+
+            <!-- ================================== -->
+            <!--   HALAMAN 2: OBSERVASI -->
+            <!-- ================================== -->
+            <div id="content-observasi" class="content-section">
+                <h1>Hasil Input: Observasi</h1>
+                <p>Pilih sekolah untuk melihat hasil input Observasi yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-obs">Provinsi</label>
+                        <select id="filter-provinsi-obs" data-target-kab="filter-kabkota-obs" data-target-npsn="filter-npsn-obs" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-obs">Kab/Kota</label>
+                        <select id="filter-kabkota-obs" data-target-npsn="filter-npsn-obs" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-obs">NPSN / Sekolah</label>
+                        <select id="filter-npsn-obs" data-collection="observasi" data-container="observasi-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="observasi-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+            
+            <!-- ================================== -->
+            <!--   HALAMAN 3: WAWANCARA GURU -->
+            <!-- ================================== -->
+            <div id="content-wawancara-guru" class="content-section">
+                <h1>Hasil Input: Wawancara Guru</h1>
+                <p>Pilih sekolah untuk melihat hasil input Wawancara Guru yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-wg">Provinsi</label>
+                        <select id="filter-provinsi-wg" data-target-kab="filter-kabkota-wg" data-target-npsn="filter-npsn-wg" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-wg">Kab/Kota</label>
+                        <select id="filter-kabkota-wg" data-target-npsn="filter-npsn-wg" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-wg">NPSN / Sekolah</label>
+                        <select id="filter-npsn-wg" data-collection="wawancara_guru" data-container="wg-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="wg-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+
+            <!-- ================================== -->
+            <!--   HALAMAN 4: WAWANCARA MURID -->
+            <!-- ================================== -->
+            <div id="content-wawancara-murid" class="content-section">
+                <h1>Hasil Input: Wawancara Murid</h1>
+                <p>Pilih sekolah untuk melihat hasil input Wawancara Murid yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-wm">Provinsi</label>
+                        <select id="filter-provinsi-wm" data-target-kab="filter-kabkota-wm" data-target-npsn="filter-npsn-wm" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-wm">Kab/Kota</label>
+                        <select id="filter-kabkota-wm" data-target-npsn="filter-npsn-wm" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-wm">NPSN / Sekolah</label>
+                        <select id="filter-npsn-wm" data-collection="wawancara_murid" data-container="wm-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="wm-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+            
+            <!-- ================================== -->
+            <!--   HALAMAN 5: LAPORAN -->
+            <!-- ================================== -->
+            <div id="content-laporan" class="content-section">
+                <h1>Hasil Input: Laporan</h1>
+                <p>Pilih sekolah untuk melihat hasil input Laporan Pendampingan yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-lpr">Provinsi</label>
+                        <select id="filter-provinsi-lpr" data-target-kab="filter-kabkota-lpr" data-target-npsn="filter-npsn-lpr" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-lpr">Kab/Kota</label>
+                        <select id="filter-kabkota-lpr" data-target-npsn="filter-npsn-lpr" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-lpr">NPSN / Sekolah</label>
+                        <select id="filter-npsn-lpr" data-collection="laporan" data-container="laporan-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="laporan-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ==================
+         MODAL PREVIEW PROGRAM
+    =================== -->
+    <div id="program-preview-modal" class="modal-overlay">
+        <div class="modal-content modal-xl">
+            <button class="modal-close">&times;</button>
+            <h3>Preview Program Sekolah</h3>
+            
+            <!-- Filter di dalam Modal -->
+            <div class="filter-container flex-shrink-0">
+                <div class="form-group">
+                    <label for="filter-provinsi-program">Provinsi</label>
+                    <select id="filter-provinsi-program" data-target-kab="filter-kabkota-program" data-target-npsn="filter-npsn-program" class="filter-provinsi">
+                        <option value="">Semua Provinsi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-kabkota-program">Kab/Kota</label>
+                    <select id="filter-kabkota-program" data-target-npsn="filter-npsn-program" class="filter-kabkota" disabled>
+                        <option value="">Semua Kab/Kota</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-npsn-program">NPSN / Sekolah</label>
+                    <select id="filter-npsn-program" class="filter-npsn" disabled>
+                        <option value="">Pilih Sekolah</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Kontainer Iframe -->
+            <div id="program-iframe-container" class="mt-4 flex-grow border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                <p id="program-status-message" class="text-gray-500">Pilih sekolah untuk melihat preview program.</p>
+                <iframe id="program-iframe" src="about:blank" class="w-full h-full hidden" frameborder="0"></iframe>
+            </div>
+
+            <!-- Link cadangan -->
+            <a id="program-fallback-link" href="#" target="_blank" class="text-blue-600 hover:underline text-center mt-2 hidden">
+                Tidak bisa memuat preview? Buka di tab baru <i class="fas fa-external-link-alt fa-xs"></i>
+            </a>
+
+        </div>
+    </div>
+    
+    <!-- ==================
+         MODAL ALERT (UNTUK ERROR/SUKSES)
+    =================== -->
+    <div id="modal-alert" class="modal-overlay">
+        <div class="modal-content modal-lg">
+            <button class="modal-close">&times;</button>
+            <h3 id="alert-title">Informasi</h3>
+            <p id="alert-message">Operasi berhasil.</p>
+            <div class="form-action-buttons" style="justify-content: center;">
+                <button type="button" class="form-submit-button modal-close">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================
+         JAVASCRIPT
+    =================== -->
+
+    <script type="module">
+        // 1. Impor modul Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getFirestore, collection, setLogLevel,
+            onSnapshot, doc, getDoc, query, where, getDocs
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 2. Konfigurasi Firebase (Diambil dari file Anda)
+        const firebaseConfig = {
+          apiKey: "AIzaSyAi_-eBHTWJVa-xHkKgrCKZkAgzlzNCccA",
+          authDomain: "direktorat-sd.firebaseapp.com",
+          projectId: "direktorat-sd",
+          storageBucket: "direktorat-sd.firebasestorage.app",
+          messagingSenderId: "215819821063",
+          appId: "1:215819821063:web:4bdb7f127acbc1cfde4aa2"
+        };
+        
+        // 3. Inisialisasi Firebase
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            setLogLevel('debug');
+            console.log("Firebase berhasil diinisialisasi untuk Supervisi.html.");
+        } catch (e) {
+            console.error("Error inisialisasi Firebase:", e);
+        }
+
+        // --- Variabel Global ---
+        let allSekolahList = [];
+        let allUsersList = [];
+        
+        // --- Elemen UI Global ---
+        const modalLogin = document.getElementById('modal-login');
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        const loginError = document.getElementById('login-error');
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const appContainer = document.getElementById('app-container');
+        
+        const alertModal = document.getElementById('modal-alert');
+        const alertTitle = document.getElementById('alert-title');
+        const alertMessage = document.getElementById('alert-message');
+        
+        const programPreviewModal = document.getElementById('program-preview-modal');
+        const programNpsnFilter = document.getElementById('filter-npsn-program');
+        const programIframe = document.getElementById('program-iframe');
+        const programStatusMessage = document.getElementById('program-status-message');
+        const programFallbackLink = document.getElementById('program-fallback-link');
+
+        // --- Koleksi Data (untuk pencarian NPSN) ---
+        // Peta ini akan memetakan nama koleksi ke field NPSN yang benar
+        const npsnFieldMap = new Map([
+            ['fgd', 'npsn_fgd'],
+            ['wawancara_guru', 'npsn'],
+            ['observasi', 'npsn_obs'],
+            ['wawancara_murid', 'npsn_murid'],
+            ['laporan', 'npsn_lpr']
+        ]);
+
+        // ===================================
+        // FUNGSI UTAMA
+        // ===================================
+
+        /**
+         * Inisialisasi utama setelah DOM dimuat.
+         */
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!db) {
+                showAlertModal("Koneksi ke database gagal. Cek konsol.", true);
+                return;
+            }
+            // Tambahkan listener ke form login
+            loginForm.addEventListener('submit', handleLogin);
+            
+            // Mulai ambil data
+            try {
+                [allSekolahList, allUsersList] = await Promise.all([
+                    fetchCollection('sekolah'),
+                    fetchCollection('users')
+                ]);
+                
+                // Urutkan sekolah untuk filter
+                allSekolahList.sort((a, b) => (a.provinsi || "").localeCompare(b.provinsi || "") || (a.kota || "").localeCompare(b.kota || ""));
+
+                // Isi filter di modal login
+                populateProvinsiFilter(allUsersList, document.getElementById('login-provinsi'), true);
+
+            } catch (error) {
+                console.error("Gagal memuat data awal:", error);
+                loginError.textContent = "Gagal memuat data awal. Cek konsol.";
+                loginError.style.display = 'block';
+            }
+        });
+
+        /**
+         * Mengambil semua data dari koleksi.
+         */
+        async function fetchCollection(collectionName) {
+            const snapshot = await getDocs(collection(db, collectionName));
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+
+        /**
+         * Menangani submit form login.
+         */
+        async function handleLogin(e) {
+            e.preventDefault();
+            loginButton.disabled = true;
+            loginButton.textContent = "Mencoba Login...";
+            loginError.style.display = 'none';
+
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            try {
+                const q = query(collection(db, "users"), where("username", "==", username));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    throw new Error("Username atau password salah.");
+                }
+
+                let userFound = false;
+                let isAuthorized = false; // Admin atau Supervisor
+
+                querySnapshot.forEach(doc => {
+                    const user = doc.data();
+                    if (user.password === password) {
+                        userFound = true;
+                        // Kita anggap Supervisor adalah 'admin'
+                        if (user.role === 'admin' || user.role === 'supervisor') {
+                            isAuthorized = true;
+                        }
+                    }
+                });
+
+                if (!userFound) {
+                    throw new Error("Username atau password salah.");
+                }
+                if (!isAuthorized) {
+                    throw new Error("Login berhasil, namun Anda bukan 'admin' or 'supervisor'.");
+                }
+
+                // Jika lolos semua:
+                modalLogin.classList.remove('active');
+                appContainer.style.display = 'flex'; // Tampilkan konten
+                initializePanel(); // Panggil inisialisasi panel
+
+            } catch (error) {
+                console.error("Login gagal:", error);
+                loginError.textContent = error.message;
+                loginError.style.display = 'block';
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        }
+        
+        /**
+         * Inisialisasi Panel Supervisor setelah login berhasil.
+         */
+        function initializePanel() {
+            // Setup Navigasi Sidebar
+            const menuLinks = document.querySelectorAll('.sidebar-menu a[data-target]');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    
+                    menuLinks.forEach(ml => ml.classList.remove('active'));
+                    contentSections.forEach(cs => cs.classList.remove('active'));
+                    
+                    link.classList.add('active');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Setup tombol Logout
+            document.getElementById('logout-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                appContainer.style.display = 'none';
+                modalLogin.classList.add('active');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                loginError.style.display = 'none';
+            });
+            
+            // Setup Modal Program
+            document.getElementById('show-program-modal').addEventListener('click', (e) => {
+                e.preventDefault();
+                programPreviewModal.classList.add('active');
+            });
+            
+            // Setup penutup modal
+            document.querySelectorAll('.modal-close, .modal-overlay').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close')) {
+                        document.querySelectorAll('.modal-overlay').forEach(modal => {
+                            if (modal.id !== 'modal-login') {
+                                modal.classList.remove('active');
+                                // Reset iframe program jika modal ditutup
+                                if (modal.id === 'program-preview-modal') {
+                                    programIframe.src = "about:blank";
+                                    programStatusMessage.textContent = "Pilih sekolah untuk melihat preview program.";
+                                    programStatusMessage.classList.remove('hidden');
+                                    programIframe.classList.add('hidden');
+                                    programFallbackLink.classList.add('hidden');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Isi semua filter dropdown di panel
+            const allProvinsiFilters = document.querySelectorAll('.filter-provinsi');
+            allProvinsiFilters.forEach(select => {
+                populateProvinsiFilter(allSekolahList, select, false);
+                select.addEventListener('change', handleProvinsiChange);
+            });
+            
+            const allKabKotaFilters = document.querySelectorAll('.filter-kabkota');
+            allKabKotaFilters.forEach(select => {
+                select.addEventListener('change', handleKabKotaChange);
+            });
+            
+            // Listener khusus untuk filter NPSN
+            const allNpsnFilters = document.querySelectorAll('.filter-npsn');
+            allNpsnFilters.forEach(select => {
+                select.addEventListener('change', handleNpsnChange);
+            });
+        }
+        
+        // ===================================
+        // FUNGSI MODAL ALERT
+        // ===================================
+
+        function showAlertModal(message, isError = false) {
+            alertTitle.textContent = isError ? "Error" : "Informasi";
+            alertMessage.textContent = message;
+            alertModal.classList.add('active');
+        }
+
+        // ===================================
+        // FUNGSI FILTER & EVENT HANDLER
+        // ===================================
+
+        function populateProvinsiFilter(dataSource, selectElement, isUserList) {
+            const uniqueSet = new Set();
+            if (isUserList) {
+                dataSource.forEach(item => item.provinsi && uniqueSet.add(item.provinsi));
+            } else {
+                dataSource.forEach(item => item.provinsi && uniqueSet.add(item.provinsi));
+            }
+            
+            const sortedItems = [...uniqueSet].sort();
+            selectElement.innerHTML = `<option value="">${isUserList ? 'Pilih Provinsi' : 'Semua Provinsi'}</option>`;
+            sortedItems.forEach(item => {
+                if(item !== "ADMINISTRATOR") {
+                    selectElement.appendChild(new Option(item, item));
+                }
+            });
+        }
+
+        function handleProvinsiChange(event) {
+            const provSelect = event.target;
+            const selectedProv = provSelect.value;
+            const kabSelect = document.getElementById(provSelect.dataset.targetKab);
+            const npsnSelect = document.getElementById(provSelect.dataset.targetNpsn);
+            
+            // Reset Kab/Kota
+            kabSelect.innerHTML = '<option value="">Semua Kab/Kota</option>';
+            kabSelect.disabled = true;
+            // Reset NPSN
+            npsnSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
+            npsnSelect.disabled = true;
+            
+            // Reset kontainer hasil (jika ini filter utama, bukan modal program)
+            if (npsnSelect.dataset.container) {
+                document.getElementById(npsnSelect.dataset.container).innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+            }
+            
+            if (selectedProv) {
+                const kabKotaSet = new Set(allSekolahList
+                    .filter(s => s.provinsi === selectedProv)
+                    .map(s => s.kota).filter(Boolean));
+                
+                [...kabKotaSet].sort().forEach(kota => {
+                    kabSelect.appendChild(new Option(kota, kota));
+                });
+                kabSelect.disabled = false;
+            }
+        }
+        
+        function handleKabKotaChange(event) {
+            const kabSelect = event.target;
+            const selectedKab = kabSelect.value;
+            const provSelect = kabSelect.closest('.filter-container').querySelector('.filter-provinsi');
+            const selectedProv = provSelect.value;
+            const npsnSelect = document.getElementById(kabSelect.dataset.targetNpsn);
+
+            // Reset NPSN
+            npsnSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
+            npsnSelect.disabled = true;
+
+            // Reset kontainer hasil (jika ini filter utama, bukan modal program)
+            if (npsnSelect.dataset.container) {
+                document.getElementById(npsnSelect.dataset.container).innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+            }
+            
+            if (selectedKab) {
+                const schools = allSekolahList.filter(s => s.provinsi === selectedProv && s.kota === selectedKab);
+                
+                schools.sort((a,b) => a.sekolah.localeCompare(b.sekolah)).forEach(sekolah => {
+                    npsnSelect.appendChild(new Option(`${sekolah.sekolah} (${sekolah.npsn})`, sekolah.npsn));
+                });
+                npsnSelect.disabled = false;
+            }
+        }
+        
+        /**
+         * Handler utama saat NPSN diganti. Memuat data sesuai section.
+         */
+        async function handleNpsnChange(event) {
+            const npsnSelect = event.target;
+            const selectedNpsn = npsnSelect.value;
+
+            // Cek apakah ini filter di modal program
+            if (npsnSelect.id === 'filter-npsn-program') {
+                await loadProgramPreview(selectedNpsn);
+                return;
+            }
+
+            // Jika bukan modal program, ini adalah filter section biasa
+            const collectionName = npsnSelect.dataset.collection;
+            const containerId = npsnSelect.dataset.container;
+            const container = document.getElementById(containerId);
+            
+            if (!selectedNpsn) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+                return;
+            }
+
+            container.innerHTML = '<div class="loader"></div><p class="text-center text-gray-500">Memuat data...</p>';
+            
+            try {
+                const npsnField = npsnFieldMap.get(collectionName);
+                const q = query(collection(db, collectionName), where(npsnField, "==", selectedNpsn));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="text-center text-gray-500 py-10">Tidak ada data input ditemukan untuk sekolah ini.</p>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.docs.forEach((doc, index) => {
+                    const data = doc.data();
+                    html += `<div class="text-lg font-semibold text-gray-700">Data Input #${index + 1}</div>`;
+
+                    // Panggil fungsi render yang sesuai
+                    switch (collectionName) {
+                        case 'fgd':
+                            html += renderFgdCard(data);
+                            break;
+                        case 'wawancara_guru':
+                            html += renderWawancaraGuruCard(data);
+                            break;
+                        case 'observasi':
+                            html += renderObservasiTable(data);
+                            break;
+                        case 'wawancara_murid':
+                            html += renderWawancaraMuridCard(data);
+                            break;
+                        case 'laporan':
+                            html += renderLaporanCard(data);
+                            break;
+                        default:
+                            html += '<p>Render tidak didukung.</p>';
+                    }
+                });
+                container.innerHTML = html;
+                
+            } catch (error) {
+                console.error(`Gagal memuat data ${collectionName}:`, error);
+                container.innerHTML = `<p class="text-center text-red-500 py-10">Gagal memuat data: ${error.message}</p>`;
+                showAlertModal(`Gagal memuat data: ${error.message}`, true);
+            }
+        }
+        
+        /**
+         * Memuat preview program di modal.
+         */
+        async function loadProgramPreview(npsn) {
+            programStatusMessage.textContent = "Mencari program...";
+            programStatusMessage.classList.remove('hidden');
+            programIframe.classList.add('hidden');
+            programFallbackLink.classList.add('hidden');
+            programIframe.src = "about:blank";
+
+            if (!npsn) {
+                programStatusMessage.textContent = "Pilih sekolah untuk melihat preview program.";
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "program_sekolah", npsn);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists() && docSnap.data().linkFinal) {
+                    const url = docSnap.data().linkFinal;
+                    // Ubah URL GDrive 'view' menjadi 'preview' agar bisa di-embed
+                    const previewUrl = url.replace("/view?usp=sharing", "/preview").replace("/view", "/preview");
+                    
+                    programIframe.src = previewUrl;
+                    programIframe.classList.remove('hidden');
+                    programStatusMessage.classList.add('hidden');
+                    
+                    programFallbackLink.href = url;
+                    programFallbackLink.classList.remove('hidden');
+                    
+                } else {
+                    programStatusMessage.textContent = "Program Final belum diunggah untuk sekolah ini.";
+                }
+            } catch (error) {
+                console.error("Gagal fetch program:", error);
+                programStatusMessage.textContent = "Gagal memuat data program.";
+                showAlertModal(`Gagal memuat data program: ${error.message}`, true);
+            }
+        }
+
+        // ===================================
+        // FUNGSI RENDER HASIL INPUT
+        // ===================================
+
+        /**
+         * Helper untuk menampilkan jawaban.
+         */
+        function renderAnswer(answer) {
+            if (!answer || answer.trim() === "") {
+                return '<div class="result-answer empty">(Tidak diisi)</div>';
+            }
+            // Escape HTML
+            const escapedAnswer = answer.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return `<div class="result-answer">${escapedAnswer}</div>`;
+        }
+
+        /**
+         * Render Card untuk FGD.
+         */
+        function renderFgdCard(data) {
+            // Data dari Form.html
+            const questions = [
+                { label: '1. Pemahaman Umum (Kepala Sekolah)', id: 'fgd_q1_ks' },
+                { label: '1. Pemahaman Umum (Guru)', id: 'fgd_q1_guru' },
+                { label: '2. Kondisi Awal (Kepala Sekolah)', id: 'fgd_q2_ks' },
+                { label: '2. Kondisi Awal (Guru)', id: 'fgd_q2_guru' },
+                { label: '3. Kepemimpinan Instruksional (KS & Guru)', id: 'fgd_q3' },
+                { label: '4. Praktik Pembelajaran (KS & Guru)', id: 'fgd_q4' },
+                { label: '5. Kolaborasi (Kepala Sekolah)', id: 'fgd_q5_ks' },
+                { label: '5. Kolaborasi (Guru)', id: 'fgd_q5_guru' },
+                { label: '6. Pemanfaatan Sumber Daya (Kepala Sekolah)', id: 'fgd_q6_ks' },
+                { label: '6. Pemanfaatan Sumber Daya (Guru)', id: 'fgd_q6_guru' },
+                { label: '7. Evaluasi dan Refleksi (KS & Guru)', id: 'fgd_q7' },
+                { label: '8. Kesiapan Implementasi (KS & Guru)', id: 'fgd_q8' },
+            ];
+            
+            let body = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><div class="result-question">Petugas 1</div> ${renderAnswer(data.petugas1_fgd)}</div>
+                    <div><div class="result-question">Petugas 2</div> ${renderAnswer(data.petugas2_fgd)}</div>
+                    <div><div class="result-question">Kepala Sekolah</div> ${renderAnswer(data.nama_kepala_sekolah)}</div>
+                    <div><div class="result-question">Guru</div> ${renderAnswer(data.nama_guru_fgd)}</div>
+                </div>
+                <hr>`;
+                
+            questions.forEach(q => {
+                body += `
+                    <div>
+                        <div class="result-question">${q.label}</div>
+                        ${renderAnswer(data[q.id])}
+                    </div>
+                `;
+            });
+            
+            return `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>FGD - ${data.nama_sekolah_fgd || 'Data'}</h3>
+                        <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                    </div>
+                    <div class="result-card-body">${body}</div>
+                </div>`;
+        }
+        
+        /**
+         * Render Card untuk Wawancara Guru.
+         */
+        function renderWawancaraGuruCard(data) {
+             const questions = [
+                { label: '1. Pemahaman Umum', id: 'q1' },
+                { label: '2. Kondisi Awal dan Refleksi', id: 'q2' },
+                { label: '3. Praktik Pembelajaran', id: 'q3' },
+                { label: '4. Kolaborasi', id: 'q4' },
+                { label: '5. Pemanfaatan Media', id: 'q5' },
+                { label: '6. Refleksi dan Evaluasi', id: 'q6' },
+                { label: '7. Kesiapan dan Dukungan', id: 'q7' },
+             ];
+             
+             let body = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><div class="result-question">Petugas 1</div> ${renderAnswer(data.petugas1)}</div>
+                    <div><div class="result-question">Petugas 2</div> ${renderAnswer(data.petugas2)}</div>
+                    <div><div class="result-question">Nama Guru</div> ${renderAnswer(data.nama_guru)}</div>
+                    <div><div class="result-question">Kelas</div> ${renderAnswer(data.kelas_guru)}</div>
+                </div>
+                <hr>`;
+                
+            questions.forEach(q => {
+                body += `
+                    <div>
+                        <div class="result-question">${q.label}</div>
+                        ${renderAnswer(data[q.id])}
+                    </div>
+                `;
+            });
+            
+            return `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Wawancara Guru - ${data.nama_sekolah || 'Data'}</h3>
+                        <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                    </div>
+                    <div class="result-card-body">${body}</div>
+                </div>`;
+        }
+
+        /**
+         * Render Card untuk Wawancara Murid.
+         */
+        function renderWawancaraMuridCard(data) {
+             const questions = [
+                { label: '1. Pengalaman Belajar', id: 'mq1' },
+                { label: '2. Kegiatan Literasi', id: 'mq2' },
+                { label: '3. Kegiatan Numerasi', id: 'mq3' },
+                { label: '4. Refleksi Belajar', id: 'mq4' },
+                { label: '5. Lingkungan Belajar', id: 'mq5' },
+                { label: '6. Keterlibatan dan Motivasi', id: 'mq6' },
+             ];
+             
+             let body = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><div class="result-question">Petugas 1</div> ${renderAnswer(data.petugas1_murid)}</div>
+                    <div><div class="result-question">Petugas 2</div> ${renderAnswer(data.petugas2_murid)}</div>
+                </div>
+                <div class="result-question">Data Murid</div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    ${renderAnswer(data.nama_murid_1 + ' (Kelas ' + data.kelas_murid_1 + ')')}
+                    ${renderAnswer(data.nama_murid_2 + ' (Kelas ' + data.kelas_murid_2 + ')')}
+                    ${renderAnswer(data.nama_murid_3 + ' (Kelas ' + data.kelas_murid_3 + ')')}
+                    ${renderAnswer(data.nama_murid_4 + ' (Kelas ' + data.kelas_murid_4 + ')')}
+                    ${renderAnswer(data.nama_murid_5 + ' (Kelas ' + data.kelas_murid_5 + ')')}
+                    ${renderAnswer(data.nama_murid_6 + ' (Kelas ' + data.kelas_murid_6 + ')')}
+                </div>
+                <hr>`;
+                
+            questions.forEach(q => {
+                body += `
+                    <div>
+                        <div class="result-question">${q.label}</div>
+                        ${renderAnswer(data[q.id])}
+                    </div>
+                `;
+            });
+            
+            return `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Wawancara Murid - ${data.nama_sekolah_murid || 'Data'}</h3>
+                        <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                    </div>
+                    <div class="result-card-body">${body}</div>
+                </div>`;
+        }
+
+        /**
+         * Render Tabel Read-Only untuk Observasi.
+         */
+        function renderObservasiTable(data) {
+            const items = {
+                "A. Proses Pembelajaran di Kelas": [
+                    { id: 'obs_a1', indicator: 'Kegiatan Pembuka' },
+                    { id: 'obs_a2', indicator: 'Aktivasi Literasi' },
+                    { id: 'obs_a3', indicator: 'Aktivasi Numerasi' },
+                    { id: 'obs_a4', indicator: 'Pertanyaan Pemantik (SSA)' },
+                    { id: 'obs_a5', indicator: 'Tahapan CPA' },
+                    { id: 'obs_a6', indicator: 'Keterlibatan Murid' },
+                    { id: 'obs_a7', indicator: 'Kegiatan Reflektif' },
+                    { id: 'obs_a8', indicator: 'Pemanfaatan Media' },
+                    { id: 'obs_a9', indicator: 'Diferensiasi Pembelajaran' },
+                    { id: 'obs_a10', indicator: 'Penilaian Formatif' }
+                ],
+                "B. Kondisi Lingkungan": [
+                    { id: 'obs_b1', indicator: 'Lingkungan Kelas (Literasi)' },
+                    { id: 'obs_b2', indicator: 'Lingkungan Kelas (Numerasi)' },
+                    { id: 'obs_b3', indicator: 'Pojok Baca' },
+                    { id: 'obs_b4', indicator: 'Paparan Karya Murid' },
+                    { id: 'obs_b5', indicator: 'Kebersihan & Kerapian' },
+                    { id: 'obs_b6', indicator: 'Fasilitas Pendukung' },
+                    { id: 'obs_b7', indicator: 'Kegiatan Literasi Sekolah' },
+                    { id: 'obs_b8', indicator: 'Kegiatan Numerasi Sekolah' },
+                    { id: 'obs_b9', indicator: 'Keterlibatan KS & Guru' },
+                    { id: 'obs_b10', indicator: 'Suasana Sekolah' }
+                ]
+            };
+            
+            function renderRadioChoice(value) {
+                if (value === 'ya') return '<div class="check-icon"><i class="fas fa-check-circle"></i></div>';
+                if (value === 'tidak') return '<div class="check-icon"><i class="fas fa-times-circle"></i></div>';
+                return '<div class="check-icon"><i class="fas fa-circle-question"></i></div>';
+            }
+
+            function renderFoto(url) {
+                if (url) {
+                    return `<a href="${url}" target="_blank"><img src="${url}" class="foto-preview" alt="Foto Observasi"></a>`;
+                }
+                return `(Tidak ada foto)`;
+            }
+
+            let tableHTML = `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Observasi - ${data.nama_sekolah_obs || 'Data'}</h3>
+                        <p>Guru: ${data.nama_guru_obs || 'N/A'} | Kelas: ${data.kelas_guru_obs || 'N/A'}</p>
+                        <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                    </div>
+                    <div class="result-card-body !p-0 overflow-x-auto">
+                        <table class="observasi-table">
+                            <thead>
+                                <tr>
+                                    <th>Komponen</th>
+                                    <th>Hasil</th>
+                                    <th>Catatan & Bukti Pendukung</th>
+                                    <th>Dokumentasi (Foto)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            for (const [sectionTitle, sectionItems] of Object.entries(items)) {
+                tableHTML += `<tr class="bg-gray-50"><td colspan="4" class="font-bold p-3">${sectionTitle}</td></tr>`;
+                sectionItems.forEach(item => {
+                    tableHTML += `
+                        <tr>
+                            <td class="w-1/4">${item.indicator}</td>
+                            <td class="w-1/12">${renderRadioChoice(data[item.id])}</td>
+                            <td class="w-1/2">${renderAnswer(data['catatan_' + item.id.split('_')[1]])}</td>
+                            <td class="w-1/4">${renderFoto(data['foto_url_' + item.id])}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            tableHTML += `</tbody></table></div></div>`;
+            return tableHTML;
+        }
+
+        /**
+         * Render Card untuk Laporan.
+         */
+        function renderLaporanCard(data) {
+            // Ini akan menjadi fungsi render yang besar
+            let body = `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Laporan Pendampingan - ${data.nama_sekolah_lpr || 'Data'}</h3>
+                        <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                    </div>
+                    <div class="result-card-body space-y-6">
+
+                        <!-- 1. Identitas Kegiatan -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">1. Identitas Kegiatan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><div class="result-question">Nama Sekolah</div> ${renderAnswer(data.lpr_s1_nama_sekolah)}</div>
+                            <div><div class="result-question">NPSN</div> ${renderAnswer(data.lpr_s1_npsn)}</div>
+                            <div class="md:col-span-2"><div class="result-question">Alamat</div> ${renderAnswer(data.lpr_s1_alamat)}</div>
+                            <div><div class="result-question">Kab/Kota</div> ${renderAnswer(data.lpr_s1_kab_kota)}</div>
+                            <div><div class="result-question">Provinsi</div> ${renderAnswer(data.lpr_s1_provinsi)}</div>
+                            <div><div class="result-question">Tanggal</div> ${renderAnswer(data.lpr_s1_tanggal)}</div>
+                            <div><div class="result-question">Durasi</div> ${renderAnswer(data.lpr_s1_durasi)}</div>
+                        </div>
+
+                        <!-- 3. Ringkasan Proses -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">3. Ringkasan Proses Pendampingan</h4>
+                        <div><div class="result-question">Tahapan Kegiatan</div> ${renderAnswer(data.lpr_s3_tahapan)}</div>
+                        <div><div class="result-question">Metode</div> ${renderAnswer(data.lpr_s3_metode)}</div>
+                        <div><div class="result-question">Suasana & Partisipasi</div> ${renderAnswer(data.lpr_s3_suasana)}</div>
+
+                        <!-- 4. Hasil Analisis -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">4. Hasil Analisis dan Temuan</h4>
+                        <h5 class="text-md font-semibold text-gray-700">A. Berdasarkan Wawancara</h5>
+                        <div><div class="result-question">Kepala Sekolah</div> ${renderAnswer(data.lpr_s4a_ks)}</div>
+                        <div><div class="result-question">Guru</div> ${renderAnswer(data.lpr_s4a_guru)}</div>
+                        <div><div class="result-question">Murid</div> ${renderAnswer(data.lpr_s4a_murid)}</div>
+                        
+                        <h5 class="text-md font-semibold text-gray-700 mt-4">B. Berdasarkan Observasi</h5>
+                        <div class="overflow-x-auto"><table class="observasi-table">
+                            <thead><tr><th>Aspek</th><th>Kondisi Faktual</th><th>Catatan Pendamping</th></tr></thead>
+                            <tbody>
+                                <tr><td>Proses Pembelajaran</td><td>${renderAnswer(data.lpr_s4b_proses_faktual)}</td><td>${renderAnswer(data.lpr_s4b_proses_catatan)}</td></tr>
+                                <tr><td>Aktivitas Murid</td><td>${renderAnswer(data.lpr_s4b_aktivitas_faktual)}</td><td>${renderAnswer(data.lpr_s4b_aktivitas_catatan)}</td></tr>
+                                <tr><td>Lingkungan Sekolah</td><td>${renderAnswer(data.lpr_s4b_lingkungan_faktual)}</td><td>${renderAnswer(data.lpr_s4b_lingkungan_catatan)}</td></tr>
+                            </tbody>
+                        </table></div>
+
+                        <h5 class="text-md font-semibold text-gray-700 mt-4">C. Konsistensi</h5>
+                        <div><div class="result-question">Penilaian Konsistensi</div> ${renderAnswer(data.lpr_s4c_konsistensi)}</div>
+                        <div><div class="result-question">Catatan</div> ${renderAnswer(data.lpr_s4c_catatan)}</div>
+
+                        <!-- 6. Rekomendasi -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">6. Rekomendasi Pendamping</h4>
+                        ${renderAnswer(
+                            `1. ${data.lpr_s6_rek_1 || '-'}\n2. ${data.lpr_s6_rek_2 || '-'}\n3. ${data.lpr_s6_rek_3 || '-'}\n4. ${data.lpr_s6_rek_4 || '-'}`
+                        )}
+                        
+                        <!-- 7. Kesimpulan -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">7. Kesimpulan</h4>
+                        <div><div class="result-question">Finalisasi Dokumen</div> ${renderAnswer(data.lpr_s7_final)}</div>
+                        <div><div class="result-question">Catatan Finalisasi</div> ${renderAnswer(data.lpr_s7_final_catatan)}</div>
+                        <div><div class="result-question">Rencana 14 Hari</div> ${renderAnswer(data.lpr_s7_rencana_catatan)}</div>
+                        <div><div class="result-question">Tindak Lanjut</div> ${renderAnswer(data.lpr_s7_tindak_lanjut)}</div>
+
+                    </div>
+                </div>
+            `;
+            return body;
+        }
+
+    </script>
+
+</body>
+</html>
