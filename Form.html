@@ -2117,7 +2117,7 @@ function showForm(formId, clickedLink) {
             const textareas = document.querySelectorAll(
                 '#wawancara-guru-questions textarea, #fgd-questions textarea, #laporan-form textarea[id^="lpr_s"]'
             );
-            const MIN_WORDS = 50;
+            const MIN_WORDS = 10;
 
             textareas.forEach(textarea => {
                 const counterId = 'counter_' + textarea.id;
