@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
-    <title>Halaman Supervisi - Pendampingan Litnum</title>
+    <title>Supervisor - Pendampingan Litnum</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
+    <!-- BARU: Tambahkan html2pdf.js untuk cetak PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsPna9C/G1VsVLoJSglLOYdSgPSpEHNZcwde5cOcb9kscNlTddCmyjGMSQxetEHEjP9S5pl+oEwNMcVb1iUcgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <style>
         /* Pengaturan Dasar Halaman */
         body, html {
@@ -447,6 +450,16 @@
                     </div>
                 </div>
 
+                <!-- BARU: Tombol Aksi -->
+                <div id="fgd-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('fgd-results-container', 'FGD_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('fgd')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
                 <!-- Kontainer Hasil -->
                 <div id="fgd-results-container" class="space-y-6">
                     <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
@@ -480,6 +493,16 @@
                             <option value="">Pilih Sekolah</option>
                         </select>
                     </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="observasi-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('observasi-results-container', 'Observasi_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('observasi')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
                 </div>
 
                 <!-- Kontainer Hasil -->
@@ -517,6 +540,16 @@
                     </div>
                 </div>
 
+                <!-- BARU: Tombol Aksi -->
+                <div id="wawancara_guru-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('wg-results-container', 'Wawancara_Guru_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('wawancara_guru')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
                 <!-- Kontainer Hasil -->
                 <div id="wg-results-container" class="space-y-6">
                     <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
@@ -552,6 +585,16 @@
                     </div>
                 </div>
 
+                <!-- BARU: Tombol Aksi -->
+                <div id="wawancara_murid-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('wm-results-container', 'Wawancara_Murid_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('wawancara_murid')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
                 <!-- Kontainer Hasil -->
                 <div id="wm-results-container" class="space-y-6">
                     <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
@@ -585,6 +628,16 @@
                             <option value="">Pilih Sekolah</option>
                         </select>
                     </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="laporan-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('laporan-results-container', 'Laporan_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('laporan')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
                 </div>
 
                 <!-- Kontainer Hasil -->
@@ -691,6 +744,7 @@
         // --- Variabel Global ---
         let allSekolahList = [];
         let allUsersList = [];
+        let currentLoadedData = null; // BARU: Untuk menyimpan data yang sedang dilihat
         
         // --- Elemen UI Global ---
         const modalLogin = document.getElementById('modal-login');
@@ -894,6 +948,10 @@
             allNpsnFilters.forEach(select => {
                 select.addEventListener('change', handleNpsnChange);
             });
+            
+            // BARU: Tautkan fungsi PDF dan CSV ke window agar bisa di-panggil dari onclick
+            window.generatePdfFromView = generatePdfFromView;
+            window.exportToCSV = exportToCSV;
         }
         
         // ===================================
@@ -943,6 +1001,9 @@
             // Reset kontainer hasil (jika ini filter utama, bukan modal program)
             if (npsnSelect.dataset.container) {
                 document.getElementById(npsnSelect.dataset.container).innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+                // BARU: Sembunyikan tombol aksi
+                document.querySelectorAll('.action-buttons').forEach(btn => btn.classList.add('hidden'));
+                currentLoadedData = null;
             }
             
             if (selectedProv) {
@@ -971,6 +1032,9 @@
             // Reset kontainer hasil (jika ini filter utama, bukan modal program)
             if (npsnSelect.dataset.container) {
                 document.getElementById(npsnSelect.dataset.container).innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+                // BARU: Sembunyikan tombol aksi
+                document.querySelectorAll('.action-buttons').forEach(btn => btn.classList.add('hidden'));
+                currentLoadedData = null;
             }
             
             if (selectedKab) {
@@ -989,6 +1053,10 @@
         async function handleNpsnChange(event) {
             const npsnSelect = event.target;
             const selectedNpsn = npsnSelect.value;
+            
+            // BARU: Sembunyikan semua tombol aksi saat filter berubah
+            document.querySelectorAll('.action-buttons').forEach(btn => btn.classList.add('hidden'));
+            currentLoadedData = null;
 
             // Cek apakah ini filter di modal program
             if (npsnSelect.id === 'filter-npsn-program') {
@@ -1017,6 +1085,10 @@
                     container.innerHTML = '<p class="text-center text-gray-500 py-10">Tidak ada data input ditemukan untuk sekolah ini.</p>';
                     return;
                 }
+                
+                // BARU: Simpan data yang dimuat untuk di-export
+                const dataArray = snapshot.docs.map(doc => doc.data());
+                currentLoadedData = { collection: collectionName, data: dataArray };
 
                 let html = '';
                 snapshot.docs.forEach((doc, index) => {
@@ -1045,6 +1117,12 @@
                     }
                 });
                 container.innerHTML = html;
+                
+                // BARU: Tampilkan tombol aksi
+                const actionButtons = document.getElementById(collectionName + '-action-buttons');
+                if (actionButtons) {
+                    actionButtons.classList.remove('hidden');
+                }
                 
             } catch (error) {
                 console.error(`Gagal memuat data ${collectionName}:`, error);
@@ -1400,6 +1478,167 @@
             `;
             return body;
         }
+
+        // ===================================
+        // BARU: FUNGSI CETAK PDF & EXPORT CSV
+        // ===================================
+
+        /**
+         * Mencetak elemen kontainer sebagai PDF.
+         */
+        function generatePdfFromView(containerId, title) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                showAlertModal("Gagal menemukan konten untuk dicetak.", true);
+                return;
+            }
+            
+            // Dapatkan NPSN dari filter aktif
+            const npsnSelect = container.closest('.content-section').querySelector('.filter-npsn');
+            const npsn = npsnSelect.value || "Report";
+            const filename = `${title}_${npsn}.pdf`;
+
+            // Opsi untuk html2pdf
+            const opt = {
+                margin:       [0.5, 0.5, 0.5, 0.5], // [top, left, bottom, right] in inches
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Buat klon dari elemen untuk dimodifikasi
+            const elementToPrint = container.cloneNode(true);
+            
+            // Sembunyikan tombol aksi dari klon
+            elementToPrint.querySelectorAll('.action-buttons').forEach(btn => btn.style.display = 'none');
+            // Ganti foto preview dengan link
+            elementToPrint.querySelectorAll('.foto-preview').forEach(img => {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.textContent = "[Lihat Foto]";
+                link.target = "_blank";
+                img.parentNode.replaceChild(link, img);
+            });
+
+            showAlertModal("Mempersiapkan PDF... Ini mungkin memakan waktu beberapa detik.");
+
+            // Jalankan html2pdf
+            html2pdf().from(elementToPrint).set(opt).save().then(() => {
+                showAlertModal("PDF berhasil dibuat dan diunduh.");
+            }).catch(err => {
+                showAlertModal("Gagal membuat PDF: " + err.message, true);
+            });
+        }
+
+        /**
+         * Mengekspor data yang sedang dilihat ke file CSV.
+         */
+        function exportToCSV(expectedCollectionName) {
+            if (!currentLoadedData || currentLoadedData.collection !== expectedCollectionName || currentLoadedData.data.length === 0) {
+                showAlertModal("Tidak ada data yang dimuat untuk diekspor. Pilih sekolah terlebih dahulu.", true);
+                return;
+            }
+
+            showAlertModal("Mempersiapkan file CSV...");
+
+            try {
+                const dataToExport = currentLoadedData.data;
+                // 1. Ratakan semua objek (untuk menangani data laporan yang nested)
+                const flattenedData = dataToExport.map(item => flattenObject(item));
+                
+                // 2. Konversi ke CSV
+                const csvString = convertToCSV(flattenedData);
+                
+                // 3. Buat dan unduh file
+                const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+                const npsn = flattenedData[0].npsn || flattenedData[0].npsn_fgd || flattenedData[0].npsn_obs || flattenedData[0].npsn_murid || flattenedData[0].npsn_lpr || "data";
+                const filename = `Export_${expectedCollectionName}_${npsn}.csv`;
+                
+                const link = document.createElement("a");
+                if (link.download !== undefined) { 
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }
+                
+                showAlertModal("File CSV berhasil diunduh.");
+                
+            } catch (error) {
+                console.error("Gagal export CSV:", error);
+                showAlertModal("Gagal mengekspor CSV: " + error.message, true);
+            }
+        }
+
+        /**
+         * Helper untuk mengubah array of objects menjadi string CSV.
+         */
+        function convertToCSV(objArray) {
+            const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+            let str = '';
+            let headers = [];
+
+            // Kumpulkan semua keys unik sebagai header
+            let headerSet = new Set();
+            array.forEach(item => {
+                Object.keys(item).forEach(key => headerSet.add(key));
+            });
+            headers = [...headerSet];
+            
+            // Tambahkan baris header
+            str += headers.map(header => `"${header}"`).join(',') + '\r\n';
+
+            // Tambahkan baris data
+            for (let i = 0; i < array.length; i++) {
+                let line = [];
+                for (let header of headers) {
+                    let value = array[i][header];
+                    if (value === null || value === undefined) {
+                        value = "";
+                    }
+                    // Handle nilai yang mengandung koma atau kutip
+                    if (typeof value === 'string') {
+                        value = value.replace(/"/g, '""'); // Escape double quotes
+                        value = `"${value.replace(/(\r\n|\n|\r)/gm, " ")}"`; // Ganti newline & bungkus dengan kutip
+                    }
+                    line.push(value);
+                }
+                str += line.join(',') + '\r\n';
+            }
+            return str;
+        }
+
+        /**
+         * Helper untuk meratakan objek JSON yang nested (misal: data.lpr_s1_nama_sekolah)
+         */
+        function flattenObject(ob) {
+            let toReturn = {};
+            for (let i in ob) {
+                if (!ob.hasOwnProperty(i)) continue;
+                if ((typeof ob[i]) == 'object' && ob[i] !== null && !Array.isArray(ob[i]) && !(ob[i] instanceof Date)) {
+                    // Jika objek, rekursif
+                    let flatObject = flattenObject(ob[i]);
+                    for (let x in flatObject) {
+                        if (!flatObject.hasOwnProperty(x)) continue;
+                        toReturn[i + '.' + x] = flatObject[x];
+                    }
+                } else if (ob[i] instanceof Date) {
+                    toReturn[i] = ob[i].toISOString(); // Format tanggal
+                } else if (typeof ob[i] === 'object' && ob[i] !== null && ob[i].hasOwnProperty('seconds')) {
+                    // Handle Firebase Timestamp
+                    toReturn[i] = new Date(ob[i].seconds * 1000).toLocaleString('id-ID');
+                } else {
+                    toReturn[i] = ob[i];
+                }
+            }
+            return toReturn;
+        }
+
 
     </script>
 
