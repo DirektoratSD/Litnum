@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://kemendikdasmen.go.id/web/image/website/21/favicon?unique=c3563e4">  
+    <title>Halaman Supervisi - Pendampingan Litnum</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- BARU: Tambahkan html2pdf.js untuk cetak PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsPna9C/G1VsVLoJSglLOYdSgPSpEHNZcwde5cOcb9kscNlTddCmyjGMSQxetEHEjP9S5pl+oEwNMcVb1iUcgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- ================================================== -->
+    <!-- BARU: Tambahkan library SheetJS (xlsx.js) untuk Excel -->
+    <!-- ================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" xintegrity="sha512-r22gChDnGvBft4MloAA9ELSJUHBBwKxvz7S5ISQ+9sL1GfsbMN1aOKpdYESgBHnNlUiQpbimD0p5gUfPfqhOnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        /* ... CSS tidak berubah ... */
+        /* Pengaturan Dasar Halaman */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100%;
+            background-color: #f4f7f6;
+        }
+
+        /* Kontainer Utama (Flexbox) */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sembunyikan app container by default */
+        #app-container {
+            display: none;
+        }
+
+        /* Sidebar (Menu Samping) */
+        .sidebar {
+            width: 240px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+
+        .sidebar-menu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #bdc3c7;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+
+        /* Konten Utama */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .main-content h1 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        /* Kontainer untuk setiap halaman/konten */
+        .content-section {
+            display: none; /* Semua disembunyikan by default */
+        }
+        .content-section.active {
+            display: block; /* Yang aktif akan ditampilkan */
+        }
+
+        /* Filter Kontainer */
+        .filter-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+        .filter-container .form-group {
+            margin-bottom: 0;
+        }
+        .filter-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+            font-size: 0.875rem;
+        }
+        .filter-container select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        .filter-container select:disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        /* Card Hasil Input */
+        .result-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .result-card-header {
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            /* BARU: Ubah ke flex untuk menampung tombol edit */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .result-card-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .result-card-header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .result-card-body {
+            padding: 24px;
+            space-y: 16px;
+        }
+        .result-question {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        .result-answer {
+            font-size: 0.875rem;
+            color: #4b5563;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            white-space: pre-wrap; /* Jaga format newline */
+            word-wrap: break-word;
+        }
+        .result-answer.empty {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Tabel Observasi */
+        .observasi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        .observasi-table th, .observasi-table td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.875rem;
+            vertical-align: top;
+        }
+        .observasi-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        .observasi-table .check-icon {
+            text-align: center;
+            font-size: 1.25rem;
+        }
+        .observasi-table .check-icon .fa-check-circle {
+            color: #10b981; /* green-500 */
+        }
+        .observasi-table .check-icon .fa-times-circle {
+            color: #ef4444; /* red-500 */
+        }
+        .observasi-table .check-icon .fa-circle-question {
+            color: #a1a1aa; /* zinc-400 */
+        }
+        .observasi-table .foto-preview {
+            width: 100px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        /* BARU: Style untuk tombol edit di card */
+        .btn-edit-card {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+        .btn-edit-card:hover {
+            background-color: #2563eb; /* blue-600 */
+        }
+
+        /* BARU: Style untuk modal edit */
+        #edit-modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+            text-align: left;
+            padding: 16px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        #edit-modal-body .form-group {
+            margin-bottom: 16px;
+        }
+        #edit-modal-body label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+        #edit-modal-body input[type="text"],
+        #edit-modal-body textarea,
+        #edit-modal-body select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: #fff;
+            font-size: 0.875rem;
+        }
+        #edit-modal-body textarea {
+            min-height: 100px;
+        }
+        #edit-modal-body h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-top: 16px;
+            margin-bottom: 12px;
+        }
+        #edit-modal-body .radio-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+
+        /* GAYA MODAL (Copy dari Admin.html) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-content.modal-lg {
+            max-width: 700px;
+        }
+        .modal-content.modal-xl {
+            max-width: 1100px; /* 6xl */
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .modal-content p {
+            color: #34495e;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .modal-content .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 15px;
+            display: none;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            font-weight: bold;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .modal-close:hover {
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        .form-submit-button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .form-submit-button:hover {
+            background-color: #34495e;
+        }
+        .form-submit-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .form-action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .btn-cancel {
+            background-color: #7f8c8d;
+        }
+        .btn-cancel:hover {
+            background-color: #95a5a6;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- ==================
+         MODAL LOGIN (ADMIN/SUPERVISOR)
+    =================== -->
+    <div id="modal-login" class="modal-overlay active">
+        <div class="modal-content modal-lg">
+            <h3>Login Supervisor</h3>
+            <p>Halaman ini memerlukan hak akses Admin/Supervisor.</p>
+            
+            <form id="login-form" class="data-form">
+                <div class="form-group">
+                    <label for="username-input">Username</label>
+                    <input type="text" id="username-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-input">Password</label>
+                    <input type="password" id="password-input" required>
+                </div>
+                <button type="submit" id="login-button" class="form-submit-button" style="width: 100%;">Login</button>
+                <p id="login-error" class="error-message">Username atau password salah.</p>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="app-container" id="app-container">
+        
+        <!-- ==================
+             SIDEBAR (MENU)
+        =================== -->
+        <aside class="sidebar">
+            <h2 id="sidebar-title">SUPERVISI</h2>
+            <ul class="sidebar-menu">
+                <li><a data-target="content-fgd" class="active"><i class="fas fa-users fa-fw mr-2"></i>FGD</a></li>      
+                <li><a data-target="content-observasi"><i class="fas fa-search fa-fw mr-2"></i>Observasi</a></li>
+                <li><a data-target="content-wawancara-guru"><i class="fas fa-chalkboard-user fa-fw mr-2"></i>Wawancara Guru</a></li>
+                <li><a data-target="content-wawancara-murid"><i class="fas fa-children fa-fw mr-2"></i>Wawancara Murid</a></li>
+                <li><a data-target="content-laporan"><i class="fas fa-file-invoice fa-fw mr-2"></i>Laporan</a></li>
+                
+                <li class="menu-separator" style="margin-top: 20px; padding-left: 15px; font-size: 0.9em; color: #7f8c8d; font-weight: bold;">SEKOLAH</li>
+                <!-- Link ini akan mentrigger modal, bukan pindah section -->
+                <li><a id="show-program-modal" class="cursor-pointer"><i class="fas fa-tasks fa-fw mr-2"></i>Program</a></li>
+
+                <!-- ================================== -->
+                <!-- BARU: Menu Export Global -->
+                <!-- ================================== -->
+                <li class="menu-separator" style="margin-top: 20px; padding-left: 15px; font-size: 0.9em; color: #7f8c8d; font-weight: bold;">ADMIN</li>
+                <li><a data-target="content-export-global"><i class="fas fa-globe fa-fw mr-2"></i>Export Global</a></li>
+
+
+                <li class="menu-separator" style="margin-top: 30px;">
+                    <a href="#" id="logout-button" style="background-color: #c0392b; color: white;">
+                        <i class="fas fa-sign-out-alt fa-fw mr-2"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- ==================
+             KONTEN UTAMA
+        =================== -->
+        <main class="main-content">
+
+            <!-- ================================== -->
+            <!--   BARU: Tombol Aksi Global         -->
+            <!-- ================================== -->
+            <div id="global-action-buttons" class="hidden mb-6 flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow items-center">
+                <button onclick="exportAllToExcel()" class="bg-purple-600 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-700 flex items-center">
+                    <i class="fas fa-file-excel mr-2"></i> Download Semua Data (Excel)
+                </button>
+                <span class="text-gray-600 self-center text-sm">Unduh semua data (FGD, Observasi, dll) untuk sekolah yang dipilih ke dalam satu file Excel.</span>
+            </div>
+
+
+            <!-- ================================== -->
+            <!--   HALAMAN 1: FGD -->
+            <!-- ================================== -->
+            <div id="content-fgd" class="content-section active">
+                <h1>Hasil Input: FGD</h1>
+                <p>Pilih sekolah untuk melihat hasil input FGD yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-fgd">Provinsi</label>
+                        <select id="filter-provinsi-fgd" data-target-kab="filter-kabkota-fgd" data-target-npsn="filter-npsn-fgd" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-fgd">Kab/Kota</label>
+                        <select id="filter-kabkota-fgd" data-target-npsn="filter-npsn-fgd" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-fgd">NPSN / Sekolah</label>
+                        <select id="filter-npsn-fgd" data-collection="fgd" data-container="fgd-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="fgd-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('fgd-results-container', 'FGD_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('fgd')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="fgd-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+
+            <!-- ================================== -->
+            <!--   HALAMAN 2: OBSERVASI -->
+            <!-- ================================== -->
+            <div id="content-observasi" class="content-section">
+                <h1>Hasil Input: Observasi</h1>
+                <p>Pilih sekolah untuk melihat hasil input Observasi yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-obs">Provinsi</label>
+                        <select id="filter-provinsi-obs" data-target-kab="filter-kabkota-obs" data-target-npsn="filter-npsn-obs" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-obs">Kab/Kota</label>
+                        <select id="filter-kabkota-obs" data-target-npsn="filter-npsn-obs" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-obs">NPSN / Sekolah</label>
+                        <select id="filter-npsn-obs" data-collection="observasi" data-container="observasi-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="observasi-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('observasi-results-container', 'Observasi_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('observasi')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="observasi-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+            
+            <!-- ================================== -->
+            <!--   HALAMAN 3: WAWANCARA GURU -->
+            <!-- ================================== -->
+            <div id="content-wawancara-guru" class="content-section">
+                <h1>Hasil Input: Wawancara Guru</h1>
+                <p>Pilih sekolah untuk melihat hasil input Wawancara Guru yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-wg">Provinsi</label>
+                        <select id="filter-provinsi-wg" data-target-kab="filter-kabkota-wg" data-target-npsn="filter-npsn-wg" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-wg">Kab/Kota</label>
+                        <select id="filter-kabkota-wg" data-target-npsn="filter-npsn-wg" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-wg">NPSN / Sekolah</label>
+                        <select id="filter-npsn-wg" data-collection="wawancara_guru" data-container="wg-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="wawancara_guru-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('wg-results-container', 'Wawancara_Guru_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('wawancara_guru')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="wg-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+
+            <!-- ================================== -->
+            <!--   HALAMAN 4: WAWANCARA MURID -->
+            <!-- ================================== -->
+            <div id="content-wawancara-murid" class="content-section">
+                <h1>Hasil Input: Wawancara Murid</h1>
+                <p>Pilih sekolah untuk melihat hasil input Wawancara Murid yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-wm">Provinsi</label>
+                        <select id="filter-provinsi-wm" data-target-kab="filter-kabkota-wm" data-target-npsn="filter-npsn-wm" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-wm">Kab/Kota</label>
+                        <select id="filter-kabkota-wm" data-target-npsn="filter-npsn-wm" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-wm">NPSN / Sekolah</label>
+                        <select id="filter-npsn-wm" data-collection="wawancara_murid" data-container="wm-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="wawancara_murid-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('wm-results-container', 'Wawancara_Murid_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('wawancara_murid')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="wm-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+            
+            <!-- ================================== -->
+            <!--   HALAMAN 5: LAPORAN -->
+            <!-- ================================== -->
+            <div id="content-laporan" class="content-section">
+                <h1>Hasil Input: Laporan</h1>
+                <p>Pilih sekolah untuk melihat hasil input Laporan Pendampingan yang dikirim oleh petugas.</p>
+
+                <!-- Filter -->
+                <div class="filter-container">
+                    <div class="form-group">
+                        <label for="filter-provinsi-lpr">Provinsi</label>
+                        <select id="filter-provinsi-lpr" data-target-kab="filter-kabkota-lpr" data-target-npsn="filter-npsn-lpr" class="filter-provinsi">
+                            <option value="">Semua Provinsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kabkota-lpr">Kab/Kota</label>
+                        <select id="filter-kabkota-lpr" data-target-npsn="filter-npsn-lpr" class="filter-kabkota" disabled>
+                            <option value="">Semua Kab/Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-npsn-lpr">NPSN / Sekolah</label>
+                        <select id="filter-npsn-lpr" data-collection="laporan" data-container="laporan-results-container" class="filter-npsn" disabled>
+                            <option value="">Pilih Sekolah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BARU: Tombol Aksi -->
+                <div id="laporan-action-buttons" class="action-buttons hidden mt-4 flex flex-wrap gap-4">
+                    <button onclick="generatePdfFromView('laporan-results-container', 'Laporan_Report')" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+                    </button>
+                    <button onclick="exportToCSV('laporan')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 flex items-center">
+                        <i class="fas fa-file-excel mr-2"></i> Export to Spreadsheet (CSV)
+                    </button>
+                </div>
+
+                <!-- Kontainer Hasil -->
+                <div id="laporan-results-container" class="space-y-6">
+                    <p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>
+                </div>
+            </div>
+
+            <!-- ================================== -->
+            <!--   BARU: HALAMAN EXPORT GLOBAL      -->
+            <!-- ================================== -->
+            <div id="content-export-global" class="content-section hidden">
+                <h1>Export Global</h1>
+                <p>Gunakan tombol di bawah ini untuk mengunduh <strong>SEMUA</strong> data dari <strong>SEMUA</strong> sekolah (semua provinsi dan kab/kota) ke dalam satu file Excel.</p>
+                <p class="text-sm text-yellow-700 bg-yellow-100 p-3 rounded-lg border border-yellow-300 my-4"><i class="fas fa-exclamation-triangle mr-2"></i><strong>Peringatan:</strong> Proses ini mungkin memakan waktu beberapa menit jika data sangat besar. Harap jangan tutup halaman ini setelah menekan tombol.</p>
+
+                <div class="mt-6">
+                    <button onclick="exportGlobalExcel()" id="btn-export-global" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 flex items-center text-lg font-semibold">
+                        <i class="fas fa-file-excel mr-3"></i> Download SEMUA DATA (.xlsx)
+                    </button>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <!-- ==================
+         MODAL PREVIEW PROGRAM
+    =================== -->
+    <div id="program-preview-modal" class="modal-overlay">
+        <div class="modal-content modal-xl">
+            <button class="modal-close">&times;</button>
+            <h3>Preview Program Sekolah</h3>
+            
+            <!-- Filter di dalam Modal -->
+            <div class="filter-container flex-shrink-0">
+                <div class="form-group">
+                    <label for="filter-provinsi-program">Provinsi</label>
+                    <select id="filter-provinsi-program" data-target-kab="filter-kabkota-program" data-target-npsn="filter-npsn-program" class="filter-provinsi">
+                        <option value="">Semua Provinsi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-kabkota-program">Kab/Kota</label>
+                    <select id="filter-kabkota-program" data-target-npsn="filter-npsn-program" class="filter-kabkota" disabled>
+                        <option value="">Semua Kab/Kota</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-npsn-program">NPSN / Sekolah</label>
+                    <select id="filter-npsn-program" class="filter-npsn" disabled>
+                        <option value="">Pilih Sekolah</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Kontainer Iframe -->
+            <div id="program-iframe-container" class="mt-4 flex-grow border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                <p id="program-status-message" class="text-gray-500">Pilih sekolah untuk melihat preview program.</p>
+                <iframe id="program-iframe" src="about:blank" class="w-full h-full hidden" frameborder="0"></iframe>
+            </div>
+
+            <!-- Link cadangan -->
+            <a id="program-fallback-link" href="#" target="_blank" class="text-blue-600 hover:underline text-center mt-2 hidden">
+                Tidak bisa memuat preview? Buka di tab baru <i class="fas fa-external-link-alt fa-xs"></i>
+            </a>
+
+        </div>
+    </div>
+    
+    <!-- ==================
+         MODAL ALERT (UNTUK ERROR/SUKSES)
+    =================== -->
+    <div id="modal-alert" class="modal-overlay">
+        <div class="modal-content modal-lg">
+            <button class="modal-close">&times;</button>
+            <h3 id="alert-title">Informasi</h3>
+            <p id="alert-message">Operasi berhasil.</p>
+            <div class="form-action-buttons" style="justify-content: center;">
+                <button type="button" class="form-submit-button modal-close">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================
+         BARU: MODAL EDIT DATA
+    =================== -->
+    <div id="edit-data-modal" class="modal-overlay">
+        <div class="modal-content modal-xl"> <!-- Buat modal ini ekstra besar -->
+            <button class="modal-close">&times;</button>
+            <h3 id="edit-modal-title">Edit Data</h3>
+            
+            <!-- Kontainer untuk form yang akan di-render oleh JS -->
+            <div id="edit-modal-body">
+                <!-- Form dinamis akan dimuat di sini... -->
+            </div>
+
+            <!-- Tombol Aksi Modal -->
+            <div class="form-action-buttons" style="border-top: 1px solid #e5e7eb; padding-top: 16px; margin-top: 16px;">
+                <button type="button" class="form-submit-button btn-cancel modal-close">Batal</button>
+                <button type="button" id="edit-save-button" class="form-submit-button" style="background-color: #10b981; hover:background-color: #059669;">
+                    <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================
+         JAVASCRIPT
+    =================== -->
+
+    <script type="module">
+        // 1. Impor modul Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getFirestore, collection, setLogLevel,
+            onSnapshot, doc, getDoc, query, where, getDocs,
+            updateDoc // BARU: Impor updateDoc
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 2. Konfigurasi Firebase (Diambil dari file Anda)
+        const firebaseConfig = {
+          apiKey: "AIzaSyAi_-eBHTWJVa-xHkKgrCKZkAgzlzNCccA",
+          authDomain: "direktorat-sd.firebaseapp.com",
+          projectId: "direktorat-sd",
+          storageBucket: "direktorat-sd.firebasestorage.app",
+          messagingSenderId: "215819821063",
+          appId: "1:215819821063:web:4bdb7f127acbc1cfde4aa2"
+        };
+        
+        // 3. Inisialisasi Firebase
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            setLogLevel('debug');
+            console.log("Firebase berhasil diinisialisasi untuk Supervisi.html.");
+        } catch (e) {
+            console.error("Error inisialisasi Firebase:", e);
+        }
+
+        // --- Variabel Global ---
+        let allSekolahList = [];
+        let allUsersList = [];
+        let currentLoadedData = null; // BARU: Untuk menyimpan data yang sedang dilihat
+        
+        // --- Elemen UI Global ---
+        const modalLogin = document.getElementById('modal-login');
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        const loginError = document.getElementById('login-error');
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const appContainer = document.getElementById('app-container');
+        
+        const alertModal = document.getElementById('modal-alert');
+        const alertTitle = document.getElementById('alert-title');
+        const alertMessage = document.getElementById('alert-message');
+        
+        const programPreviewModal = document.getElementById('program-preview-modal');
+        const programNpsnFilter = document.getElementById('filter-npsn-program');
+        const programIframe = document.getElementById('program-iframe');
+        const programStatusMessage = document.getElementById('program-status-message');
+        const programFallbackLink = document.getElementById('program-fallback-link');
+
+        // BARU: Elemen Modal Edit
+        const editDataModal = document.getElementById('edit-data-modal');
+        const editModalTitle = document.getElementById('edit-modal-title');
+        const editModalBody = document.getElementById('edit-modal-body');
+        const editSaveButton = document.getElementById('edit-save-button');
+
+        // BARU: Tombol Aksi Global
+        const globalActionButtons = document.getElementById('global-action-buttons');
+
+
+        // --- Koleksi Data (untuk pencarian NPSN) ---
+        // Peta ini akan memetakan nama koleksi ke field NPSN yang benar
+        const npsnFieldMap = new Map([
+            ['fgd', 'npsn_fgd'],
+            ['wawancara_guru', 'npsn'],
+            ['observasi', 'npsn_obs'],
+            ['wawancara_murid', 'npsn_murid'],
+            ['laporan', 'npsn_lpr']
+        ]);
+
+        // ===================================
+        // FUNGSI UTAMA
+        // ===================================
+
+        /**
+         * Inisialisasi utama setelah DOM dimuat.
+         */
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!db) {
+                showAlertModal("Koneksi ke database gagal. Cek konsol.", true);
+                return;
+            }
+            // Tambahkan listener ke form login
+            loginForm.addEventListener('submit', handleLogin);
+            
+            // Mulai ambil data
+            try {
+                // PERBAIKAN: Kita fetch semua data di awal saat login
+                // Ini akan memakan waktu lebih lama saat login, tapi membuat export global instan
+                [allSekolahList, allUsersList] = await Promise.all([
+                    fetchCollection('sekolah'),
+                    fetchCollection('users')
+                ]);
+                
+                // Urutkan sekolah untuk filter
+                allSekolahList.sort((a, b) => (a.provinsi || "").localeCompare(b.provinsi || "") || (a.kota || "").localeCompare(b.kota || ""));
+
+                // Isi filter di modal login (hanya user, karena supervisor login pakai username)
+                // Kita akan gunakan allUsersList untuk validasi login
+                // Kita akan gunakan allSekolahList untuk mengisi filter setelah login
+                
+            } catch (error) {
+                console.error("Gagal memuat data awal:", error);
+                loginError.textContent = "Gagal memuat data awal. Cek konsol.";
+                loginError.style.display = 'block';
+            }
+        });
+
+        /**
+         * Mengambil semua data dari koleksi.
+         */
+        async function fetchCollection(collectionName) {
+            const snapshot = await getDocs(collection(db, collectionName));
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+
+        /**
+         * Menangani submit form login.
+         */
+        async function handleLogin(e) {
+            e.preventDefault();
+            loginButton.disabled = true;
+            loginButton.textContent = "Mencoba Login...";
+            loginError.style.display = 'none';
+
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            try {
+                // Validasi login menggunakan data user yang sudah di-fetch
+                const user = allUsersList.find(u => u.username === username);
+
+                if (!user) {
+                    throw new Error("Username atau password salah.");
+                }
+
+                let isAuthorized = false;
+                if (user.password === password) {
+                    if (user.role === 'admin' || user.role === 'supervisor') {
+                        isAuthorized = true;
+                    }
+                }
+
+                if (!isAuthorized) {
+                    throw new Error("Username/password salah atau Anda tidak memiliki hak akses.");
+                }
+
+                // Jika lolos semua:
+                modalLogin.classList.remove('active');
+                appContainer.style.display = 'flex'; // Tampilkan konten
+                initializePanel(); // Panggil inisialisasi panel
+
+            } catch (error) {
+                console.error("Login gagal:", error);
+                loginError.textContent = error.message;
+                loginError.style.display = 'block';
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        }
+        
+        /**
+         * Inisialisasi Panel Supervisor setelah login berhasil.
+         */
+        function initializePanel() {
+            // Setup Navigasi Sidebar
+            const menuLinks = document.querySelectorAll('.sidebar-menu a[data-target]');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    
+                    menuLinks.forEach(ml => ml.classList.remove('active'));
+                    contentSections.forEach(cs => cs.classList.remove('active'));
+                    
+                    link.classList.add('active');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Setup tombol Logout
+            document.getElementById('logout-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                appContainer.style.display = 'none';
+                modalLogin.classList.add('active');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                loginError.style.display = 'none';
+            });
+            
+            // Setup Modal Program
+            document.getElementById('show-program-modal').addEventListener('click', (e) => {
+                e.preventDefault();
+                programPreviewModal.classList.add('active');
+            });
+            
+            // Setup penutup modal
+            document.querySelectorAll('.modal-close, .modal-overlay').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close')) {
+                        document.querySelectorAll('.modal-overlay').forEach(modal => {
+                            if (modal.id !== 'modal-login') {
+                                modal.classList.remove('active');
+                                // Reset iframe program jika modal ditutup
+                                if (modal.id === 'program-preview-modal') {
+                                    programIframe.src = "about:blank";
+                                    programStatusMessage.textContent = "Pilih sekolah untuk melihat preview program.";
+                                    programStatusMessage.classList.remove('hidden');
+                                    programIframe.classList.add('hidden');
+                                    programFallbackLink.classList.add('hidden');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Isi semua filter dropdown di panel (menggunakan allSekolahList yang sudah di-fetch)
+            const allProvinsiFilters = document.querySelectorAll('.filter-provinsi');
+            allProvinsiFilters.forEach(select => {
+                populateProvinsiFilter(allSekolahList, select, false);
+                select.addEventListener('change', handleProvinsiChange);
+            });
+            
+            const allKabKotaFilters = document.querySelectorAll('.filter-kabkota');
+            allKabKotaFilters.forEach(select => {
+                select.addEventListener('change', handleKabKotaChange);
+            });
+            
+            // Listener khusus untuk filter NPSN
+            const allNpsnFilters = document.querySelectorAll('.filter-npsn');
+            allNpsnFilters.forEach(select => {
+                select.addEventListener('change', handleNpsnChange);
+            });
+            
+            // BARU: Tautkan fungsi PDF dan CSV ke window agar bisa di-panggil dari onclick
+            window.generatePdfFromView = generatePdfFromView;
+            window.exportToCSV = exportToCSV;
+            // =======================================================
+            // BARU: Tautkan fungsi EXCEL BARU ke window
+            // =======================================================
+            window.exportAllToExcel = exportAllToExcel;
+            window.exportGlobalExcel = exportGlobalExcel; // Fungsi global baru
+
+
+            // BARU: Tautkan fungsi Edit ke window
+            window.openEditModal = openEditModal;
+        }
+        
+        // ===================================
+        // FUNGSI MODAL ALERT
+        // ===================================
+
+        function showAlertModal(message, isError = false) {
+            alertTitle.textContent = isError ? "Error" : "Informasi";
+            alertMessage.textContent = message;
+            alertModal.classList.add('active');
+        }
+
+        // ===================================
+        // FUNGSI FILTER & EVENT HANDLER
+        // ===================================
+
+        function populateProvinsiFilter(dataSource, selectElement, isUserList) {
+            const uniqueSet = new Set();
+            if (isUserList) {
+                // Ini untuk modal login (meskipun kita tidak menggunakannya lagi, biarkan saja)
+                dataSource.forEach(item => item.provinsi && uniqueSet.add(item.provinsi));
+            } else {
+                // Ini untuk filter di panel
+                dataSource.forEach(item => item.provinsi && uniqueSet.add(item.provinsi));
+            }
+            
+            const sortedItems = [...uniqueSet].sort();
+            selectElement.innerHTML = `<option value="">${isUserList ? 'Pilih Provinsi' : 'Semua Provinsi'}</option>`;
+            sortedItems.forEach(item => {
+                if(item !== "ADMINISTRATOR") {
+                    selectElement.appendChild(new Option(item, item));
+                }
+            });
+        }
+
+        function handleProvinsiChange(event) {
+            const provSelect = event.target;
+            const selectedProv = provSelect.value;
+            const kabSelect = document.getElementById(provSelect.dataset.targetKab);
+            const npsnSelect = document.getElementById(provSelect.dataset.targetNpsn);
+            
+            // Reset Kab/Kota
+            kabSelect.innerHTML = '<option value="">Semua Kab/Kota</option>';
+            kabSelect.disabled = true;
+            // Reset NPSN
+            npsnSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
+            npsnSelect.disabled = true;
+            
+            // Reset kontainer hasil (jika ini filter utama, bukan modal program)
+            if (npsnSelect.dataset.container) {
+                document.getElementById(npsnSelect.dataset.container).innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+                // BARU: Sembunyikan tombol aksi
+                document.querySelectorAll('.action-buttons').forEach(btn => btn.classList.add('hidden'));
+                // =======================================================
+                // BARU: Sembunyikan tombol aksi global Excel
+                // =======================================================
+                globalActionButtons.classList.add('hidden');
+                currentLoadedData = null;
+            }
+            
+            if (selectedProv) {
+                const kabKotaSet = new Set(allSekolahList
+                    .filter(s => s.provinsi === selectedProv)
+                    .map(s => s.kota).filter(Boolean));
+                
+                [...kabKotaSet].sort().forEach(kota => {
+                    kabSelect.appendChild(new Option(kota, kota));
+                });
+                kabSelect.disabled = false;
+            }
+        }
+        
+        function handleKabKotaChange(event) {
+            const kabSelect = event.target;
+            const selectedKab = kabSelect.value;
+            const provSelect = kabSelect.closest('.filter-container').querySelector('.filter-provinsi');
+            const selectedProv = provSelect.value;
+            const npsnSelect = document.getElementById(kabSelect.dataset.targetNpsn);
+
+            // Reset NPSN
+            npsnSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
+            npsnSelect.disabled = true;
+
+            // Reset kontainer hasil (jika ini filter utama, bukan modal program)
+            if (npsnSelect.dataset.container) {
+                document.getElementById(npsnSelect.dataset.container).innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+                // BARU: Sembunyikan tombol aksi
+                document.querySelectorAll('.action-buttons').forEach(btn => btn.classList.add('hidden'));
+                // =======================================================
+                // BARU: Sembunyikan tombol aksi global Excel
+                // =======================================================
+                globalActionButtons.classList.add('hidden');
+                currentLoadedData = null;
+            }
+            
+            if (selectedKab) {
+                const schools = allSekolahList.filter(s => s.provinsi === selectedProv && s.kota === selectedKab);
+                
+                schools.sort((a,b) => a.sekolah.localeCompare(b.sekolah)).forEach(sekolah => {
+                    npsnSelect.appendChild(new Option(`${sekolah.sekolah} (${sekolah.npsn})`, sekolah.npsn));
+                });
+                npsnSelect.disabled = false;
+            }
+        }
+        
+        /**
+         * Handler utama saat NPSN diganti. Memuat data sesuai section.
+         */
+        async function handleNpsnChange(event) {
+            const npsnSelect = event.target;
+            const selectedNpsn = npsnSelect.value;
+            
+            // BARU: Sembunyikan semua tombol aksi saat filter berubah
+            document.querySelectorAll('.action-buttons').forEach(btn => btn.classList.add('hidden'));
+            // =======================================================
+            // BARU: Sembunyikan tombol aksi global Excel
+            // =======================================================
+            globalActionButtons.classList.add('hidden');
+            currentLoadedData = null;
+
+            // Cek apakah ini filter di modal program
+            if (npsnSelect.id === 'filter-npsn-program') {
+                await loadProgramPreview(selectedNpsn);
+                return;
+            }
+
+            // Jika bukan modal program, ini adalah filter section biasa
+            const collectionName = npsnSelect.dataset.collection;
+            const containerId = npsnSelect.dataset.container;
+            const container = document.getElementById(containerId);
+            
+            if (!selectedNpsn) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-10">Pilih sekolah dari filter di atas untuk memuat data.</p>';
+                return;
+            }
+
+            container.innerHTML = '<div class="loader"></div><p class="text-center text-gray-500">Memuat data...</p>';
+            
+            try {
+                const npsnField = npsnFieldMap.get(collectionName);
+                const q = query(collection(db, collectionName), where(npsnField, "==", selectedNpsn));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="text-center text-gray-500 py-10">Tidak ada data input ditemukan untuk sekolah ini.</p>';
+                    // =======================================================
+                    // BARU: Tampilkan tombol global Excel meskipun data kosong
+                    // =======================================================
+                    globalActionButtons.classList.remove('hidden');
+                    return;
+                }
+                
+                // BARU: Simpan data yang dimuat untuk di-export
+                // PERBAIKAN: Simpan ID Dokumen
+                const dataArray = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                currentLoadedData = { collection: collectionName, data: dataArray };
+
+                let html = '';
+                dataArray.forEach((docData, index) => { // Gunakan dataArray yang sudah ada ID-nya
+                    html += `<div class="text-lg font-semibold text-gray-700 mt-4">Data Input #${index + 1}</div>`;
+
+                    // Panggil fungsi render yang sesuai
+                    switch (collectionName) {
+                        case 'fgd':
+                            html += renderFgdCard(docData, collectionName); // Kirim docData (dg ID) dan collectionName
+                            break;
+                        case 'wawancara_guru':
+                            html += renderWawancaraGuruCard(docData, collectionName);
+                            break;
+                        case 'observasi':
+                            html += renderObservasiTable(docData, collectionName);
+                            break;
+                        case 'wawancara_murid':
+                            html += renderWawancaraMuridCard(docData, collectionName);
+                            break;
+                        case 'laporan':
+                            html += renderLaporanCard(docData, collectionName);
+                            break;
+                        default:
+                            html += '<p>Render tidak didukung.</p>';
+                    }
+                });
+                container.innerHTML = html;
+                
+                // BARU: Tampilkan tombol aksi
+                const actionButtons = document.getElementById(collectionName + '-action-buttons');
+                if (actionButtons) {
+                    actionButtons.classList.remove('hidden');
+                }
+                // =======================================================
+                // BARU: Tampilkan tombol aksi global Excel
+                // =======================================================
+                globalActionButtons.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error(`Gagal memuat data ${collectionName}:`, error);
+                container.innerHTML = `<p class="text-center text-red-500 py-10">Gagal memuat data: ${error.message}</p>`;
+                showAlertModal(`Gagal memuat data: ${error.message}`, true);
+            }
+        }
+        
+        /**
+         * Memuat preview program di modal.
+         */
+        async function loadProgramPreview(npsn) {
+            programStatusMessage.textContent = "Mencari program...";
+            programStatusMessage.classList.remove('hidden');
+            programIframe.classList.add('hidden');
+            programFallbackLink.classList.add('hidden');
+            programIframe.src = "about:blank";
+
+            if (!npsn) {
+                programStatusMessage.textContent = "Pilih sekolah untuk melihat preview program.";
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "program_sekolah", npsn);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists() && docSnap.data().linkFinal) {
+                    const url = docSnap.data().linkFinal;
+                    // Ubah URL GDrive 'view' menjadi 'preview' agar bisa di-embed
+                    const previewUrl = url.replace("/view?usp=sharing", "/preview").replace("/view", "/preview");
+                    
+                    programIframe.src = previewUrl;
+                    programIframe.classList.remove('hidden');
+                    programStatusMessage.classList.add('hidden');
+                    
+                    programFallbackLink.href = url;
+                    programFallbackLink.classList.remove('hidden');
+                    
+                } else {
+                    programStatusMessage.textContent = "Program Final belum diunggah untuk sekolah ini.";
+                }
+            } catch (error) {
+                console.error("Gagal fetch program:", error);
+                programStatusMessage.textContent = "Gagal memuat data program.";
+                showAlertModal(`Gagal memuat data program: ${error.message}`, true);
+            }
+        }
+
+        // ===================================
+        // FUNGSI RENDER HASIL INPUT
+        // ===================================
+
+        /**
+         * Helper untuk menampilkan jawaban.
+         */
+        function renderAnswer(answer) {
+            if (!answer || answer.trim() === "") {
+                return '<div class="result-answer empty">(Tidak diisi)</div>';
+            }
+            // Escape HTML
+            const escapedAnswer = answer.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return `<div class="result-answer">${escapedAnswer}</div>`;
+        }
+
+        /**
+         * Render Card untuk FGD.
+         */
+        function renderFgdCard(doc, collectionName) {
+            const data = doc; // doc sekarang berisi {id, ...data}
+            // Data dari Form.html
+            const questions = [
+                { label: '1. Pemahaman Umum (Kepala Sekolah)', id: 'fgd_q1_ks' },
+                { label: '1. Pemahaman Umum (Guru)', id: 'fgd_q1_guru' },
+                { label: '2. Kondisi Awal (Kepala Sekolah)', id: 'fgd_q2_ks' },
+                { label: '2. Kondisi Awal (Guru)', id: 'fgd_q2_guru' },
+                { label: '3. Kepemimpinan Instruksional (KS & Guru)', id: 'fgd_q3' },
+                { label: '4. Praktik Pembelajaran (KS & Guru)', id: 'fgd_q4' },
+                { label: '5. Kolaborasi (Kepala Sekolah)', id: 'fgd_q5_ks' },
+                { label: '5. Kolaborasi (Guru)', id: 'fgd_q5_guru' },
+                { label: '6. Pemanfaatan Sumber Daya (Kepala Sekolah)', id: 'fgd_q6_ks' },
+                { label: '6. Pemanfaatan Sumber Daya (Guru)', id: 'fgd_q6_guru' },
+                { label: '7. Evaluasi dan Refleksi (KS & Guru)', id: 'fgd_q7' },
+                { label: '8. Kesiapan Implementasi (KS & Guru)', id: 'fgd_q8' },
+            ];
+            
+            let body = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><div class="result-question">Petugas 1</div> ${renderAnswer(data.petugas1_fgd)}</div>
+                    <div><div class="result-question">Petugas 2</div> ${renderAnswer(data.petugas2_fgd)}</div>
+                    <div><div class="result-question">Kepala Sekolah</div> ${renderAnswer(data.nama_kepala_sekolah)}</div>
+                    <div><div class="result-question">Guru</div> ${renderAnswer(data.nama_guru_fgd)}</div>
+                </div>
+                <hr>`;
+                
+            questions.forEach(q => {
+                body += `
+                    <div>
+                        <div class="result-question">${q.label}</div>
+                        ${renderAnswer(data[q.id])}
+                    </div>
+                `;
+            });
+            
+            return `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div>
+                            <h3>FGD - ${data.nama_sekolah_fgd || 'Data'}</h3>
+                            <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                        </div>
+                        <button onclick="openEditModal('${collectionName}', '${data.id}')" class="btn-edit-card hidden">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    <div class="result-card-body">${body}</div>
+                </div>`;
+        }
+        
+        /**
+         * Render Card untuk Wawancara Guru.
+         */
+        function renderWawancaraGuruCard(doc, collectionName) {
+             const data = doc;
+             const questions = [
+                { label: '1. Pemahaman Umum', id: 'q1' },
+                { label: '2. Kondisi Awal dan Refleksi', id: 'q2' },
+                { label: '3. Praktik Pembelajaran', id: 'q3' },
+                { label: '4. Kolaborasi', id: 'q4' },
+                { label: '5. Pemanfaatan Media', id: 'q5' },
+                { label: '6. Refleksi dan Evaluasi', id: 'q6' },
+                { label: '7. Kesiapan dan Dukungan', id: 'q7' },
+             ];
+             
+             let body = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><div class="result-question">Petugas 1</div> ${renderAnswer(data.petugas1)}</div>
+                    <div><div class="result-question">Petugas 2</div> ${renderAnswer(data.petugas2)}</div>
+                    <div><div class="result-question">Nama Guru</div> ${renderAnswer(data.nama_guru)}</div>
+                    <div><div class="result-question">Kelas</div> ${renderAnswer(data.kelas_guru)}</div>
+                </div>
+                <hr>`;
+                
+            questions.forEach(q => {
+                body += `
+                    <div>
+                        <div class="result-question">${q.label}</div>
+                        ${renderAnswer(data[q.id])}
+                    </div>
+                `;
+            });
+            
+            return `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div>
+                            <h3>Wawancara Guru - ${data.nama_sekolah || 'Data'}</h3>
+                            <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                        </div>
+                        <button onclick="openEditModal('${collectionName}', '${data.id}')" class="btn-edit-card hidden">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    <div class="result-card-body">${body}</div>
+                </div>`;
+        }
+
+        /**
+         * Render Card untuk Wawancara Murid.
+         */
+        function renderWawancaraMuridCard(doc, collectionName) {
+             const data = doc;
+             const questions = [
+                { label: '1. Pengalaman Belajar', id: 'mq1' },
+                { label: '2. Kegiatan Literasi', id: 'mq2' },
+                { label: '3. Kegiatan Numerasi', id: 'mq3' },
+                { label: '4. Refleksi Belajar', id: 'mq4' },
+                { label: '5. Lingkungan Belajar', id: 'mq5' },
+                { label: '6. Keterlibatan dan Motivasi', id: 'mq6' },
+             ];
+             
+             let body = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><div class="result-question">Petugas 1</div> ${renderAnswer(data.petugas1_murid)}</div>
+                    <div><div class="result-question">Petugas 2</div> ${renderAnswer(data.petugas2_murid)}</div>
+                </div>
+                <div class="result-question">Data Murid</div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    ${renderAnswer(data.nama_murid_1 + ' (Kelas ' + data.kelas_murid_1 + ')')}
+                    ${renderAnswer(data.nama_murid_2 + ' (Kelas ' + data.kelas_murid_2 + ')')}
+                    ${renderAnswer(data.nama_murid_3 + ' (Kelas ' + data.kelas_murid_3 + ')')}
+                    ${renderAnswer(data.nama_murid_4 + ' (Kelas ' + data.kelas_murid_4 + ')')}
+                    ${renderAnswer(data.nama_murid_5 + ' (Kelas ' + data.kelas_murid_5 + ')')}
+                    ${renderAnswer(data.nama_murid_6 + ' (Kelas ' + data.kelas_murid_6 + ')')}
+                </div>
+                <hr>`;
+                
+            questions.forEach(q => {
+                body += `
+                    <div>
+                        <div class="result-question">${q.label}</div>
+                        ${renderAnswer(data[q.id])}
+                    </div>
+                `;
+            });
+            
+            return `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div>
+                            <h3>Wawancara Murid - ${data.nama_sekolah_murid || 'Data'}</h3>
+                            <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                        </div>
+                        <button onclick="openEditModal('${collectionName}', '${data.id}')" class="btn-edit-card hidden">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    <div class="result-card-body">${body}</div>
+                </div>`;
+        }
+
+        /**
+         * Render Tabel Read-Only untuk Observasi.
+         */
+        function renderObservasiTable(doc, collectionName) {
+            const data = doc;
+            const items = {
+                "A. Proses Pembelajaran di Kelas": [
+                    { id: 'obs_a1', indicator: 'Kegiatan Pembuka' },
+                    { id: 'obs_a2', indicator: 'Aktivasi Literasi' },
+                    { id: 'obs_a3', indicator: 'Aktivasi Numerasi' },
+                    { id: 'obs_a4', indicator: 'Pertanyaan Pemantik (SSA)' },
+                    { id: 'obs_a5', indicator: 'Tahapan CPA' },
+                    { id: 'obs_a6', indicator: 'Keterlibatan Murid' },
+                    { id: 'obs_a7', indicator: 'Kegiatan Reflektif' },
+                    { id: 'obs_a8', indicator: 'Pemanfaatan Media' },
+                    { id: 'obs_a9', indicator: 'Diferensiasi Pembelajaran' },
+                    { id: 'obs_a10', indicator: 'Penilaian Formatif' }
+                ],
+                "B. Kondisi Lingkungan": [
+                    { id: 'obs_b1', indicator: 'Lingkungan Kelas (Literasi)' },
+                    { id: 'obs_b2', indicator: 'Lingkungan Kelas (Numerasi)' },
+                    { id: 'obs_b3', indicator: 'Pojok Baca' },
+                    { id: 'obs_b4', indicator: 'Paparan Karya Murid' },
+                    { id: 'obs_b5', indicator: 'Kebersihan & Kerapian' },
+                    { id: 'obs_b6', indicator: 'Fasilitas Pendukung' },
+                    { id: 'obs_b7', indicator: 'Kegiatan Literasi Sekolah' },
+                    { id: 'obs_b8', indicator: 'Kegiatan Numerasi Sekolah' },
+                    { id: 'obs_b9', indicator: 'Keterlibatan KS & Guru' },
+                    { id: 'obs_b10', indicator: 'Suasana Sekolah' }
+                ]
+            };
+            
+            function renderRadioChoice(value) {
+                if (value === 'ya') return '<div class="check-icon"><i class="fas fa-check-circle"></i></div>';
+                if (value === 'tidak') return '<div class="check-icon"><i class="fas fa-times-circle"></i></div>';
+                return '<div class="check-icon"><i class="fas fa-circle-question"></i></div>';
+            }
+
+            function renderFoto(url) {
+                if (url) {
+                    return `<a href="${url}" target="_blank"><img src="${url}" class="foto-preview" alt="Foto Observasi"></a>`;
+                }
+                return `(Tidak ada foto)`;
+            }
+
+            let tableHTML = `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div>
+                            <h3>Observasi - ${data.nama_sekolah_obs || 'Data'}</h3>
+                            <p>Guru: ${data.nama_guru_obs || 'N/A'} | Kelas: ${data.kelas_guru_obs || 'N/A'}</p>
+                            <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                        </div>
+                        <button onclick="openEditModal('${collectionName}', '${data.id}')" class="btn-edit-card hidden">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    <div class="result-card-body !p-0 overflow-x-auto">
+                        <table class="observasi-table">
+                            <thead>
+                                <tr>
+                                    <th>Komponen</th>
+                                    <th>Hasil</th>
+                                    <th>Catatan & Bukti Pendukung</th>
+                                    <th>Dokumentasi (Foto)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            for (const [sectionTitle, sectionItems] of Object.entries(items)) {
+                tableHTML += `<tr class="bg-gray-50"><td colspan="4" class="font-bold p-3">${sectionTitle}</td></tr>`;
+                sectionItems.forEach(item => {
+                    tableHTML += `
+                        <tr>
+                            <td class="w-1/4">${item.indicator}</td>
+                            <td class="w-1/12">${renderRadioChoice(data[item.id])}</td>
+                            <td class="w-1/2">${renderAnswer(data['catatan_' + item.id.split('_')[1]])}</td>
+                            <td class="w-1/4">${renderFoto(data['foto_url_' + item.id])}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            tableHTML += `</tbody></table></div></div>`;
+            return tableHTML;
+        }
+
+        /**
+         * Render Card untuk Laporan.
+         */
+        function renderLaporanCard(doc, collectionName) {
+            const data = doc;
+            // Ini akan menjadi fungsi render yang besar
+            let body = `
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div>
+                            <h3>Laporan Pendampingan - ${data.nama_sekolah_lpr || 'Data'}</h3>
+                            <p>Diinput pada: ${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('id-ID') : 'N/A'}</p>
+                        </div>
+                        <button onclick="openEditModal('${collectionName}', '${data.id}')" class="btn-edit-card hidden">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    <div class="result-card-body space-y-6">
+
+                        <!-- 1. Identitas Kegiatan -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">1. Identitas Kegiatan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><div class="result-question">Nama Sekolah</div> ${renderAnswer(data.lpr_s1_nama_sekolah)}</div>
+                            <div><div class="result-question">NPSN</div> ${renderAnswer(data.lpr_s1_npsn)}</div>
+                            <div class="md:col-span-2"><div class="result-question">Alamat</div> ${renderAnswer(data.lpr_s1_alamat)}</div>
+                            <div><div class="result-question">Kab/Kota</div> ${renderAnswer(data.lpr_s1_kab_kota)}</div>
+                            <div><div class="result-question">Provinsi</div> ${renderAnswer(data.lpr_s1_provinsi)}</div>
+                            <div><div class="result-question">Tanggal</div> ${renderAnswer(data.lpr_s1_tanggal)}</div>
+                            <div><div class="result-question">Durasi</div> ${renderAnswer(data.lpr_s1_durasi)}</div>
+                        </div>
+
+                        <!-- 3. Ringkasan Proses -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">3. Ringkasan Proses Pendampingan</h4>
+                        <div><div class="result-question">Tahapan Kegiatan</div> ${renderAnswer(data.lpr_s3_tahapan)}</div>
+                        <div><div class="result-question">Metode</div> ${renderAnswer(data.lpr_s3_metode)}</div>
+                        <div><div class="result-question">Suasana & Partisipasi</div> ${renderAnswer(data.lpr_s3_suasana)}</div>
+
+                        <!-- 4. Hasil Analisis -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">4. Hasil Analisis dan Temuan</h4>
+                        <h5 class="text-md font-semibold text-gray-700">A. Berdasarkan Wawancara</h5>
+                        <div><div class="result-question">Kepala Sekolah</div> ${renderAnswer(data.lpr_s4a_ks)}</div>
+                        <div><div class="result-question">Guru</div> ${renderAnswer(data.lpr_s4a_guru)}</div>
+                        <div><div class="result-question">Murid</div> ${renderAnswer(data.lpr_s4a_murid)}</div>
+                        
+                        <h5 class="text-md font-semibold text-gray-700 mt-4">B. Berdasarkan Observasi</h5>
+                        <div class="overflow-x-auto"><table class="observasi-table">
+                            <thead><tr><th>Aspek</th><th>Kondisi Faktual</th><th>Catatan Pendamping</th></tr></thead>
+                            <tbody>
+                                <tr><td>Proses Pembelajaran</td><td>${renderAnswer(data.lpr_s4b_proses_faktual)}</td><td>${renderAnswer(data.lpr_s4b_proses_catatan)}</td></tr>
+                                <tr><td>Aktivitas Murid</td><td>${renderAnswer(data.lpr_s4b_aktivitas_faktual)}</td><td>${renderAnswer(data.lpr_s4b_aktivitas_catatan)}</td></tr>
+                                <tr><td>Lingkungan Sekolah</td><td>${renderAnswer(data.lpr_s4b_lingkungan_faktual)}</td><td>${renderAnswer(data.lpr_s4b_lingkungan_catatan)}</td></tr>
+                            </tbody>
+                        </table></div>
+
+                        <h5 class="text-md font-semibold text-gray-700 mt-4">C. Konsistensi</h5>
+                        <div><div class="result-question">Penilaian Konsistensi</div> ${renderAnswer(data.lpr_s4c_konsistensi)}</div>
+                        <div><div class="result-question">Catatan</div> ${renderAnswer(data.lpr_s4c_catatan)}</div>
+
+                        <!-- 6. Rekomendasi -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">6. Rekomendasi Pendamping</h4>
+                        ${renderAnswer(
+                            `1. ${data.lpr_s6_rek_1 || '-'}\n2. ${data.lpr_s6_rek_2 || '-'}\n3. ${data.lpr_s6_rek_3 || '-'}\n4. ${data.lpr_s6_rek_4 || '-'}`
+                        )}
+                        
+                        <!-- 7. Kesimpulan -->
+                        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mt-4">7. Kesimpulan</h4>
+                        <div><div class="result-question">Finalisasi Dokumen</div> ${renderAnswer(data.lpr_s7_final)}</div>
+                        <div><div class="result-question">Catatan Finalisasi</div> ${renderAnswer(data.lpr_s7_final_catatan)}</div>
+                        <div><div class="result-question">Rencana 14 Hari</div> ${renderAnswer(data.lpr_s7_rencana_catatan)}</div>
+                        <div><div class="result-question">Tindak Lanjut</div> ${renderAnswer(data.lpr_s7_tindak_lanjut)}</div>
+
+                    </div>
+                </div>
+            `;
+            return body;
+        }
+
+        // ===================================
+        // BARU: FUNGSI CETAK PDF & EXPORT CSV
+        // ===================================
+
+        /**
+         * Mencetak elemen kontainer sebagai PDF.
+         */
+        function generatePdfFromView(containerId, title) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                showAlertModal("Gagal menemukan konten untuk dicetak.", true);
+                return;
+            }
+            
+            // Dapatkan NPSN dari filter aktif
+            const npsnSelect = container.closest('.content-section').querySelector('.filter-npsn');
+            const npsn = npsnSelect.value || "Report";
+            const filename = `${title}_${npsn}.pdf`;
+
+            // Opsi untuk html2pdf
+            const opt = {
+                margin:       [0.5, 0.5, 0.5, 0.5], // [top, left, bottom, right] in inches
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Buat klon dari elemen untuk dimodifikasi
+            const elementToPrint = container.cloneNode(true);
+            
+            // Sembunyikan tombol aksi dari klon
+            elementToPrint.querySelectorAll('.action-buttons').forEach(btn => btn.style.display = 'none');
+            // Ganti foto preview dengan link
+            elementToPrint.querySelectorAll('.foto-preview').forEach(img => {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.textContent = "[Lihat Foto]";
+                link.target = "_blank";
+                img.parentNode.replaceChild(link, img);
+            });
+
+            showAlertModal("Mempersiapkan PDF... Ini mungkin memakan waktu beberapa detik.");
+
+            // Jalankan html2pdf
+            html2pdf().from(elementToPrint).set(opt).save().then(() => {
+                showAlertModal("PDF berhasil dibuat dan diunduh.");
+            }).catch(err => {
+                showAlertModal("Gagal membuat PDF: " + err.message, true);
+            });
+        }
+
+        /**
+         * Mengekspor data yang sedang dilihat ke file CSV.
+         */
+        function exportToCSV(expectedCollectionName) {
+            if (!currentLoadedData || currentLoadedData.collection !== expectedCollectionName || currentLoadedData.data.length === 0) {
+                showAlertModal("Tidak ada data yang dimuat untuk diekspor. Pilih sekolah terlebih dahulu.", true);
+                return;
+            }
+
+            showAlertModal("Mempersiapkan file CSV...");
+
+            try {
+                const dataToExport = currentLoadedData.data;
+                // 1. Ratakan semua objek (untuk menangani data laporan yang nested)
+                const flattenedData = dataToExport.map(item => flattenObject(item));
+                
+                // 2. Konversi ke CSV
+                const csvString = convertToCSV(flattenedData);
+                
+                // 3. Buat dan unduh file
+                const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+                const npsn = flattenedData[0].npsn || flattenedData[0].npsn_fgd || flattenedData[0].npsn_obs || flattenedData[0].npsn_murid || flattenedData[0].npsn_lpr || "data";
+                const filename = `Export_${expectedCollectionName}_${npsn}.csv`;
+                
+                const link = document.createElement("a");
+                if (link.download !== undefined) { 
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }
+                
+                showAlertModal("File CSV berhasil diunduh.");
+                
+            } catch (error) {
+                console.error("Gagal export CSV:", error);
+                showAlertModal("Gagal mengekspor CSV: " + error.message, true);
+            }
+        }
+        
+        // =============================================================
+        // FUNGSI EXPORT SEMUA DATA KE EXCEL (Per Sekolah)
+        // =============================================================
+
+        /**
+         * Mengekspor semua data (5 koleksi) untuk NPSN yang dipilih ke satu file Excel.
+         * Menggunakan library SheetJS (XLSX) yang sudah di-import di <head>.
+         */
+        async function exportAllToExcel() {
+            // 1. Dapatkan NPSN yang aktif dari filter manapun yang sedang terlihat
+            const activeSection = document.querySelector('.content-section.active');
+            const activeNpsnSelect = activeSection.querySelector('.filter-npsn');
+            const selectedNpsn = activeNpsnSelect ? activeNpsnSelect.value : null;
+
+            if (!selectedNpsn) {
+                showAlertModal("Silakan pilih sekolah terlebih dahulu.", true);
+                return;
+            }
+
+            showAlertModal("Mempersiapkan file Excel... Ini mungkin memakan waktu beberapa detik.");
+
+            // Dapatkan info sekolah untuk nama file
+            const schoolInfo = allSekolahList.find(s => s.npsn === selectedNpsn);
+            const schoolName = schoolInfo ? schoolInfo.sekolah.replace(/[^a-zA-Z0-9]/g, '_') : selectedNpsn; // Sanitasi nama file
+            const fileName = `Export_SemuaData_${schoolName}.xlsx`;
+
+            try {
+                // 2. Definisikan koleksi yang akan di-fetch
+                const collectionsToFetch = [
+                    { name: 'fgd', field: npsnFieldMap.get('fgd'), title: '1. Data FGD' },
+                    { name: 'wawancara_guru', field: npsnFieldMap.get('wawancara_guru'), title: '2. Wawancara Guru' },
+                    { name: 'observasi', field: npsnFieldMap.get('observasi'), title: '3. Data Observasi' },
+                    { name: 'wawancara_murid', field: npsnFieldMap.get('wawancara_murid'), title: '4. Wawancara Murid' },
+                    { name: 'laporan', field: npsnFieldMap.get('laporan'), title: '5. Data Laporan' }
+                ];
+
+                // 3. Fetch semua data secara paralel
+                const fetchPromises = collectionsToFetch.map(col => {
+                    const q = query(collection(db, col.name), where(col.field, "==", selectedNpsn));
+                    return getDocs(q);
+                });
+
+                const results = await Promise.all(fetchPromises);
+
+                // 4. Buat Workbook (File Excel)
+                const wb = XLSX.utils.book_new();
+
+                // 5. Loop hasil fetch dan buat sheet
+                results.forEach((snapshot, index) => {
+                    const colConfig = collectionsToFetch[index];
+                    const sheetName = colConfig.title.substring(0, 31); // Nama sheet maks 31 char
+                    
+                    let data = snapshot.docs.map(doc => flattenObject({ doc_id: doc.id, ...doc.data() }));
+                    
+                    let ws; // Worksheet
+                    if (data.length === 0) {
+                        // Buat sheet kosong dengan pesan
+                        ws = XLSX.utils.json_to_sheet([{ Message: `Tidak ada data ditemukan untuk ${colConfig.name}` }]);
+                    } else {
+                        // Bersihkan data (konversi timestamp, dll.)
+                        data = data.map(row => {
+                            Object.keys(row).forEach(key => {
+                                // Konversi Timestamp Firebase ke string yang bisa dibaca
+                                if (row[key] && typeof row[key] === 'object' && row[key].hasOwnProperty('seconds')) {
+                                    row[key] = new Date(row[key].seconds * 1000).toLocaleString('id-ID');
+                                }
+                            });
+                            return row;
+                        });
+                        ws = XLSX.utils.json_to_sheet(data);
+                    }
+                    
+                    // Tambahkan worksheet ke workbook
+                    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+                });
+
+                // 6. Tulis file dan trigger download
+                XLSX.writeFile(wb, fileName);
+                
+                // Tutup modal loading (modal alert akan ditutup oleh user)
+                // Pesan sukses sudah ditampilkan di awal
+                
+            } catch (error) {
+                console.error("Gagal export Excel:", error);
+                showAlertModal("Gagal mengekspor Excel: " + error.message, true);
+            }
+        }
+
+        // =============================================================
+        // BARU: FUNGSI EXPORT GLOBAL (SEMUA PROVINSI/KOTA/NPSN)
+        // =============================================================
+        async function exportGlobalExcel() {
+            // 1. Dapatkan tombol dan tampilkan loading
+            const exportButton = document.getElementById('btn-export-global');
+            if (exportButton) {
+                exportButton.disabled = true;
+                exportButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i> Mengunduh... Harap Tunggu...';
+            }
+            
+            showAlertModal("Mempersiapkan file Excel Global... Ini mungkin memakan waktu. Harap tunggu.");
+
+            const fileName = `Export_GLOBAL_SemuaData_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+            try {
+                // 2. Definisikan koleksi yang akan di-fetch
+                // Kita akan fetch 5 koleksi data. 'sekolah' and 'users' sudah ada di global.
+                const collectionsToFetch = [
+                    { name: 'fgd', title: 'Data FGD' },
+                    { name: 'wawancara_guru', title: 'Wawancara Guru' },
+                    { name: 'observasi', title: 'Data Observasi' },
+                    { name: 'wawancara_murid', title: 'Wawancara Murid' },
+                    { name: 'laporan', title: 'Data Laporan' }
+                ];
+
+                // 3. Fetch semua data (tanpa filter NPSN) secara paralel
+                const fetchPromises = collectionsToFetch.map(col => {
+                    // Query tanpa 'where' clause
+                    const q = query(collection(db, col.name));
+                    return getDocs(q);
+                });
+
+                const results = await Promise.all(fetchPromises);
+
+                // 4. Buat Workbook (File Excel)
+                const wb = XLSX.utils.book_new();
+
+                // 5. Tambahkan 'sekolah' dan 'users' dari data global
+                if (allSekolahList.length > 0) {
+                    const ws_sekolah = XLSX.utils.json_to_sheet(allSekolahList.map(flattenObject));
+                    XLSX.utils.book_append_sheet(wb, ws_sekolah, "Data Sekolah");
+                }
+                if (allUsersList.length > 0) {
+                    const ws_users = XLSX.utils.json_to_sheet(allUsersList.map(flattenObject));
+                    XLSX.utils.book_append_sheet(wb, ws_users, "Data Users");
+                }
+
+                // 6. Loop hasil fetch (data form) dan buat sheet
+                results.forEach((snapshot, index) => {
+                    const colConfig = collectionsToFetch[index];
+                    const sheetName = colConfig.title.substring(0, 31); // Nama sheet maks 31 char
+                    
+                    let data = snapshot.docs.map(doc => flattenObject({ doc_id: doc.id, ...doc.data() }));
+                    
+                    let ws; // Worksheet
+                    if (data.length === 0) {
+                        ws = XLSX.utils.json_to_sheet([{ Message: `Tidak ada data ditemukan untuk ${colConfig.name}` }]);
+                    } else {
+                        // Bersihkan data (konversi timestamp, dll.)
+                        data = data.map(row => {
+                            Object.keys(row).forEach(key => {
+                                if (row[key] && typeof row[key] === 'object' && row[key].hasOwnProperty('seconds')) {
+                                    row[key] = new Date(row[key].seconds * 1000).toLocaleString('id-ID');
+                                }
+                            });
+                            return row;
+                        });
+                        ws = XLSX.utils.json_to_sheet(data);
+                    }
+                    
+                    // Tambahkan worksheet ke workbook
+                    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+                });
+
+                // 7. Tulis file dan trigger download
+                XLSX.writeFile(wb, fileName);
+                
+                // Beri pesan sukses
+                showAlertModal("File Excel Global berhasil dibuat dan diunduh.");
+                
+            } catch (error) {
+                console.error("Gagal export Global Excel:", error);
+                showAlertModal("Gagal mengekspor Excel Global: " + error.message, true);
+            } finally {
+                // 8. Kembalikan tombol ke state normal
+                if (exportButton) {
+                    exportButton.disabled = false;
+                    exportButton.innerHTML = '<i class="fas fa-file-excel mr-3"></i> Download SEMUA DATA (.xlsx)';
+                }
+            }
+        }
+
+
+        /**
+         * Helper untuk mengubah array of objects menjadi string CSV.
+         */
+        function convertToCSV(objArray) {
+            const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+            let str = '';
+            let headers = [];
+
+            // Kumpulkan semua keys unik sebagai header
+            let headerSet = new Set();
+            array.forEach(item => {
+                Object.keys(item).forEach(key => headerSet.add(key));
+            });
+            headers = [...headerSet];
+            
+            // Tambahkan baris header
+            str += headers.map(header => `"${header}"`).join(',') + '\r\n';
+
+            // Tambahkan baris data
+            for (let i = 0; i < array.length; i++) {
+                let line = [];
+                for (let header of headers) {
+                    let value = array[i][header];
+                    if (value === null || value === undefined) {
+                        value = "";
+                    }
+                    // Handle nilai yang mengandung koma atau kutip
+                    if (typeof value === 'string') {
+                        value = value.replace(/"/g, '""'); // Escape double quotes
+                        value = `"${value.replace(/(\r\n|\n|\r)/gm, " ")}"`; // Ganti newline & bungkus dengan kutip
+                    }
+                    line.push(value);
+                }
+                str += line.join(',') + '\r\n';
+            }
+            return str;
+        }
+
+        /**
+         * Helper untuk meratakan objek JSON yang nested (misal: data.lpr_s1_nama_sekolah)
+         */
+        function flattenObject(ob) {
+            let toReturn = {};
+            for (let i in ob) {
+                if (!ob.hasOwnProperty(i)) continue;
+                if ((typeof ob[i]) == 'object' && ob[i] !== null && !Array.isArray(ob[i]) && !(ob[i] instanceof Date)) {
+                    // Jika objek, rekursif
+                    let flatObject = flattenObject(ob[i]);
+                    for (let x in flatObject) {
+                        if (!flatObject.hasOwnProperty(x)) continue;
+                        toReturn[i + '.' + x] = flatObject[x];
+                    }
+                } else if (ob[i] instanceof Date) {
+                    toReturn[i] = ob[i].toISOString(); // Format tanggal
+                } else if (typeof ob[i] === 'object' && ob[i] !== null && ob[i].hasOwnProperty('seconds')) {
+                    // Handle Firebase Timestamp
+                    toReturn[i] = new Date(ob[i].seconds * 1000).toLocaleString('id-ID');
+                } else {
+                    toReturn[i] = ob[i];
+                }
+            }
+            return toReturn;
+        }
+
+        // ===================================
+        // BARU: FUNGSI EDIT DATA
+        // ===================================
+
+        /**
+         * Membuka modal edit dan membangun form dinamis.
+         */
+        function openEditModal(collectionName, docId) {
+            const docData = currentLoadedData.data.find(d => d.id === docId);
+            if (!docData) {
+                showAlertModal("Gagal menemukan data untuk diedit.", true);
+                return;
+            }
+
+            editModalTitle.textContent = `Edit Data: ${collectionName} (${docId.substring(0, 6)}...)`;
+            
+            let formHtml = `<form id="edit-form" class="space-y-4">`;
+            
+            // Helper untuk membuat input/textarea
+            const createField = (key, value, type = 'text', label = key) => {
+                value = value || ''; // Handle undefined/null
+                if (type === 'textarea') {
+                    return `
+                        <div class="form-group">
+                            <label for="edit_${key}">${label}</label>
+                            <textarea id="edit_${key}" name="${key}" rows="4">${value}</textarea>
+                        </div>`;
+                }
+                return `
+                    <div class="form-group">
+                        <label for="edit_${key}">${label}</label>
+                        <input type="text" id="edit_${key}" name="${key}" value="${value}">
+                    </div>`;
+            };
+
+            // Bangun form berdasarkan koleksi
+            // Ini adalah versi sederhana; idealnya meniru Form.html
+            // Untuk sekarang, kita buat editor "raw" untuk semua field
+            
+            formHtml += `<h4>Data Mentah (Edit dengan hati-hati)</h4>`;
+            
+            const sortedKeys = Object.keys(docData).sort();
+            
+            for (const key of sortedKeys) {
+                const value = docData[key];
+                
+                // Abaikan ID dan Timestamp
+                if (key === 'id' || key === 'createdAt') continue;
+                
+                // Tentukan tipe field
+                if (typeof value === 'string' && value.length > 80) {
+                     formHtml += createField(key, value, 'textarea', key);
+                } else if (typeof value === 'string' || typeof value === 'number') {
+                     formHtml += createField(key, value, 'text', key);
+                }
+                // (Logika untuk radio/checkbox bisa ditambahkan di sini jika perlu)
+            }
+            
+
+            formHtml += `</form>`;
+            editModalBody.innerHTML = formHtml;
+
+            // Atur tombol Simpan
+            editSaveButton.onclick = () => saveEdit(collectionName, docId);
+            
+            // Tampilkan modal
+            editDataModal.classList.add('active');
+        }
+        
+        /**
+         * Menyimpan data yang telah diedit dari modal.
+         */
+        async function saveEdit(collectionName, docId) {
+            const form = document.getElementById('edit-form');
+            if (!form) return;
+
+            editSaveButton.disabled = true;
+            editSaveButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan...';
+
+            try {
+                const formData = new FormData(form);
+                const updatedData = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    updatedData[key] = value;
+                }
+                
+                // Hapus field 'id' jika tidak sengaja masuk
+                delete updatedData.id;
+
+                // Lakukan update
+                const docRef = doc(db, collectionName, docId);
+                await updateDoc(docRef, updatedData);
+                
+                // Tutup modal
+                editDataModal.classList.remove('active');
+                showAlertModal("Data berhasil diperbarui!");
+
+                // Refresh data di view
+                // Temukan filter NPSN yang aktif
+                const activeSection = document.querySelector('.content-section.active');
+                const activeNpsnSelect = activeSection.querySelector('.filter-npsn');
+                if (activeNpsnSelect) {
+                    // Picu ulang event change untuk me-refresh data
+                    activeNpsnSelect.dispatchEvent(new Event('change'));
+                }
+
+            } catch (error) {
+                console.error("Gagal menyimpan update:", error);
+                showAlertModal("Gagal menyimpan perubahan: " + error.message, true);
+            } finally {
+                editSaveButton.disabled = false;
+                editSaveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Simpan Perubahan';
+            }
+        }
+
+
+    </script>
+
+</body>
+</html>
