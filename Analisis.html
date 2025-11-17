@@ -506,7 +506,7 @@
         <main class="main-content">
 
             <!-- ================================== -->
-            <!--   BARU: Tombol Aksi Global         -->
+            <!--   BARU: Tombol Aksi Global           -->
             <!-- ================================== -->
             <div id="global-action-buttons" class="hidden mb-6 flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow items-center">
                 <button onclick="exportAllToExcel()" class="bg-purple-600 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-700 flex items-center">
@@ -744,14 +744,22 @@
             <!-- ================================== -->
             <!--   BARU: HALAMAN EXPORT GLOBAL      -->
             <!-- ================================== -->
-            <div id="content-export-global" class="content-section hidden">
+            <div id="content-export-global" class="content-section">
                 <h1>Export Global</h1>
                 <p>Gunakan tombol di bawah ini untuk mengunduh <strong>SEMUA</strong> data dari <strong>SEMUA</strong> sekolah (semua provinsi dan kab/kota) ke dalam satu file Excel.</p>
                 <p class="text-sm text-yellow-700 bg-yellow-100 p-3 rounded-lg border border-yellow-300 my-4"><i class="fas fa-exclamation-triangle mr-2"></i><strong>Peringatan:</strong> Proses ini mungkin memakan waktu beberapa menit jika data sangat besar. Harap jangan tutup halaman ini setelah menekan tombol.</p>
 
-                <div class="mt-6">
-                    <button onclick="exportGlobalExcel()" id="btn-export-global" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 flex items-center text-lg font-semibold">
+                <div class="mt-6 flex flex-col sm:flex-row gap-4">
+                    <!-- Tombol Download (Sudah ada) -->
+                    <button onclick="exportGlobalExcel()" id="btn-export-global" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 flex items-center justify-center text-lg font-semibold">
                         <i class="fas fa-file-excel mr-3"></i> Download SEMUA DATA (.xlsx)
+                    </button>
+                    
+                    <!-- ================================== -->
+                    <!-- BARU: Tombol Sync ke Google Sheet  -->
+                    <!-- ================================== -->
+                    <button onclick="syncGlobalToSheet()" id="btn-sync-global" class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 flex items-center justify-center text-lg font-semibold">
+                        <i class="fas fa-cloud-upload-alt mr-3"></i> Sync ke Google Sheet
                     </button>
                 </div>
             </div>
@@ -864,6 +872,13 @@
           messagingSenderId: "215819821063",
           appId: "1:215819821063:web:4bdb7f127acbc1cfde4aa2"
         };
+        
+        // =======================================================
+        // BARU: URL Google Apps Script untuk SINKRONISASI
+        // =======================================================
+        // Ganti dengan URL Aplikasi Web Anda setelah men-deploy Code.gs
+        const GLOBAL_SHEET_GAS_URL = "https://script.google.com/macros/s/AKfycbz0_srXaXHZ6jieRgcy11YKeGsdQzrWc5z5Vrlj_FTWiiH80DVkxrUeTx8lPzw5QdnGkQ/exec";
+
         
         // 3. Inisialisasi Firebase
         let db;
@@ -1095,6 +1110,7 @@
             // =======================================================
             window.exportAllToExcel = exportAllToExcel;
             window.exportGlobalExcel = exportGlobalExcel; // Fungsi global baru
+            window.syncGlobalToSheet = syncGlobalToSheet; // Fungsi sync global baru
 
 
             // BARU: Tautkan fungsi Edit ke window
@@ -1775,12 +1791,77 @@
         }
         
         // =============================================================
-        // FUNGSI EXPORT SEMUA DATA KE EXCEL (Per Sekolah)
+        // =============================================================
+        // BEGIN PENAMBAHAN FUNGSI EXPORT YANG HILANG
+        // =============================================================
         // =============================================================
 
         /**
+         * Helper untuk mengubah array of objects menjadi string CSV.
+         */
+        function convertToCSV(objArray) {
+            const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+            let str = '';
+            let headers = [];
+
+            // Kumpulkan semua keys unik sebagai header
+            let headerSet = new Set();
+            array.forEach(item => {
+                Object.keys(item).forEach(key => headerSet.add(key));
+            });
+            headers = [...headerSet];
+            
+            // Tambahkan baris header
+            str += headers.map(header => `"${header}"`).join(',') + '\r\n';
+
+            // Tambahkan baris data
+            for (let i = 0; i < array.length; i++) {
+                let line = [];
+                for (let header of headers) {
+                    let value = array[i][header];
+                    if (value === null || value === undefined) {
+                        value = "";
+                    }
+                    // Handle nilai yang mengandung koma atau kutip
+                    if (typeof value === 'string') {
+                        value = value.replace(/"/g, '""'); // Escape double quotes
+                        value = `"${value.replace(/(\r\n|\n|\r)/gm, " ")}"`; // Ganti newline & bungkus dengan kutip
+                    }
+                    line.push(value);
+                }
+                str += line.join(',') + '\r\n';
+            }
+            return str;
+        }
+
+        /**
+         * Helper untuk meratakan objek JSON yang nested (misal: data.lpr_s1_nama_sekolah)
+         */
+        function flattenObject(ob) {
+            let toReturn = {};
+            for (let i in ob) {
+                if (!ob.hasOwnProperty(i)) continue;
+                if ((typeof ob[i]) == 'object' && ob[i] !== null && !Array.isArray(ob[i]) && !(ob[i] instanceof Date)) {
+                    // Jika objek, rekursif
+                    let flatObject = flattenObject(ob[i]);
+                    for (let x in flatObject) {
+                        if (!flatObject.hasOwnProperty(x)) continue;
+                        toReturn[i + '.' + x] = flatObject[x];
+                    }
+                } else if (ob[i] instanceof Date) {
+                    toReturn[i] = ob[i].toISOString(); // Format tanggal
+                } else if (typeof ob[i] === 'object' && ob[i] !== null && ob[i].hasOwnProperty('seconds')) {
+                    // Handle Firebase Timestamp
+                    toReturn[i] = new Date(ob[i].seconds * 1000).toLocaleString('id-ID');
+                } else {
+                    toReturn[i] = ob[i];
+                }
+            }
+            return toReturn;
+        }
+
+        /**
          * Mengekspor semua data (5 koleksi) untuk NPSN yang dipilih ke satu file Excel.
-         * Menggunakan library SheetJS (XLSX) yang sudah di-import di <head>.
          */
         async function exportAllToExcel() {
             // 1. Dapatkan NPSN yang aktif dari filter manapun yang sedang terlihat
@@ -1863,8 +1944,125 @@
         }
 
         // =============================================================
-        // BARU: FUNGSI EXPORT GLOBAL (SEMUA PROVINSI/KOTA/NPSN)
+        // BARU: FUNGSI HELPER PENGURUTAN KOLOM
         // =============================================================
+        /**
+         * Mengurutkan dan memperkaya data baris berdasarkan urutan kolom yang ditentukan.
+         * @param {Array<Object>} data - Array data mentah dari Firestore.
+         * @param {string} collectionName - Nama koleksi (misal 'fgd', 'wawancara_guru').
+         * @param {Map} sekolahMap - Map data sekolah (NPSN -> info sekolah).
+         * @param {Map} npsnFieldMap - Map (koleksi -> nama field NPSN).
+         * @returns {Array<Object>} Array data yang sudah diurutkan kolomnya.
+         */
+        function orderAndEnrichData(data, collectionName, sekolahMap, npsnFieldMap) {
+            // 1. Tentukan urutan header berdasarkan permintaan Anda
+            const headerOrders = {
+                'wawancara_guru': [
+                    'Provinsi', 'Kab/Kota', 'Petugas 1', 'Petugas 2', 'NPSN', 'Nama Sekolah',
+                    'nama_guru', 'kelas_guru', 'hp_guru', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'
+                ],
+                'fgd': [
+                    'Provinsi', 'Kab/Kota', 'Petugas 1', 'Petugas 2', 'NPSN', 'Nama Sekolah',
+                    'nama_kepala_sekolah', 'hp_kepala_sekolah', 'lama_bertugas', 'nama_guru_fgd', 'kelas_guru_fgd',
+                    'fgd_q1_ks', 'fgd_q1_guru', 'fgd_q2_ks', 'fgd_q2_guru', 'fgd_q3', 'fgd_q4', 
+                    'fgd_q5_ks', 'fgd_q5_guru', 'fgd_q6_ks', 'fgd_q6_guru', 'fgd_q7', 'fgd_q8'
+                ],
+                'wawancara_murid': [
+                    'Provinsi', 'Kab/Kota', 'Petugas 1', 'Petugas 2', 'NPSN', 'Nama Sekolah',
+                    'nama_murid_1', 'kelas_murid_1', 'nama_murid_2', 'kelas_murid_2', 'nama_murid_3', 'kelas_murid_3',
+                    'nama_murid_4', 'kelas_murid_4', 'nama_murid_5', 'kelas_murid_5', 'nama_murid_6', 'kelas_murid_6',
+                    'mq1', 'mq2', 'mq3', 'mq4', 'mq5', 'mq6'
+                ],
+                'observasi': [
+                    'Provinsi', 'Kab/Kota', 'NPSN', 'Nama Sekolah', 'Petugas 1', 'Petugas 2',
+                    'nama_guru_obs', 'kelas_guru_obs', 'hp_guru_obs',
+                    'obs_a1', 'catatan_a1', 'foto_url_obs_a1', 'obs_a2', 'catatan_a2', 'foto_url_obs_a2',
+                    'obs_a3', 'catatan_a3', 'foto_url_obs_a3', 'obs_a4', 'catatan_a4', 'foto_url_obs_a4',
+                    'obs_a5', 'catatan_a5', 'foto_url_obs_a5', 'obs_a6', 'catatan_a6', 'foto_url_obs_a6',
+                    'obs_a7', 'catatan_a7', 'foto_url_obs_a7', 'obs_a8', 'catatan_a8', 'foto_url_obs_a8',
+                    'obs_a9', 'catatan_a9', 'foto_url_obs_a9', 'obs_a10', 'catatan_a10', 'foto_url_obs_a10',
+                    'obs_b1', 'catatan_b1', 'foto_url_obs_b1', 'obs_b2', 'catatan_b2', 'foto_url_obs_b2',
+                    'obs_b3', 'catatan_b3', 'foto_url_obs_b3', 'obs_b4', 'catatan_b4', 'foto_url_obs_b4',
+                    'obs_b5', 'catatan_b5', 'foto_url_obs_b5', 'obs_b6', 'catatan_b6', 'foto_url_obs_b6',
+                    'obs_b7', 'catatan_b7', 'foto_url_obs_b7', 'obs_b8', 'catatan_b8', 'foto_url_obs_b8',
+                    'obs_b9', 'catatan_b9', 'foto_url_obs_b9', 'obs_b10', 'catatan_b10', 'foto_url_obs_b10'
+                ],
+                'laporan': null // Laporan tidak diurutkan ulang, biarkan default
+            };
+
+            const orderedHeaders = headerOrders[collectionName];
+
+            // Jika tidak ada urutan spesifik (misal 'laporan'), kembalikan data apa adanya
+            // tapi tetap bersihkan timestamp
+            if (!orderedHeaders) {
+                return data.map(row => {
+                    Object.keys(row).forEach(key => {
+                        if (row[key] && typeof row[key] === 'object' && row[key].hasOwnProperty('seconds')) {
+                            row[key] = new Date(row[key].seconds * 1000).toLocaleString('id-ID');
+                        }
+                    });
+                    return row;
+                });
+            }
+
+            // 2. Proses data dengan urutan spesifik
+            const orderedData = data.map(row => {
+                // Bersihkan timestamp dulu
+                Object.keys(row).forEach(key => {
+                    if (row[key] && typeof row[key] === 'object' && row[key].hasOwnProperty('seconds')) {
+                        row[key] = new Date(row[key].seconds * 1000).toLocaleString('id-ID');
+                    }
+                });
+
+                // Cari data sekolah
+                const npsn = row[npsnFieldMap.get(collectionName)] || row['npsn'] || '';
+                const schoolData = sekolahMap.get(npsn) || {};
+
+                // Buat objek baru berdasarkan urutan header
+                const newOrderedObject = {};
+                for (const header of orderedHeaders) {
+                    let value = '';
+                    
+                    // Cek kunci spesial (dari data sekolah)
+                    switch (header) {
+                        case 'Provinsi':
+                            value = schoolData.provinsi || row['provinsi'] || '';
+                            break;
+                        case 'Kab/Kota':
+                            value = schoolData.kota || row['kab_kota'] || '';
+                            break;
+                        case 'NPSN':
+                            value = npsn;
+                            break;
+                        case 'Nama Sekolah':
+                            value = schoolData.sekolah || row['nama_sekolah'] || row['nama_sekolah_fgd'] || row['nama_sekolah_obs'] || row['nama_sekolah_murid'] || row['nama_sekolah_lpr'] || '';
+                            break;
+                        case 'Petugas 1':
+                            value = schoolData.petugas1 || row['petugas1'] || row['petugas1_fgd'] || row['petugas1_obs'] || row['petugas1_murid'] || row['petugas1_lpr'] || '';
+                            break;
+                        case 'Petugas 2':
+                            value = schoolData.petugas2 || row['petugas2'] || row['petugas2_fgd'] || row['petugas2_obs'] || row['petugas2_murid'] || row['petugas2_lpr'] || '';
+                            break;
+                        default:
+                            // Ambil nilai dari data baris asli
+                            value = row[header] !== undefined ? row[header] : '';
+                    }
+                    newOrderedObject[header] = value;
+                }
+                
+                // Tambahkan doc_id di akhir untuk referensi
+                newOrderedObject['doc_id'] = row['doc_id'];
+                
+                return newOrderedObject;
+            });
+
+            return orderedData;
+        }
+
+
+        /**
+         * Mengekspor SEMUA data dari SEMUA sekolah ke satu file Excel.
+         */
         async function exportGlobalExcel() {
             // 1. Dapatkan tombol dan tampilkan loading
             const exportButton = document.getElementById('btn-export-global');
@@ -1879,7 +2077,6 @@
 
             try {
                 // 2. Definisikan koleksi yang akan di-fetch
-                // Kita akan fetch 5 koleksi data. 'sekolah' and 'users' sudah ada di global.
                 const collectionsToFetch = [
                     { name: 'fgd', title: 'Data FGD' },
                     { name: 'wawancara_guru', title: 'Wawancara Guru' },
@@ -1887,10 +2084,21 @@
                     { name: 'wawancara_murid', title: 'Wawancara Murid' },
                     { name: 'laporan', title: 'Data Laporan' }
                 ];
+                
+                // BARU: Siapkan map untuk data sekolah
+                const sekolahMap = new Map();
+                allSekolahList.forEach(s => {
+                    sekolahMap.set(s.npsn, {
+                        provinsi: s.provinsi || '',
+                        kota: s.kota || '',
+                        sekolah: s.sekolah || '',
+                        petugas1: s.petugas1 || '',
+                        petugas2: s.petugas2 || ''
+                    });
+                });
 
                 // 3. Fetch semua data (tanpa filter NPSN) secara paralel
                 const fetchPromises = collectionsToFetch.map(col => {
-                    // Query tanpa 'where' clause
                     const q = query(collection(db, col.name));
                     return getDocs(q);
                 });
@@ -1921,16 +2129,11 @@
                     if (data.length === 0) {
                         ws = XLSX.utils.json_to_sheet([{ Message: `Tidak ada data ditemukan untuk ${colConfig.name}` }]);
                     } else {
-                        // Bersihkan data (konversi timestamp, dll.)
-                        data = data.map(row => {
-                            Object.keys(row).forEach(key => {
-                                if (row[key] && typeof row[key] === 'object' && row[key].hasOwnProperty('seconds')) {
-                                    row[key] = new Date(row[key].seconds * 1000).toLocaleString('id-ID');
-                                }
-                            });
-                            return row;
-                        });
-                        ws = XLSX.utils.json_to_sheet(data);
+                        // ===================================
+                        // MODIFIKASI: Panggil helper pengurutan baru
+                        // ===================================
+                        const orderedData = orderAndEnrichData(data, colConfig.name, sekolahMap, npsnFieldMap);
+                        ws = XLSX.utils.json_to_sheet(orderedData);
                     }
                     
                     // Tambahkan worksheet ke workbook
@@ -1955,70 +2158,115 @@
             }
         }
 
-
         /**
-         * Helper untuk mengubah array of objects menjadi string CSV.
+         * Mengirim SEMUA data dari SEMUA sekolah ke Google Sheet via Apps Script.
          */
-        function convertToCSV(objArray) {
-            const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-            let str = '';
-            let headers = [];
+        async function syncGlobalToSheet() {
+            if (GLOBAL_SHEET_GAS_URL === "GANTI_DENGAN_URL_DEPLOYMENT_APPS_SCRIPT_BARU_ANDA") {
+                showAlertModal("Gagal: URL Google Apps Script (GLOBAL_SHEET_GAS_URL) belum diatur di file Supervisor.html.", true);
+                return;
+            }
 
-            // Kumpulkan semua keys unik sebagai header
-            let headerSet = new Set();
-            array.forEach(item => {
-                Object.keys(item).forEach(key => headerSet.add(key));
-            });
-            headers = [...headerSet];
+            // 1. Dapatkan tombol dan tampilkan loading
+            const syncButton = document.getElementById('btn-sync-global');
+            if (syncButton) {
+                syncButton.disabled = true;
+                syncButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i> Menyinkronkan... Harap Tunggu...';
+            }
             
-            // Tambahkan baris header
-            str += headers.map(header => `"${header}"`).join(',') + '\r\n';
+            showAlertModal("Mempersiapkan data untuk dikirim ke Google Sheet... Ini mungkin memakan waktu.");
 
-            // Tambahkan baris data
-            for (let i = 0; i < array.length; i++) {
-                let line = [];
-                for (let header of headers) {
-                    let value = array[i][header];
-                    if (value === null || value === undefined) {
-                        value = "";
-                    }
-                    // Handle nilai yang mengandung koma atau kutip
-                    if (typeof value === 'string') {
-                        value = value.replace(/"/g, '""'); // Escape double quotes
-                        value = `"${value.replace(/(\r\n|\n|\r)/gm, " ")}"`; // Ganti newline & bungkus dengan kutip
-                    }
-                    line.push(value);
+            try {
+                // 2. Definisikan koleksi yang akan di-fetch
+                const collectionsToFetch = [
+                    { name: 'fgd', title: 'Data FGD' },
+                    { name: 'wawancara_guru', title: 'Wawancara Guru' },
+                    { name: 'observasi', title: 'Data Observasi' },
+                    { name: 'wawancara_murid', title: 'Wawancara Murid' },
+                    { name: 'laporan', title: 'Data Laporan' }
+                ];
+                
+                // BARU: Siapkan map untuk data sekolah
+                const sekolahMap = new Map();
+                allSekolahList.forEach(s => {
+                    sekolahMap.set(s.npsn, {
+                        provinsi: s.provinsi || '',
+                        kota: s.kota || '',
+                        sekolah: s.sekolah || '',
+                        petugas1: s.petugas1 || '',
+                        petugas2: s.petugas2 || ''
+                    });
+                });
+
+                // 3. Fetch semua data (tanpa filter NPSN) secara paralel
+                const fetchPromises = collectionsToFetch.map(col => {
+                    const q = query(collection(db, col.name));
+                    return getDocs(q);
+                });
+
+                const results = await Promise.all(fetchPromises);
+                
+                // 4. Siapkan payload JSON besar
+                const payload = {
+                    sekolah: allSekolahList,
+                    users: allUsersList
+                };
+
+                // 5. Loop hasil fetch (data form) dan tambahkan ke payload
+                results.forEach((snapshot, index) => {
+                    const colConfig = collectionsToFetch[index];
+                    const data = snapshot.docs.map(doc => flattenObject({ doc_id: doc.id, ...doc.data() }));
+                    
+                    // ===================================
+                    // MODIFIKASI: Panggil helper pengurutan baru
+                    // ===================================
+                    const orderedData = orderAndEnrichData(data, colConfig.name, sekolahMap, npsnFieldMap);
+                    payload[colConfig.name] = orderedData;
+                });
+
+                showAlertModal("Mengirim data ke Google Sheet... Proses ini bisa memakan waktu beberapa menit.");
+
+                // 6. Kirim data ke Google Apps Script
+                const response = await fetch(GLOBAL_SHEET_GAS_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8', // Kirim sebagai teks biasa untuk GAS
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server GAS merespon dengan status ${response.status}`);
                 }
-                str += line.join(',') + '\r\n';
-            }
-            return str;
-        }
 
-        /**
-         * Helper untuk meratakan objek JSON yang nested (misal: data.lpr_s1_nama_sekolah)
-         */
-        function flattenObject(ob) {
-            let toReturn = {};
-            for (let i in ob) {
-                if (!ob.hasOwnProperty(i)) continue;
-                if ((typeof ob[i]) == 'object' && ob[i] !== null && !Array.isArray(ob[i]) && !(ob[i] instanceof Date)) {
-                    // Jika objek, rekursif
-                    let flatObject = flattenObject(ob[i]);
-                    for (let x in flatObject) {
-                        if (!flatObject.hasOwnProperty(x)) continue;
-                        toReturn[i + '.' + x] = flatObject[x];
-                    }
-                } else if (ob[i] instanceof Date) {
-                    toReturn[i] = ob[i].toISOString(); // Format tanggal
-                } else if (typeof ob[i] === 'object' && ob[i] !== null && ob[i].hasOwnProperty('seconds')) {
-                    // Handle Firebase Timestamp
-                    toReturn[i] = new Date(ob[i].seconds * 1000).toLocaleString('id-ID');
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showAlertModal("Sinkronisasi Selesai! Data Anda sekarang ada di Google Sheet.");
                 } else {
-                    toReturn[i] = ob[i];
+                    throw new Error(result.message || "Gagal sinkronisasi dari GAS.");
+                }
+                
+            } catch (error) {
+                console.error("Gagal Sync Global:", error);
+                showAlertModal("Gagal menyinkronkan data: " + error.message, true);
+            } finally {
+                // 7. Kembalikan tombol ke state normal
+                if (syncButton) {
+                    syncButton.disabled = false;
+                    syncButton.innerHTML = '<i class="fas fa-cloud-upload-alt mr-3"></i> Sync ke Google Sheet';
                 }
             }
-            return toReturn;
         }
+        
+        // =============================================================
+        // =============================================================
+        // END PENAMBAHAN FUNGSI EXPORT YANG HILANG
+        // =============================================================
+        // =============================================================
+
 
         // ===================================
         // BARU: FUNGSI EDIT DATA
